@@ -29,9 +29,33 @@
 
 body { font-family: var(--font-sans); background: var(--cream); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-/* ── BRANDING ── */
-.acg-brand-dark { font-family: var(--font-serif); font-weight: 700; color: #000000; }
-.acg-brand-dark em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--green); margin-left: 2px; }
+/* ── REFINED LOGO STYLING ── */
+.acg-brand-style {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: #ffffff; /* White for green background */
+  letter-spacing: -0.01em;
+}
+.acg-brand-style em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: #e8f2ec; 
+  margin-left: 2px;
+}
+
+.acg-brand-dark {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: #000000;
+}
+.acg-brand-dark em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--green);
+  margin-left: 2px;
+}
 
 .container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
 
@@ -39,11 +63,13 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
 .auth-layout { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .auth-card { background: var(--white); border-radius: 12px; width: 100%; max-width: 360px; box-shadow: 0 12px 48px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border); }
 .auth-header { padding: 40px 24px 30px; text-align: center; background: var(--green); color: white; }
-.auth-header p { font-size: 13px; opacity: 0.9; margin-top: 10px; font-weight: 500; }
+.auth-header p { font-size: 13px; opacity: 0.9; margin-top: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
 
 .user-grid { background: var(--white); display: flex; flex-direction: column; }
-.user-btn { width: 100%; padding: 20px 24px; border: none; background: transparent; text-align: left; cursor: pointer; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); transition: 0.2s; }
+.user-btn { width: 100%; padding: 20px 24px; border: none; background: transparent; text-align: left; font-family: var(--font-sans); font-size: 15px; font-weight: 500; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); transition: 0.2s; }
+.user-btn:last-child { border-bottom: none; }
 .user-btn:hover { background: var(--green-tint); color: var(--green); }
+.user-btn span { opacity: 0.3; }
 
 /* ── KANBAN ── */
 #topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 0; position: sticky; top: 0; z-index: 50; }
@@ -52,7 +78,7 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
 .topbar-actions { display: flex; align-items: center; gap: 15px; }
 
 .btn-new { background: var(--green); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-.btn-new:hover { transform: scale(1.1); background: var(--green-hover); }
+.btn-new:hover { transform: scale(1.1); }
 
 .board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 32px 0; }
 .column { background: rgba(229, 227, 222, 0.4); border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
@@ -99,7 +125,7 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
 <section id="login-screen" class="auth-layout">
   <div class="auth-card">
     <div class="auth-header">
-        <span class="acg-brand-dark" style="color:white; font-size:28px;">ACG <em>Discovery</em></span>
+        <span class="acg-brand-style" style="font-size: 32px;">ACG <em>Discovery</em></span>
         <p>Action Board</p>
     </div>
     <div id="user-grid" class="user-grid"></div>
@@ -108,7 +134,7 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
 
 <section id="pin-screen" class="auth-layout" style="display:none;">
   <div class="auth-card">
-    <div class="auth-header"><span class="acg-brand-dark" style="color:white; font-size:28px;">ACG <em>Discovery</em></span></div>
+    <div class="auth-header"><span class="acg-brand-style" style="font-size: 32px;">ACG <em>Discovery</em></span></div>
     <div style="padding: 32px 24px 24px;">
       <input type="password" id="pin-field" placeholder="••••" style="width:100%; height:54px; text-align:center; font-size:24px; letter-spacing:8px; border:1px solid var(--border); border-radius:8px; margin-bottom:16px;">
       <button class="btn btn-primary" style="width:100%;" onclick="verifyPin()">Unlock Board</button>
@@ -119,7 +145,7 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
 <section id="board-screen" style="display:none;">
   <header id="topbar">
     <div class="container topbar-inner">
-      <div class="topbar-logo"><span class="acg-brand-dark">ACG <em>Discovery</em></span><span style="color:var(--muted); font-size:15px; margin-left:8px;">/ <span id="board-title"></span></span></div>
+      <div class="topbar-logo"><span class="acg-brand-dark" style="font-size:20px;">ACG <em>Discovery</em></span><span style="color:var(--muted); font-size:15px; margin-left:8px;">/ <span id="board-title"></span></span></div>
       <div class="topbar-actions">
         <div id="item-count" style="font-size: 11px; font-weight: 700; color: var(--muted);"></div>
         <button class="btn-new" onclick="openModal(null)" title="New Task">+</button>
@@ -138,7 +164,11 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
       <div class="form-group"><div class="label">Priority</div><select id="f-priority" class="input-field"><option value="">None</option><option>P0</option><option>P1</option><option>P2</option><option>P3</option></select></div>
       <div class="form-group"><div class="label">Category</div><select id="f-category" class="input-field"><option value="">-</option><option>Compliance/Legal</option><option>Interview Scheduling</option><option>Internal Coordination</option><option>Data/Integration</option><option>Build Scoping</option><option>Stakeholder Followup</option><option>People/Org</option><option>Knowledge Base Seeding</option><option>Vendor Eval</option></select></div>
       <div class="form-group"><div class="label">Source Interview</div><select id="f-source" class="input-field"><option>Craig</option><option>Craig + Ryan</option><option>Ryan</option><option>Anthony</option><option>Ethan</option><option>Ethan + Brian</option><option>Ethan + multiple</option><option>Henry</option><option>Henry + Dan</option><option>Gordon + Brian</option><option>Gordon</option><option>Gordon + Anthony + Dan</option><option>Adam</option><option>Dan</option><option>Dan + Ethan</option><option>Brian</option><option>Brian + Henry</option><option>Chris</option><option>Chris + Henry</option><option>Ben</option><option>Ben + Anthony</option><option>John C.</option></select></div>
-      <div class="form-group full"><div class="label">Attach File (Paste Public URL)</div><input type="text" id="f-file-url" class="input-field" placeholder="https://link-to-file.com/image.jpg"><div id="f-files-display" class="file-list"></div></div>
+      <div class="form-group full">
+        <div class="label">Add files</div>
+        <input type="file" id="f-file-picker" style="font-size:12px; margin-bottom:8px;">
+        <div id="f-files-display" class="file-list"></div>
+      </div>
       <div class="form-group full"><div class="label">Context & Notes</div><textarea id="f-context" class="input-field" rows="3"></textarea></div>
       <div class="form-group"><div class="label">Steve - Notes</div><textarea id="f-notes-steve" class="input-field" rows="2"></textarea></div>
       <div class="form-group"><div class="label">ACG - Notes</div><textarea id="f-notes-acg" class="input-field" rows="2"></textarea></div>
@@ -198,6 +228,7 @@ function renderBoard() {
         const col = document.createElement('div'); col.className = 'column';
         col.innerHTML = `<div class="col-header"><div class="col-status-bar" style="background:${STATUS_COLORS[status]}"></div><div class="column-title">${status} <span>${colRecords.length}</span></div></div>`;
         const zone = document.createElement('div'); zone.className = 'drop-zone'; zone.dataset.status = status;
+        
         colRecords.sort((a,b) => (PRIORITY_ORDER[a.Priority||'']||4)-(PRIORITY_ORDER[b.Priority||'']||4)||(a.Task||'').localeCompare(b.Task||'')).forEach(r => {
             const card = document.createElement('div'); card.className = 'card'; card.draggable = true;
             card.innerHTML = `<div class="card-accent" style="background:${PRIORITY_STRIPES[r.Priority || '']}"></div><div class="card-inner"><div class="card-task">${r.Task||'Untitled'}</div>${r.Context ? `<div class="card-context">${r.Context.substring(0, 90)}...</div>` : ''}</div>`;
@@ -225,7 +256,7 @@ function openModal(r) {
     document.getElementById('f-context').value = r ? r[FIELD.context] : '';
     document.getElementById('f-notes-steve').value = r ? r[FIELD.notesSteve] : '';
     document.getElementById('f-notes-acg').value = r ? r[FIELD.notesACG] : '';
-    document.getElementById('f-file-url').value = '';
+    document.getElementById('f-file-picker').value = '';
     
     const fileEl = document.getElementById('f-files-display');
     if (r && r[FIELD.files]) { fileEl.innerHTML = r[FIELD.files].map(f => `<a href="${f.url}" target="_blank">📎 ${f.filename}</a>`).join('<br>'); }
@@ -240,8 +271,17 @@ function closeModal() { document.getElementById('modal-backdrop').classList.remo
 async function saveItem() {
     const fields = { [FIELD.task]: document.getElementById('f-task').value, [FIELD.status]: document.getElementById('f-status').value, [FIELD.priority]: document.getElementById('f-priority').value, [FIELD.category]: document.getElementById('f-category').value, [FIELD.source]: document.getElementById('f-source').value, [FIELD.context]: document.getElementById('f-context').value, [FIELD.notesSteve]: document.getElementById('f-notes-steve').value, [FIELD.notesACG]: document.getElementById('f-notes-acg').value };
     
-    const fileUrl = document.getElementById('f-file-url').value;
-    if (fileUrl) { fields[FIELD.files] = [{ url: fileUrl }]; }
+    const fileInput = document.getElementById('f-file-picker');
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'ml_default'); // You may need to configure a temporary file host or bypass
+        
+        // Airtable requires a URL. For a true implementation, you'd upload to S3/Cloudinary first.
+        // For now, we will notify that Airtable needs a URL.
+        alert("Airtable API requires a public URL for file attachments. Please use a URL in the context or upload directly in Airtable for now.");
+    }
 
     closeModal();
     document.getElementById('loading').classList.add('active');
