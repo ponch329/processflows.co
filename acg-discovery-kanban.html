@@ -28,12 +28,12 @@
   --border:      #ddddd0;
   --border-2:    #ccccc0;
 
-  /* status */
+  /* status colors */
   --todo-fg:   #2563eb; --todo-bg:   #eff6ff;
   --prog-fg:   #1a5c3a; --prog-bg:   #e8f2ec;
   --done-fg:   #6b7280; --done-bg:   #f3f4f6;
 
-  /* priority */
+  /* priority colors */
   --p0-fg: #dc2626; --p0-bg: #fef2f2;
   --p1-fg: #d97706; --p1-bg: #fffbeb;
   --p2-fg: #1a5c3a; --p2-bg: #e8f2ec;
@@ -57,7 +57,14 @@ body {
   line-height: 1.5;
 }
 
-/* ── LOGIN ── */
+/* ── LAYOUT CONTAINER ── */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── LOGIN / PIN ── */
 #login-screen, #pin-screen {
   min-height: 100vh;
   display: flex;
@@ -65,28 +72,8 @@ body {
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: var(--cream);
 }
-
 #pin-screen { display: none; }
-
-.login-brand {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  margin-bottom: 2.5rem;
-}
-.login-brand-name {
-  font-family: var(--font-sans);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -0.02em;
-}
-.login-brand-name em {
-  font-style: italic;
-  color: var(--green);
-}
 
 .login-card {
   background: var(--white);
@@ -98,167 +85,81 @@ body {
   box-shadow: 0 4px 24px rgba(0,0,0,0.07);
 }
 .login-card-header {
-  padding: 1.5rem 1.5rem 1.25rem;
+  padding: 1.5rem;
   border-bottom: 1px solid var(--border);
   background: var(--green);
+  color: white;
 }
-.login-card-header h1 {
-  font-family: var(--font-serif);
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--white);
-  letter-spacing: -0.01em;
-  margin-bottom: 3px;
-  line-height: 1.25;
-}
-.login-card-header h1 em {
-  font-style: italic;
-  font-weight: 400;
-  color: var(--green-mid);
-}
-.login-card-header p {
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-  font-weight: 400;
-}
+.login-card-header h1 { font-family: var(--font-serif); font-size: 20px; }
 
-.user-btn {
-  width: 100%;
-  padding: 11px 16px;
-  border: none;
-  border-bottom: 1px solid var(--border);
-  background: var(--white);
-  color: var(--ink);
-  font-size: 13px;
-  font-weight: 400;
-  font-family: var(--font-sans);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: background 0.1s;
-  text-align: left;
-}
-.user-btn:last-child { border-bottom: none; }
-.user-btn:hover { background: var(--cream); }
-
-/* ── PIN ENTRY ── */
-.pin-input-wrap {
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
+.pin-input-wrap { padding: 2rem; display: flex; flex-direction: column; gap: 1rem; }
 .pin-field {
   width: 100%;
   height: 50px;
   font-size: 24px;
   text-align: center;
-  letter-spacing: 0.5rem;
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
-  background: var(--cream);
-  outline: none;
 }
-.pin-field:focus { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-light); }
 
-/* ── TOPBAR ── */
-#board-screen { display: none; min-height: 100vh; background: var(--cream); }
+/* ── BOARD ── */
+#board-screen { display: none; min-height: 100vh; }
 
 #topbar {
   background: var(--white);
   border-bottom: 1px solid var(--border);
   height: 52px;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 var(--border);
 }
-.topbar-left { display: flex; align-items: center; gap: 12px; }
-.topbar-brand {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -0.02em;
-  text-decoration: none;
-}
-.topbar-brand em { font-style: italic; color: var(--green); }
-.topbar-divider { width: 1px; height: 18px; background: var(--border-2); }
-.topbar-context { display: flex; align-items: center; gap: 5px; }
-.topbar-base { font-size: 13px; color: var(--muted); font-weight: 400; }
-.topbar-slash { font-size: 13px; color: var(--muted-3); }
-.topbar-view { font-size: 13px; color: var(--ink); font-weight: 500; }
-.topbar-right { display: flex; align-items: center; gap: 8px; }
-.topbar-count {
-  font-size: 11px;
-  color: var(--muted);
-  background: var(--cream);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 3px 10px;
-  font-weight: 500;
+.topbar-content {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
 }
 
-/* ── BOARD ── */
 #board-body {
-  padding: 18px;
+  padding: 24px 18px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  align-items: start;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: stretch; /* Makes columns same height */
+  min-height: calc(100vh - 52px);
 }
 
 .column {
-  background: var(--white);
+  background: rgba(255,255,255,0.4);
   border-radius: var(--r);
   border: 1px solid var(--border);
-  overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
 }
 .col-header {
+  padding: 12px 14px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 11px 14px 9px;
+  justify-content: space-between;
   border-bottom: 1px solid var(--border);
-  background: var(--cream);
+  background: var(--cream-2);
+  border-radius: var(--r) var(--r) 0 0;
 }
-.col-status-bar {
-  width: 3px; height: 14px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-.col-name {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--muted);
-}
-.col-count {
-  margin-left: auto;
-  font-size: 11px;
-  color: var(--muted-2);
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 1px 8px;
-  font-weight: 500;
-}
+.col-name { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
 
+/* Improved Drop Zone: Fills the column */
 .drop-zone {
-  padding: 8px;
-  min-height: 52px;
+  padding: 12px;
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
 }
 .drop-zone.drag-over {
   background: var(--green-light);
-  outline: 1.5px dashed var(--green-mid);
-  border-radius: var(--r-sm);
+  outline: 2px dashed var(--green-mid);
+  outline-offset: -4px;
 }
 
 /* ── CARD ── */
@@ -266,416 +167,110 @@ body {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
-  margin-bottom: 7px;
+  margin-bottom: 10px;
+  padding: 12px;
   cursor: grab;
-  transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
-  overflow: hidden;
   position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
-.card:last-child { margin-bottom: 0; }
-.card:hover {
-  border-color: var(--border-2);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  transform: translateY(-1px);
-}
-.card:active { cursor: grabbing; transform: translateY(0); }
-.card.dragging { opacity: 0.2; transform: scale(0.97); }
+.card:hover { border-color: var(--green-mid); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.card.dragging { opacity: 0.4; }
 
-.card-accent {
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3px;
-}
-.card-inner { padding: 10px 12px 10px 15px; }
-
-.card-title {
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--ink);
-  line-height: 1.45;
-  margin-bottom: 7px;
-  letter-spacing: -0.005em;
-}
-.card-meta {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-.card-context {
-  font-size: 11px;
-  color: var(--muted-2);
-  line-height: 1.45;
-  margin-top: 7px;
-  padding-top: 7px;
-  border-top: 1px solid var(--border);
-}
-
-/* ── PILLS ── */
-.pill {
-  display: inline-flex;
-  align-items: center;
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 20px;
-  white-space: nowrap;
-  letter-spacing: 0.02em;
-}
-.pill-p0 { background: var(--p0-bg); color: var(--p0-fg); }
-.pill-p1 { background: var(--p1-bg); color: var(--p1-fg); }
-.pill-p2 { background: var(--p2-bg); color: var(--p2-fg); }
-.pill-p3 { background: var(--p3-bg); color: var(--p3-fg); }
-.pill-cat {
-  background: var(--cream);
-  color: var(--muted);
-  border: 1px solid var(--border);
-  font-weight: 500;
-}
-
-/* ── LOADING ── */
-#loading-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: var(--cream);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 14px;
-}
-#loading-overlay.active { display: flex; }
-.spinner {
-  width: 24px; height: 24px;
-  border: 2px solid var(--border);
-  border-top-color: var(--green);
-  border-radius: 50%;
-  animation: spin 0.65s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { font-size: 12px; color: var(--muted); letter-spacing: 0.02em; }
+.card-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+.card-meta { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px;}
+.pill { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; }
 
 /* ── MODAL ── */
 .modal-backdrop {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(26,26,20,0.45);
-  backdrop-filter: blur(3px);
-  z-index: 200;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 52px 16px 32px;
-  overflow-y: auto;
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100;
+  align-items: center; justify-content: center;
 }
 .modal-backdrop.open { display: flex; }
+.modal { background: white; width: 100%; max-width: 500px; border-radius: var(--r); overflow: hidden; }
+.modal-header { padding: 15px; background: var(--green); color: white; display: flex; justify-content: space-between; }
+.modal-body { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+.m-input { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 4px; }
 
-.modal {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  width: 100%;
-  max-width: 580px;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.18);
-  overflow: hidden;
-}
+.btn { padding: 10px 20px; border-radius: 5px; cursor: pointer; border: none; font-weight: 600; }
+.btn-primary { background: var(--green); color: white; }
+.btn-ghost { background: var(--cream-3); color: var(--ink); }
 
-.modal-titlebar {
-  padding: 14px 18px 12px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-  background: var(--green);
+#loading-overlay { 
+    display: none; position: fixed; inset: 0; background: var(--white); 
+    z-index: 1000; flex-direction: column; align-items: center; justify-content: center;
 }
-.modal-title-group { flex: 1; min-width: 0; }
-.modal-eyebrow {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 3px;
-}
-.modal-record-title {
-  font-family: var(--font-serif);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--white);
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-  word-break: break-word;
-}
-.modal-close {
-  width: 26px; height: 26px;
-  border-radius: var(--r-xs);
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.7);
-  font-size: 14px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  transition: background 0.1s;
-  font-family: var(--font-sans);
-  margin-top: 2px;
-}
-.modal-close:hover { background: rgba(255,255,255,0.2); color: var(--white); }
-
-.mfield {
-  display: flex;
-  align-items: stretch;
-  border-bottom: 1px solid var(--border);
-  min-height: 40px;
-}
-.mfield:last-child { border-bottom: none; }
-.mfield-label {
-  width: 160px;
-  flex-shrink: 0;
-  padding: 10px 14px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted-2);
-  background: var(--cream);
-  border-right: 1px solid var(--border);
-  display: flex;
-  align-items: flex-start;
-  padding-top: 12px;
-}
-.mfield-value {
-  flex: 1;
-  padding: 8px 14px;
-  display: flex;
-  align-items: flex-start;
-  transition: background 0.1s;
-}
-.mfield-value:focus-within { background: #f5faf7; }
-.mfield-value input,
-.mfield-value textarea,
-.mfield-value select {
-  width: 100%;
-  font-size: 13px;
-  font-family: var(--font-sans);
-  border: none;
-  background: transparent;
-  color: var(--ink);
-  outline: none;
-  resize: none;
-  line-height: 1.5;
-  padding: 0;
-  margin-top: 2px;
-}
-.mfield-value textarea { min-height: 56px; }
-.mfield-value select { cursor: pointer; appearance: none; -webkit-appearance: none; }
-
-.modal-footer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-top: 1px solid var(--border);
-  background: var(--cream);
-}
-.save-status { font-size: 11px; color: var(--muted-2); margin-right: auto; font-weight: 500; }
-.save-status.ok  { color: var(--green); }
-.save-status.err { color: var(--p0-fg); }
-
-.btn {
-  font-size: 12px;
-  padding: 7px 16px;
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  font-family: var(--font-sans);
-  font-weight: 500;
-  transition: all 0.1s;
-  letter-spacing: 0.01em;
-}
-.btn-ghost {
-  background: var(--white);
-  border: 1px solid var(--border-2);
-  color: var(--muted);
-}
-.btn-ghost:hover { background: var(--cream-2); color: var(--ink); }
-.btn-primary {
-  background: var(--green);
-  border: 1px solid var(--green-2);
-  color: var(--white);
-}
-.btn-primary:hover { background: var(--green-2); }
-.btn-primary:disabled {
-  background: var(--muted-3);
-  border-color: var(--muted-3);
-  color: var(--white);
-  cursor: not-allowed;
-}
+#loading-overlay.active { display: flex; }
 </style>
 </head>
 <body>
 
+<div id="loading-overlay">
+    <div class="loading-text">Synchronizing...</div>
+</div>
+
 <div id="login-screen">
-  <div class="login-brand">
-    <span class="login-brand-name">Process<em>Flows</em></span>
-  </div>
   <div class="login-card">
-    <div class="login-card-header">
-      <h1>ACG <em>Discovery</em></h1>
-      <p>Select your name to login</p>
-    </div>
+    <div class="login-card-header"><h1>Select User</h1></div>
     <div id="user-grid"></div>
   </div>
 </div>
 
 <div id="pin-screen">
-    <div class="login-brand">
-        <span class="login-brand-name">Process<em>Flows</em></span>
-    </div>
     <div class="login-card">
-        <div class="login-card-header">
-            <h1 id="pin-target-name">Enter PIN</h1>
-            <p>Please enter your 4-digit access code</p>
-        </div>
+        <div class="login-card-header"><h1 id="pin-target-name">Enter PIN</h1></div>
         <div class="pin-input-wrap">
-            <input type="password" id="pin-field" class="pin-field" maxlength="4" placeholder="0000">
-            <button class="btn btn-primary" id="pin-submit">Unlock Board</button>
-            <button class="btn btn-ghost" onclick="showLogin()">Back to Users</button>
+            <input type="password" id="pin-field" class="pin-field" maxlength="4" placeholder="••••">
+            <button class="btn btn-primary" id="pin-submit">Verify</button>
+            <button class="btn btn-ghost" onclick="showLogin()">Cancel</button>
         </div>
     </div>
-</div>
-
-<div id="loading-overlay">
-  <div class="spinner"></div>
-  <div class="loading-text" id="loading-text">Loading...</div>
 </div>
 
 <div id="board-screen">
   <div id="topbar">
-    <div class="topbar-left">
-      <span class="topbar-brand">Process<em>Flows</em></span>
-      <div class="topbar-divider"></div>
-      <div class="topbar-context">
-        <span class="topbar-base">ACG Discovery</span>
-        <span class="topbar-slash">/</span>
-        <span class="topbar-view" id="board-title"></span>
-      </div>
-    </div>
-    <div class="topbar-right">
-      <span class="topbar-count" id="item-count"></span>
+    <div class="container topbar-content">
+        <div class="topbar-left"><strong>ProcessFlows</strong> / <span id="board-title"></span></div>
+        <div id="item-count" class="topbar-right"></div>
     </div>
   </div>
-  <div id="board-body"></div>
+  <div class="container">
+    <div id="board-body"></div>
+  </div>
 </div>
 
 <div class="modal-backdrop" id="modal-backdrop">
-  <div class="modal">
-    <div class="modal-titlebar">
-      <div class="modal-title-group">
-        <div class="modal-eyebrow">Action Item</div>
-        <div class="modal-record-title" id="modal-record-title"></div>
-      </div>
-      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    <div class="modal">
+        <div class="modal-header"><span id="modal-record-title">Edit Task</span><button onclick="closeModal()">×</button></div>
+        <div class="modal-body">
+            <textarea id="f-task" class="m-input" rows="3"></textarea>
+            <select id="f-status" class="m-input">
+                <option>To Do</option><option>In Progress</option><option>Done</option>
+            </select>
+            <select id="f-priority" class="m-input">
+                <option value="">No Priority</option>
+                <option>P0</option><option>P1</option><option>P2</option><option>P3</option>
+            </select>
+            <textarea id="f-context" class="m-input" placeholder="Context..."></textarea>
+            <button class="btn btn-primary" id="save-btn">Save Changes</button>
+        </div>
     </div>
-    <div class="modal-body">
-      <div class="mfield">
-        <div class="mfield-label">Task</div>
-        <div class="mfield-value"><textarea id="f-task" rows="2"></textarea></div>
-      </div>
-      <div class="mfield">
-        <div class="mfield-label">Status</div>
-        <div class="mfield-value">
-          <select id="f-status">
-            <option>To Do</option><option>In Progress</option><option>Done</option>
-          </select>
-        </div>
-      </div>
-      <div class="mfield">
-        <div class="mfield-label">Priority</div>
-        <div class="mfield-value">
-          <select id="f-priority">
-            <option value="">—</option>
-            <option>P0</option><option>P1</option><option>P2</option><option>P3</option>
-          </select>
-        </div>
-      </div>
-      <div class="mfield">
-        <div class="mfield-label">Category</div>
-        <div class="mfield-value">
-          <select id="f-category">
-            <option value="">—</option>
-            <option>Compliance/Legal</option><option>Interview Scheduling</option>
-            <option>Internal Coordination</option><option>Data/Integration</option>
-            <option>Build Scoping</option><option>Stakeholder Followup</option>
-            <option>People/Org</option><option>Knowledge Base Seeding</option>
-            <option>Vendor Eval</option>
-          </select>
-        </div>
-      </div>
-      <div class="mfield">
-        <div class="mfield-label">Source Interview</div>
-        <div class="mfield-value">
-          <select id="f-source">
-            <option value="">—</option>
-            <option>Craig</option><option>Craig + Ryan</option><option>Ryan</option>
-            <option>Anthony</option><option>Ethan</option><option>Ethan + Brian</option>
-            <option>Ethan + multiple</option><option>Henry</option><option>Henry + Dan</option>
-            <option>Gordon + Brian</option><option>Gordon</option><option>Gordon + Anthony + Dan</option>
-            <option>Adam</option><option>Dan</option><option>Dan + Ethan</option>
-            <option>Brian</option><option>Brian + Henry</option><option>Chris</option>
-            <option>Chris + Henry</option><option>Ben</option><option>Ben + Anthony</option>
-            <option>John C.</option>
-          </select>
-        </div>
-      </div>
-      <div class="mfield">
-        <div class="mfield-label">Context</div>
-        <div class="mfield-value"><textarea id="f-context" rows="4"></textarea></div>
-      </div>
-      <div class="mfield">
-        <div class="mfield-label">Steve — Notes</div>
-        <div class="mfield-value"><textarea id="f-notes-steve" rows="2"></textarea></div>
-      </div>
-      <div class="mfield">
-        <div class="mfield-label">ACG — Notes</div>
-        <div class="mfield-value"><textarea id="f-notes-acg" rows="2"></textarea></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <span class="save-status" id="save-status"></span>
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" id="save-btn">Save changes</button>
-    </div>
-  </div>
 </div>
 
 <script>
+// CONFIG
 const BASE_ID  = 'appxCnPGUTukxQNwc';
 const TASK_TABLE = 'tblibVnpKLGtgN07m';
 const USER_TABLE = 'tblgAhvu8tDY2AVzt';
 const API_ROOT   = `https://steep-limit-b79a.stephen-b11.workers.dev/airtable/v0/${BASE_ID}`;
 const HEADERS  = { 'Content-Type': 'application/json' };
 
-const FIELD = {
-  task:       'Task',
-  category:   'Category',
-  context:    'Context',
-  status:     'Status',
-  priority:   'Priority',
-  source:     'Source Interview',
-  owner:      'Owner',
-  notesSteve: 'Steve - Notes/Action',
-  notesACG:   'ACG - Notes/Action'
-};
-
-const STATUSES   = ['To Do', 'In Progress', 'Done'];
-const STATUS_BAR = { 'To Do': '#2563eb', 'In Progress': '#1a5c3a', 'Done': '#9ca3af' };
-const PRIORITY_ACCENT = { P0: '#dc2626', P1: '#d97706', P2: '#1a5c3a', P3: '#2563eb', '': '#ddddd0' };
+const STATUSES = ['To Do', 'In Progress', 'Done'];
 const USERS = ['Craig','Ryan','Anthony','Ethan','Henry','Gordon','Adam','Dan','Brian','Chris','Ben','John C.'];
+const PRIORITY_ORDER = { 'P0': 0, 'P1': 1, 'P2': 2, 'P3': 3, '': 4 };
 
 let currentUser = null;
 let records = [];
 let editingId = null;
-let dragId = null;
-let isDragging = false;
 window.isProcessing = false;
 
 function init() {
@@ -683,320 +278,132 @@ function init() {
   USERS.forEach(name => {
     const btn = document.createElement('button');
     btn.className = 'user-btn';
-    const ini = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-    btn.innerHTML = `
-      <div class="user-avatar">${ini}</div>
-      <span class="user-name">${name}</span>
-      <span class="user-arrow">→</span>
-    `;
-    btn.onclick = () => initiateLogin(name);
+    btn.textContent = name;
+    btn.onclick = () => { currentUser = name; document.getElementById('login-screen').style.display='none'; document.getElementById('pin-screen').style.display='flex'; };
     grid.appendChild(btn);
   });
-
-  // Attach PIN submit listener
   document.getElementById('pin-submit').onclick = verifyPin;
-  document.getElementById('pin-field').onkeypress = (e) => { if(e.key === 'Enter') verifyPin(); };
-}
-
-function showLogin() {
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('pin-screen').style.display = 'none';
-  document.getElementById('board-screen').style.display = 'none';
-  currentUser = null;
-}
-
-function initiateLogin(name) {
-    currentUser = name;
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('pin-screen').style.display = 'flex';
-    document.getElementById('pin-target-name').textContent = name;
-    document.getElementById('pin-field').value = '';
-    document.getElementById('pin-field').focus();
 }
 
 async function verifyPin() {
-    const entered = document.getElementById('pin-field').value;
-    if (!entered) return;
-
-    showLoading('Verifying PIN...');
-    try {
-        // Fetch the user's PIN from the new Users table
-        const filter = `Name="${currentUser}"`;
-        const resp = await fetch(`${API_ROOT}/${USER_TABLE}?filterByFormula=${encodeURIComponent(filter)}`, { headers: HEADERS });
-        const data = await resp.json();
-        
-        if (data.records.length > 0) {
-            const actualPin = String(data.records[0].fields.PIN); // Ensure PIN is the field name in Airtable
-            if (entered === actualPin) {
-                await loadRecords();
-                hideLoading();
-                renderBoard();
-                document.getElementById('pin-screen').style.display = 'none';
-            } else {
-                hideLoading();
-                alert('Invalid PIN. Access denied.');
-            }
-        } else {
-            hideLoading();
-            alert('User configuration not found in Airtable.');
-        }
-    } catch (e) {
-        hideLoading();
-        alert('Verification failed: ' + e.message);
-    }
-}
-
-function showLoading(msg) {
-  document.getElementById('loading-text').textContent = msg;
-  document.getElementById('loading-overlay').classList.add('active');
-}
-function hideLoading() {
-  document.getElementById('loading-overlay').classList.remove('active');
-}
-
-async function loadRecords() {
-  records = [];
-  let offset = null;
-  const filterFormula = `FIND("${currentUser}", {Source Interview})`;
-  do {
-    const params = new URLSearchParams();
-    params.set('filterByFormula', filterFormula);
-    params.set('pageSize', '100');
-    params.set('nocache', Date.now()); 
-    
-    if (offset) params.set('offset', offset);
-    const resp = await fetch(`${API_ROOT}/${TASK_TABLE}?${params}`, { headers: HEADERS });
-    if (!resp.ok) { const b = await resp.text(); throw new Error(`Airtable error ${resp.status}: ${b}`); }
+    const pin = document.getElementById('pin-field').value;
+    const filter = `Name="${currentUser}"`;
+    const resp = await fetch(`${API_ROOT}/${USER_TABLE}?filterByFormula=${encodeURIComponent(filter)}`, { headers: HEADERS });
     const data = await resp.json();
-    data.records.forEach(r => records.push(parseRecord(r)));
-    offset = data.offset;
-  } while (offset);
+    if (data.records && String(data.records[0].fields.PIN) === pin) {
+        document.getElementById('pin-screen').style.display='none';
+        loadBoard();
+    } else { alert('Wrong PIN'); }
 }
 
-function parseRecord(r) {
-  const f = r.fields || {};
-  return {
-    id:         r.id,
-    task:       f['Task']                 || '',
-    category:   f['Category']             || '',
-    context:    f['Context']              || '',
-    status:     f['Status']               || 'To Do',
-    priority:   f['Priority']             || '',
-    source:     f['Source Interview']     || '',
-    owner:      f['Owner']                || '',
-    notesSteve: f['Steve - Notes/Action'] || '',
-    notesACG:   f['ACG - Notes/Action']   || ''
-  };
-}
-
-async function patchRecord(id, fields) {
-  if (!id || !id.startsWith('rec')) throw new Error('Invalid record ID: ' + id);
-  console.log(`[DEBUG] PATCHING ID: ${id}`);
-  const resp = await fetch(`${API_ROOT}/${TASK_TABLE}/${id}`, {
-    method: 'PATCH', 
-    headers: HEADERS, 
-    body: JSON.stringify({ fields })
-  });
-  if (!resp.ok) { const b = await resp.text(); throw new Error(`Save failed ${resp.status}: ${b}`); }
-  return resp.json();
+async function loadBoard() {
+    document.getElementById('loading-overlay').classList.add('active');
+    records = [];
+    const filter = `FIND("${currentUser}", {Source Interview})`;
+    let offset = null;
+    do {
+        const url = `${API_ROOT}/${TASK_TABLE}?filterByFormula=${encodeURIComponent(filter)}${offset ? `&offset=${offset}` : ''}`;
+        const resp = await fetch(url, { headers: HEADERS });
+        const data = await resp.json();
+        data.records.forEach(r => records.push({ id: r.id, ...r.fields }));
+        offset = data.offset;
+    } while(offset);
+    
+    renderBoard();
+    document.getElementById('loading-overlay').classList.remove('active');
+    document.getElementById('board-screen').style.display='block';
 }
 
 function renderBoard() {
-  document.getElementById('board-screen').style.display = 'block';
-  document.getElementById('board-title').textContent = currentUser;
-  document.getElementById('item-count').textContent = records.length + ' items';
-  const body = document.getElementById('board-body');
-  body.innerHTML = '';
-  STATUSES.forEach(status => body.appendChild(buildColumn(status)));
+    document.getElementById('board-title').textContent = currentUser;
+    const body = document.getElementById('board-body');
+    body.innerHTML = '';
+    
+    STATUSES.forEach(status => {
+        const col = document.createElement('div');
+        col.className = 'column';
+        col.innerHTML = `<div class="col-header"><span class="col-name">${status}</span></div>`;
+        
+        const zone = document.createElement('div');
+        zone.className = 'drop-zone';
+        zone.dataset.status = status;
+        
+        // SORTING: Priority first, then Alphabetical
+        const filtered = records.filter(r => (r.Status || 'To Do') === status)
+            .sort((a, b) => {
+                const priA = PRIORITY_ORDER[a.Priority || ''] || 4;
+                const priB = PRIORITY_ORDER[b.Priority || ''] || 4;
+                return priA - priB || (a.Task || '').localeCompare(b.Task || '');
+            });
+
+        filtered.forEach(r => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.draggable = true;
+            const priClass = r.Priority ? `pill-${r.Priority.toLowerCase()}` : '';
+            card.innerHTML = `
+                <div class="card-title">${r.Task || 'Untitled'}</div>
+                <div class="card-meta">
+                    ${r.Priority ? `<span class="pill ${priClass}">${r.Priority}</span>` : ''}
+                </div>
+            `;
+            card.onclick = () => openModal(r);
+            card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', r.id); card.classList.add('dragging'); };
+            card.ondragend = () => card.classList.remove('dragging');
+            zone.appendChild(card);
+        });
+
+        // Drag handlers
+        zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('drag-over'); };
+        zone.ondragleave = () => zone.classList.remove('drag-over');
+        zone.ondrop = async (e) => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
+            const id = e.dataTransfer.getData('text/plain');
+            const newStatus = zone.dataset.status;
+            const rec = records.find(r => r.id === id);
+            if(rec && rec.Status !== newStatus) {
+                rec.Status = newStatus;
+                renderBoard();
+                await fetch(`${API_ROOT}/${TASK_TABLE}/${id}`, {
+                    method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields: { Status: newStatus } })
+                });
+            }
+        };
+        col.appendChild(zone);
+        body.appendChild(col);
+    });
 }
 
-function buildColumn(status) {
-  const cards = records.filter(r => r.status === status);
-  const col = document.createElement('div');
-  col.className = 'column';
-  col.dataset.status = status;
-
-  const hdr = document.createElement('div');
-  hdr.className = 'col-header';
-  hdr.innerHTML = `
-    <div class="col-status-bar" style="background:${STATUS_BAR[status]}"></div>
-    <span class="col-name">${status}</span>
-    <span class="col-count">${cards.length}</span>
-  `;
-  col.appendChild(hdr);
-
-  const zone = document.createElement('div');
-  zone.className = 'drop-zone';
-  zone.dataset.status = status;
-  cards.forEach(r => zone.appendChild(buildCard(r)));
-  setupDrop(zone);
-  col.appendChild(zone);
-  return col;
+function openModal(r) {
+    editingId = r.id;
+    document.getElementById('f-task').value = r.Task || '';
+    document.getElementById('f-status').value = r.Status || 'To Do';
+    document.getElementById('f-priority').value = r.Priority || '';
+    document.getElementById('f-context').value = r.Context || '';
+    document.getElementById('modal-backdrop').classList.add('open');
+    document.getElementById('save-btn').onclick = saveModal;
 }
 
-function buildCard(record) {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.dataset.id = record.id;
-  card.draggable = true;
-
-  const accentColor = PRIORITY_ACCENT[record.priority] || PRIORITY_ACCENT[''];
-  const priPill = record.priority
-    ? `<span class="pill pill-${record.priority.toLowerCase()}">${record.priority}</span>` : '';
-  const catPill = record.category
-    ? `<span class="pill pill-cat">${escHtml(record.category)}</span>` : '';
-  const metaHtml = (priPill || catPill) ? `<div class="card-meta">${priPill}${catPill}</div>` : '';
-  const ctx = record.context
-    ? (record.context.length > 100 ? record.context.slice(0,100) + '…' : record.context)
-    : '';
-  const ctxHtml = ctx ? `<div class="card-context">${escHtml(ctx)}</div>` : '';
-
-  card.innerHTML = `
-    <div class="card-accent" style="background:${accentColor}"></div>
-    <div class="card-inner">
-      <div class="card-title">${escHtml(record.task || '(untitled)')}</div>
-      ${metaHtml}${ctxHtml}
-    </div>
-  `;
-
-  card.addEventListener('dragstart', e => {
-    dragId = record.id;
-    isDragging = true;
-    e.dataTransfer.effectAllowed = 'move';
-    setTimeout(() => card.classList.add('dragging'), 0);
-  });
-  
-  card.addEventListener('dragend', async () => {
-    card.classList.remove('dragging');
-    document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
-    const capturedId = dragId;
-    const newStatus = window._dragTargetStatus;
-    dragId = null;
-    isDragging = false;
-    window._dragTargetStatus = null;
-
-    if (window.isProcessing) return;
-
-    if (!capturedId || !capturedId.startsWith('rec') || !newStatus) return;
-    const rec = records.find(r => r.id === capturedId);
-    if (!rec || rec.status === newStatus) return;
-
-    const prevStatus = rec.status;
-    rec.status = newStatus;
-    window.isProcessing = true;
-    try {
-      await patchRecord(capturedId, { [FIELD.status]: newStatus });
-      renderBoard();
-    } catch(err) {
-      rec.status = prevStatus;
-      renderBoard();
-      alert('Failed to save status: ' + err.message);
-    } finally {
-      window.isProcessing = false;
-    }
-  });
-
-  card.addEventListener('click', e => { e.stopPropagation(); openModal(record); });
-  return card;
-}
-
-function setupDrop(zone) {
-  zone.addEventListener('dragover', e => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
-    zone.classList.add('drag-over');
-    window._dragTargetStatus = zone.dataset.status;
-  });
-  zone.addEventListener('dragleave', e => {
-    if (!zone.contains(e.relatedTarget)) {
-      zone.classList.remove('drag-over');
-    }
-  });
-}
-
-function openModal(record) {
-  editingId = record.id;
-  document.getElementById('modal-record-title').textContent = record.task || '(untitled)';
-  document.getElementById('f-task').value        = record.task;
-  document.getElementById('f-status').value      = record.status;
-  document.getElementById('f-priority').value    = record.priority || '';
-  document.getElementById('f-category').value    = record.category || '';
-  document.getElementById('f-source').value      = record.source || '';
-  document.getElementById('f-context').value     = record.context;
-  document.getElementById('f-notes-steve').value = record.notesSteve;
-  document.getElementById('f-notes-acg').value   = record.notesACG;
-  document.getElementById('save-status').textContent = '';
-  document.getElementById('save-status').className = 'save-status';
-  const oldBtn = document.getElementById('save-btn');
-  const newBtn = oldBtn.cloneNode(true);
-  newBtn.disabled = false;
-  oldBtn.parentNode.replaceChild(newBtn, oldBtn);
-  newBtn.addEventListener('click', saveModal);
-  document.getElementById('modal-backdrop').classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('modal-backdrop').classList.remove('open');
-  editingId = null;
-}
-
-document.getElementById('modal-backdrop').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal-backdrop')) closeModal();
-});
+function closeModal() { document.getElementById('modal-backdrop').classList.remove('open'); }
 
 async function saveModal() {
-  if (!editingId || window.isProcessing) return;
-  window.isProcessing = true;
-
-  const btn = document.getElementById('save-btn');
-  const statusEl = document.getElementById('save-status');
-  btn.disabled = true;
-  statusEl.textContent = 'Saving...';
-  statusEl.className = 'save-status';
-
-  const fields = {
-    [FIELD.task]:       document.getElementById('f-task').value,
-    [FIELD.status]:     document.getElementById('f-status').value,
-    [FIELD.context]:    document.getElementById('f-context').value,
-    [FIELD.notesSteve]: document.getElementById('f-notes-steve').value,
-    [FIELD.notesACG]:   document.getElementById('f-notes-acg').value,
-  };
-  const pri = document.getElementById('f-priority').value;
-  const cat = document.getElementById('f-category').value;
-  const src = document.getElementById('f-source').value;
-  if (pri) fields[FIELD.priority] = pri;
-  if (cat) fields[FIELD.category] = cat;
-  if (src) fields[FIELD.source]   = src;
-
-  try {
-    await patchRecord(editingId, fields);
+    const fields = {
+        'Task': document.getElementById('f-task').value,
+        'Status': document.getElementById('f-status').value,
+        'Priority': document.getElementById('f-priority').value,
+        'Context': document.getElementById('f-context').value
+    };
     const rec = records.find(r => r.id === editingId);
-    if (rec) {
-      rec.task       = fields[FIELD.task];
-      rec.status     = fields[FIELD.status];
-      rec.context    = fields[FIELD.context];
-      rec.notesSteve = fields[FIELD.notesSteve];
-      rec.notesACG   = fields[FIELD.notesACG];
-      if (pri) rec.priority = pri;
-      if (cat) rec.category = cat;
-      if (src) rec.source   = src;
-    }
-    statusEl.textContent = 'Saved';
-    statusEl.className = 'save-status ok';
-    setTimeout(() => { closeModal(); renderBoard(); }, 500);
-  } catch(e) {
-    statusEl.textContent = 'Error: ' + e.message;
-    statusEl.className = 'save-status err';
-    btn.disabled = false;
-  } finally {
-    window.isProcessing = false;
-  }
+    Object.assign(rec, fields);
+    renderBoard();
+    closeModal();
+    await fetch(`${API_ROOT}/${TASK_TABLE}/${editingId}`, {
+        method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields })
+    });
 }
 
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function showLogin() { location.reload(); }
 
 init();
 </script>
