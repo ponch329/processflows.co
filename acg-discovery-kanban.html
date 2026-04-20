@@ -513,7 +513,6 @@ body {
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-brand">
     <span class="login-brand-name">Process<em>Flows</em></span>
@@ -527,13 +526,11 @@ body {
   </div>
 </div>
 
-<!-- LOADING -->
 <div id="loading-overlay">
   <div class="spinner"></div>
   <div class="loading-text" id="loading-text">Loading your items...</div>
 </div>
 
-<!-- BOARD -->
 <div id="board-screen">
   <div id="topbar">
     <div class="topbar-left">
@@ -552,7 +549,6 @@ body {
   <div id="board-body"></div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-backdrop" id="modal-backdrop">
   <div class="modal">
     <div class="modal-titlebar">
@@ -662,7 +658,9 @@ let records = [];
 let editingId = null;
 let dragId = null;
 let isDragging = false;
-let isSaving = false;
+
+// CRITICAL: Global Mutex to prevent duplicate Airtable calls
+window.isProcessing = false;
 
 function init() {
   const params = new URLSearchParams(window.location.search);
@@ -754,6 +752,9 @@ function parseRecord(r) {
 
 async function patchRecord(id, fields) {
   if (!id || !id.startsWith('rec')) throw new Error('Invalid record ID: ' + id);
+  
+  console.log(`[TRACE] Sending PATCH request for record: ${id} at ${new Date().toISOString()}`);
+  
   const resp = await fetch(`${API}/${id}`, {
     method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields })
   });
@@ -825,19 +826,33 @@ function buildCard(record) {
     e.dataTransfer.effectAllowed = 'move';
     setTimeout(() => card.classList.add('dragging'), 0);
   });
+  
   card.addEventListener('dragend', async () => {
     card.classList.remove('dragging');
     document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
+    
     const capturedId = dragId;
     const newStatus = window._dragTargetStatus;
     dragId = null;
     isDragging = false;
     window._dragTargetStatus = null;
+
+    // GUARD: Check if already processing another call
+    if (window.isProcessing) {
+        console.warn(`[TRACE] Blocked overlapping call from dragend for ID: ${capturedId}`);
+        return;
+    }
+
     if (!capturedId || !capturedId.startsWith('rec') || !newStatus) return;
     const rec = records.find(r => r.id === capturedId);
     if (!rec || rec.status === newStatus) return;
+
+    console.log(`[TRACE] dragend initiating status change for ID: ${capturedId} to ${newStatus}`);
+    
     const prevStatus = rec.status;
     rec.status = newStatus;
+    
+    window.isProcessing = true; // Lock
     try {
       await patchRecord(capturedId, { [FIELD.status]: newStatus });
       renderBoard();
@@ -845,8 +860,11 @@ function buildCard(record) {
       rec.status = prevStatus;
       renderBoard();
       alert('Failed to save status: ' + err.message);
+    } finally {
+      window.isProcessing = false; // Release
     }
   });
+
   card.addEventListener('click', e => { e.stopPropagation(); openModal(record); });
   return card;
 }
@@ -869,7 +887,6 @@ function setupDrop(zone) {
 
 function openModal(record) {
   editingId = record.id;
-  isSaving = false;
   document.getElementById('modal-record-title').textContent = record.task || '(untitled)';
   document.getElementById('f-task').value        = record.task;
   document.getElementById('f-status').value      = record.status;
@@ -894,7 +911,6 @@ function openModal(record) {
 function closeModal() {
   document.getElementById('modal-backdrop').classList.remove('open');
   editingId = null;
-  isSaving = false;
 }
 
 document.getElementById('modal-backdrop').addEventListener('click', e => {
@@ -902,8 +918,14 @@ document.getElementById('modal-backdrop').addEventListener('click', e => {
 });
 
 async function saveModal() {
-  if (!editingId || isSaving) return;
-  isSaving = true;
+  if (!editingId || window.isProcessing) {
+      console.warn(`[TRACE] saveModal blocked (ID: ${editingId}, isProcessing: ${window.isProcessing})`);
+      return;
+  }
+  
+  console.log(`[TRACE] saveModal initiating for ID: ${editingId}`);
+  window.isProcessing = true; // Lock
+
   const btn = document.getElementById('save-btn');
   const statusEl = document.getElementById('save-status');
   btn.disabled = true;
@@ -939,21 +961,19 @@ async function saveModal() {
     }
     statusEl.textContent = 'Saved';
     statusEl.className = 'save-status ok';
-    isSaving = false;
     setTimeout(() => { closeModal(); renderBoard(); }, 500);
   } catch(e) {
     statusEl.textContent = 'Error: ' + e.message;
     statusEl.className = 'save-status err';
-    isSaving = false;
     btn.disabled = false;
+  } finally {
+    window.isProcessing = false; // Release
   }
 }
 
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
-
 
 init();
 </script>
