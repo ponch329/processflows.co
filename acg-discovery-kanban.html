@@ -753,12 +753,21 @@ function parseRecord(r) {
 async function patchRecord(id, fields) {
   if (!id || !id.startsWith('rec')) throw new Error('Invalid record ID: ' + id);
   
-  console.log(`[TRACE] Sending PATCH request for record: ${id} at ${new Date().toISOString()}`);
+  // LOG THE EXACT DATA LEAVING THE BROWSER
+  console.log(`[DEBUG] PATCHING ID: ${id}`);
+  console.log(`[DEBUG] FIELDS:`, JSON.stringify(fields));
   
   const resp = await fetch(`${API}/${id}`, {
-    method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields })
+    method: 'PATCH', 
+    headers: HEADERS, 
+    body: JSON.stringify({ fields }) // Airtable expects { "fields": { ... } }
   });
-  if (!resp.ok) { const b = await resp.text(); throw new Error(`Save failed ${resp.status}: ${b}`); }
+  
+  if (!resp.ok) { 
+    const b = await resp.text(); 
+    console.error(`[DEBUG] Server responded with error: ${b}`);
+    throw new Error(`Save failed ${resp.status}: ${b}`); 
+  }
   return resp.json();
 }
 
