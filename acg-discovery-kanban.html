@@ -20,10 +20,16 @@
   --muted:       #70706b;
   --border:      #e5e3de;
   
+  /* Priority Colors */
   --p0-bg: #fff1f1; --p0-fg: #c53030;
   --p1-bg: #fff8eb; --p1-fg: #b45309;
   --p2-bg: #f0fdf4; --p2-fg: #166534;
   --p3-bg: #eff6ff; --p3-fg: #1e40af;
+
+  /* Status Bar Colors */
+  --todo-bar: #2563eb;
+  --prog-bar: #1a5c3a;
+  --done-bar: #9ca3af;
 
   --font-sans:  'Inter', -apple-system, sans-serif;
   --font-serif: 'Lora', Georgia, serif;
@@ -37,85 +43,76 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── REFINED LOGO STYLING ── */
-/* Specifically for the ACG Discovery Branding */
-.acg-brand-style {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  color: #000000; /* ACG is strong black */
-  letter-spacing: -0.01em;
-}
-.acg-brand-style em {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  color: #e8f2ec; /* Discovery is light cream on green backgrounds */
-  margin-left: 2px;
-}
+/* ── BRANDING ── */
+.acg-brand-style { font-family: var(--font-serif); font-weight: 700; color: #000000; letter-spacing: -0.01em; }
+.acg-brand-style em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #e8f2ec; margin-left: 2px; }
 
-/* Variant for white backgrounds (e.g. Topbar) */
-.acg-brand-dark {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  color: #000000;
-}
-.acg-brand-dark em {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--green);
-  margin-left: 2px;
-}
+.acg-brand-dark { font-family: var(--font-serif); font-weight: 700; color: #000000; }
+.acg-brand-dark em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--green); margin-left: 2px; }
 
 .container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
 
 /* ── AUTH ── */
 .auth-layout { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .auth-card { background: var(--white); border-radius: 12px; width: 100%; max-width: 360px; box-shadow: 0 12px 48px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border); }
-
 .auth-header { padding: 40px 24px 30px; text-align: center; background: var(--green); color: white; }
-.auth-header p { font-size: 13px; opacity: 0.9; margin-top: 10px; font-weight: 500; letter-spacing: 0.02em; font-family: var(--font-sans); }
+.auth-header p { font-size: 13px; opacity: 0.9; margin-top: 10px; font-weight: 500; letter-spacing: 0.02em; }
 
 .user-grid { background: var(--white); display: flex; flex-direction: column; }
-.user-btn { 
-  width: 100%; 
-  padding: 20px 24px; 
-  border: none; 
-  background: transparent; 
-  text-align: left; 
-  font-family: var(--font-sans); 
-  font-size: 15px; 
-  font-weight: 500;
-  cursor: pointer; 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  transition: background 0.2s;
-  border-bottom: 1px solid var(--border);
-  color: var(--ink);
-}
+.user-btn { width: 100%; padding: 20px 24px; border: none; background: transparent; text-align: left; font-family: var(--font-sans); font-size: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; border-bottom: 1px solid var(--border); color: var(--ink); }
 .user-btn:last-child { border-bottom: none; }
 .user-btn:hover { background: var(--green-tint); color: var(--green); }
-.user-btn span { opacity: 0.3; font-size: 18px; }
+.user-btn span { opacity: 0.3; }
 
 /* ── KANBAN ── */
 #topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 0; position: sticky; top: 0; z-index: 50; }
 .topbar-inner { display: flex; justify-content: space-between; align-items: center; }
-
 .topbar-logo { font-size: 18px; display: flex; align-items: center; }
 .topbar-logo-title { font-size: 15px; color: var(--muted); margin-left: 8px; font-weight: 400; font-family: var(--font-serif); }
 
 .board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 32px 0; align-items: stretch; }
-.column-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; padding: 0 4px; }
-.drop-zone { min-height: 75vh; background: rgba(229, 227, 222, 0.4); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 12px; }
-.drop-zone.drag-over { background: rgba(26, 92, 58, 0.08); outline: 2px dashed var(--green); }
+
+.column { background: rgba(229, 227, 222, 0.4); border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+
+.col-header { 
+  padding: 14px 16px; 
+  display: flex; 
+  align-items: center; 
+  background: var(--white); 
+  border-bottom: 1px solid var(--border);
+}
+
+.col-status-bar { width: 4px; height: 16px; border-radius: 2px; margin-right: 10px; }
+
+.column-title { 
+  font-size: 11px; 
+  font-weight: 700; 
+  text-transform: uppercase; 
+  letter-spacing: 1.2px; 
+  color: var(--muted); 
+  flex-grow: 1; 
+  display: flex; 
+  justify-content: space-between; 
+}
+
+.drop-zone { min-height: 75vh; padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+.drop-zone.drag-over { background: rgba(26, 92, 58, 0.08); outline: 2px dashed var(--green); outline-offset: -4px; }
 
 /* ── CARDS ── */
 .card { background: var(--white); border-radius: 8px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 0 0 1px var(--border); cursor: grab; transition: all 0.2s; }
 .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 0 0 1px var(--green); }
 .card-task { font-size: 14px; font-weight: 600; line-height: 1.45; margin-bottom: 12px; color: var(--ink); }
 .card-context { font-size: 12px; color: var(--muted); line-height: 1.5; padding-top: 12px; border-top: 1px solid #f0f0ee; margin-top: 12px; }
-.pill { font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.pill { 
+    font-size: 9px; 
+    font-weight: 800; 
+    padding: 3px 10px; 
+    border-radius: 4px; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px; 
+    display: inline-block;
+}
 
 /* ── MODAL ── */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(28, 28, 27, 0.5); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
@@ -148,8 +145,7 @@ body {
         <span class="acg-brand-style" style="font-size: 28px;">ACG <em>Discovery</em></span>
         <p>Action Board</p>
     </div>
-    <div id="user-grid" class="user-grid">
-        </div>
+    <div id="user-grid" class="user-grid"></div>
   </div>
 </section>
 
@@ -204,16 +200,11 @@ body {
 </div>
 
 <script>
-// Logic remains identical to ensure stability
-const BASE_ID = 'appxCnPGUTukxQNwc';
-const TASK_TABLE = 'tblibVnpKLGtgN07m';
-const USER_TABLE = 'tblgAhvu8tDY2AVzt';
-const API_ROOT = `https://steep-limit-b79a.stephen-b11.workers.dev/airtable/v0/${BASE_ID}`;
-const HEADERS = { 'Content-Type': 'application/json' };
-
-const STATUSES = ['To Do', 'In Progress', 'Done'];
-const USERS = ['Craig','Ryan','Anthony','Ethan','Henry','Gordon','Adam','Dan','Brian','Chris','Ben','John C.'];
+const BASE_ID = 'appxCnPGUTukxQNwc', TASK_TABLE = 'tblibVnpKLGtgN07m', USER_TABLE = 'tblgAhvu8tDY2AVzt';
+const API_ROOT = `https://steep-limit-b79a.stephen-b11.workers.dev/airtable/v0/${BASE_ID}`, HEADERS = { 'Content-Type': 'application/json' };
+const STATUSES = ['To Do', 'In Progress', 'Done'], USERS = ['Craig','Ryan','Anthony','Ethan','Henry','Gordon','Adam','Dan','Brian','Chris','Ben','John C.'];
 const PRIORITY_ORDER = { 'P0': 0, 'P1': 1, 'P2': 2, 'P3': 3, '': 4 };
+const STATUS_COLORS = { 'To Do': 'var(--todo-bar)', 'In Progress': 'var(--prog-bar)', 'Done': 'var(--done-bar)' };
 
 let currentUser = null, records = [], editingId = null;
 
@@ -225,92 +216,72 @@ const FIELD = {
 function init() {
   const grid = document.getElementById('user-grid');
   if (!grid) return;
-  
   grid.innerHTML = '';
   USERS.forEach(name => {
-    const btn = document.createElement('button');
-    btn.className = 'user-btn';
-    btn.innerHTML = `${name} <span>&rarr;</span>`;
-    btn.onclick = () => {
-      currentUser = name;
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('pin-screen').style.display = 'flex';
-      document.getElementById('pin-target-name').textContent = `Access for ${name}`;
-      document.getElementById('pin-field').focus();
-    };
+    const btn = document.createElement('button'); btn.className = 'user-btn'; btn.innerHTML = `${name} <span>&rarr;</span>`;
+    btn.onclick = () => { currentUser = name; document.getElementById('login-screen').style.display='none'; document.getElementById('pin-screen').style.display='flex'; document.getElementById('pin-target-name').textContent = `Access for ${name}`; document.getElementById('pin-field').focus(); };
     grid.appendChild(btn);
   });
-  
-  document.getElementById('pin-field').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') verifyPin();
-  });
+  document.getElementById('pin-field').addEventListener('keypress', (e) => { if (e.key === 'Enter') verifyPin(); });
 }
 
 async function verifyPin() {
-    const pin = document.getElementById('pin-field').value;
-    if (!pin) return;
-    
+    const pin = document.getElementById('pin-field').value; if (!pin) return;
     const filter = `Name="${currentUser}"`;
     try {
         const resp = await fetch(`${API_ROOT}/${USER_TABLE}?filterByFormula=${encodeURIComponent(filter)}`, { headers: HEADERS });
         const data = await resp.json();
         if (data.records && data.records.length > 0 && String(data.records[0].fields.PIN) === pin) {
-            document.getElementById('pin-screen').style.display = 'none';
-            loadBoard();
-        } else {
-            alert('Incorrect PIN');
-            document.getElementById('pin-field').value = '';
-        }
-    } catch (e) {
-        alert('Verification error');
-    }
+            document.getElementById('pin-screen').style.display = 'none'; loadBoard();
+        } else { alert('Incorrect PIN'); document.getElementById('pin-field').value = ''; }
+    } catch (e) { alert('Verification error'); }
 }
 
 async function loadBoard() {
-    document.getElementById('loading').classList.add('active');
-    records = [];
+    document.getElementById('loading').classList.add('active'); records = [];
     const filter = `FIND("${currentUser}", {Source Interview})`;
     let offset = null;
     try {
         do {
             const url = `${API_ROOT}/${TASK_TABLE}?filterByFormula=${encodeURIComponent(filter)}${offset ? `&offset=${offset}` : ''}`;
-            const resp = await fetch(url, { headers: HEADERS });
-            const data = await resp.json();
+            const resp = await fetch(url, { headers: HEADERS }); const data = await resp.json();
             data.records.forEach(r => records.push({ id: r.id, ...r.fields }));
             offset = data.offset;
         } while (offset);
         renderBoard();
-    } catch (e) {
-        alert('Error loading tasks');
-    } finally {
-        document.getElementById('loading').classList.remove('active');
-        document.getElementById('board-screen').style.display = 'block';
+    } catch (e) { alert('Error loading tasks'); } finally {
+        document.getElementById('loading').classList.remove('active'); document.getElementById('board-screen').style.display = 'block';
     }
 }
 
 function renderBoard() {
     document.getElementById('board-title').textContent = currentUser;
-    const body = document.getElementById('board-body');
-    body.innerHTML = '';
+    const body = document.getElementById('board-body'); body.innerHTML = '';
     document.getElementById('item-count').textContent = `${records.length} TOTAL ITEMS`;
     
     STATUSES.forEach(status => {
         const colRecords = records.filter(r => (r.Status || 'To Do') === status);
-        const col = document.createElement('div');
-        col.className = 'column';
-        col.innerHTML = `<div class="column-title">${status} <span>${colRecords.length}</span></div>`;
+        const col = document.createElement('div'); col.className = 'column';
         
-        const zone = document.createElement('div');
-        zone.className = 'drop-zone';
-        zone.dataset.status = status;
+        // Header with status bar
+        col.innerHTML = `
+            <div class="col-header">
+                <div class="col-status-bar" style="background: ${STATUS_COLORS[status]}"></div>
+                <div class="column-title">${status} <span>${colRecords.length}</span></div>
+            </div>
+        `;
+        
+        const zone = document.createElement('div'); zone.className = 'drop-zone'; zone.dataset.status = status;
         
         colRecords.sort((a,b) => (PRIORITY_ORDER[a.Priority||'']||4)-(PRIORITY_ORDER[b.Priority||'']||4)||(a.Task||'').localeCompare(b.Task||'')).forEach(r => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.draggable = true;
+            const card = document.createElement('div'); card.className = 'card'; card.draggable = true;
+            
+            // Priority Pill styling
             const priStyle = r.Priority ? `background:var(--${r.Priority.toLowerCase()}-bg); color:var(--${r.Priority.toLowerCase()}-fg);` : 'display:none;';
+            
             const ctxSnippet = r.Context ? `<div class="card-context">${r.Context.length > 90 ? r.Context.substring(0, 90) + '...' : r.Context}</div>` : '';
             card.innerHTML = `<div class="card-task">${r.Task||'Untitled'}</div><span class="pill" style="${priStyle}">${r.Priority}</span>${ctxSnippet}`;
+            
             card.onclick = () => openModal(r);
             card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', r.id); card.classList.add('dragging'); };
             card.ondragend = () => card.classList.remove('dragging');
@@ -320,23 +291,17 @@ function renderBoard() {
         zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('drag-over'); };
         zone.ondragleave = () => zone.classList.remove('drag-over');
         zone.ondrop = async (e) => {
-            e.preventDefault();
-            zone.classList.remove('drag-over');
-            const id = e.dataTransfer.getData('text/plain');
-            const newStatus = zone.dataset.status;
+            e.preventDefault(); zone.classList.remove('drag-over');
+            const id = e.dataTransfer.getData('text/plain'); const newStatus = zone.dataset.status;
             const rec = records.find(r => r.id === id);
             if (rec && rec.Status !== newStatus) {
-                rec.Status = newStatus;
-                renderBoard();
+                rec.Status = newStatus; renderBoard();
                 await fetch(`${API_ROOT}/${TASK_TABLE}/${id}`, {
-                    method: 'PATCH',
-                    headers: HEADERS,
-                    body: JSON.stringify({ fields: { Status: newStatus } })
+                    method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields: { Status: newStatus } })
                 });
             }
         };
-        col.appendChild(zone);
-        body.appendChild(col);
+        col.appendChild(zone); body.appendChild(col);
     });
 }
 
@@ -354,9 +319,7 @@ function openModal(r) {
     document.getElementById('save-btn').onclick = saveModal;
 }
 
-function closeModal() {
-    document.getElementById('modal-backdrop').classList.remove('open');
-}
+function closeModal() { document.getElementById('modal-backdrop').classList.remove('open'); }
 
 async function saveModal() {
     const fields = {
@@ -369,23 +332,12 @@ async function saveModal() {
         [FIELD.notesSteve]: document.getElementById('f-notes-steve').value,
         [FIELD.notesACG]: document.getElementById('f-notes-acg').value
     };
-    const rec = records.find(r => r.id === editingId);
-    Object.assign(rec, fields);
-    renderBoard();
-    closeModal();
-    await fetch(`${API_ROOT}/${TASK_TABLE}/${editingId}`, {
-        method: 'PATCH',
-        headers: HEADERS,
-        body: JSON.stringify({ fields })
-    });
+    const rec = records.find(r => r.id === editingId); Object.assign(rec, fields);
+    renderBoard(); closeModal();
+    await fetch(`${API_ROOT}/${TASK_TABLE}/${editingId}`, { method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields }) });
 }
 
-// Fire init when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
-}
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
 </script>
 </body>
 </html>
