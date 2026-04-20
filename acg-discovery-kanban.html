@@ -11,253 +11,371 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --cream:       #f0ece3;
-  --cream-2:     #e8e3d8;
-  --cream-3:     #ddd8cc;
+  --cream:       #f8f6f2;
+  --cream-dark:  #f0ede8;
   --white:       #ffffff;
-  --green:       #1a5c3a;
-  --green-2:     #14472d;
-  --green-3:     #0e3320;
-  --green-light: #e8f2ec;
-  --green-mid:   #c2dccb;
-  --ink:         #111110;
-  --ink-2:       #2a2a27;
-  --muted:       #6b6b60;
-  --muted-2:     #9a9a8e;
-  --muted-3:     #c4c4b8;
-  --border:      #ddddd0;
-  --border-2:    #ccccc0;
-
-  /* status colors */
-  --todo-fg:   #2563eb; --todo-bg:   #eff6ff;
-  --prog-fg:   #1a5c3a; --prog-bg:   #e8f2ec;
-  --done-fg:   #6b7280; --done-bg:   #f3f4f6;
-
-  /* priority colors */
-  --p0-fg: #dc2626; --p0-bg: #fef2f2;
-  --p1-fg: #d97706; --p1-bg: #fffbeb;
-  --p2-fg: #1a5c3a; --p2-bg: #e8f2ec;
-  --p3-fg: #2563eb; --p3-bg: #eff6ff;
+  --green:       #1a5c3a; /* Deep, professional green */
+  --green-hover: #14472d;
+  --green-tint:  #f0f5f2;
+  --ink:         #1c1c1b;
+  --muted:       #70706b;
+  --border:      #e5e3de;
+  
+  /* Status/Priority Colors - Softened for classier look */
+  --p0-bg: #fff1f1; --p0-fg: #c53030;
+  --p1-bg: #fff8eb; --p1-fg: #b45309;
+  --p2-bg: #f0fdf4; --p2-fg: #166534;
+  --p3-bg: #eff6ff; --p3-fg: #1e40af;
 
   --font-sans:  'Inter', -apple-system, sans-serif;
   --font-serif: 'Lora', Georgia, serif;
-  --r:    10px;
-  --r-sm: 6px;
-  --r-xs: 4px;
 }
 
-html { background: var(--cream); }
 body {
   font-family: var(--font-sans);
   background: var(--cream);
   color: var(--ink);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  font-size: 14px;
-  line-height: 1.5;
 }
 
-/* ── LAYOUT CONTAINER ── */
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  width: 100%;
+  padding: 0 24px;
 }
 
-/* ── LOGIN / PIN ── */
-#login-screen, #pin-screen {
+/* ── AUTH SCREENS ── */
+.auth-layout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
 }
-#pin-screen { display: none; }
 
-.login-card {
+.auth-card {
   background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
+  border-radius: 16px;
   width: 100%;
-  max-width: 340px;
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.04), 0 0 0 1px var(--border);
   overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
 }
-.login-card-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--green);
-  color: white;
-}
-.login-card-header h1 { font-family: var(--font-serif); font-size: 20px; }
 
-.pin-input-wrap { padding: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+.auth-header {
+  padding: 40px 32px 24px;
+  text-align: center;
+}
+
+.auth-header h1 {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--green);
+}
+
+.auth-header p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.user-list {
+  padding: 8px;
+}
+
+.user-btn {
+  width: 100%;
+  padding: 16px 24px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.user-btn:hover {
+  background: var(--green-tint);
+  color: var(--green);
+}
+
+.user-btn::after {
+  content: '→';
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.2s;
+}
+
+.user-btn:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── PIN SCREEN ── */
+.pin-wrap {
+  padding: 0 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .pin-field {
   width: 100%;
-  height: 50px;
-  font-size: 24px;
+  height: 60px;
+  font-size: 32px;
   text-align: center;
+  letter-spacing: 12px;
   border: 1px solid var(--border);
-  border-radius: var(--r-sm);
+  border-radius: 12px;
+  background: var(--cream);
+  font-family: var(--font-sans);
 }
 
-/* ── BOARD ── */
-#board-screen { display: none; min-height: 100vh; }
-
+/* ── KANBAN BOARD ── */
 #topbar {
   background: var(--white);
   border-bottom: 1px solid var(--border);
-  height: 52px;
+  padding: 16px 0;
   position: sticky;
   top: 0;
-  z-index: 10;
-}
-.topbar-content {
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
+  z-index: 50;
 }
 
-#board-body {
-  padding: 24px 18px;
+.topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--green);
+}
+
+.board-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  align-items: stretch; /* Makes columns same height */
-  min-height: calc(100vh - 52px);
+  gap: 24px;
+  padding: 40px 0;
 }
 
-.column {
-  background: rgba(255,255,255,0.4);
-  border-radius: var(--r);
-  border: 1px solid var(--border);
+.column-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  margin-bottom: 20px;
   display: flex;
-  flex-direction: column;
-}
-.col-header {
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  background: var(--cream-2);
-  border-radius: var(--r) var(--r) 0 0;
 }
-.col-name { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
 
-/* Improved Drop Zone: Fills the column */
 .drop-zone {
+  min-height: 600px;
+  background: rgba(229, 227, 222, 0.3);
+  border-radius: 12px;
   padding: 12px;
-  flex: 1; 
-  display: flex;
-  flex-direction: column;
-  min-height: 200px;
-}
-.drop-zone.drag-over {
-  background: var(--green-light);
-  outline: 2px dashed var(--green-mid);
-  outline-offset: -4px;
+  transition: background 0.3s;
 }
 
-/* ── CARD ── */
+.drop-zone.drag-over {
+  background: rgba(26, 92, 58, 0.05);
+  box-shadow: inset 0 0 0 2px var(--green-mid);
+}
+
+/* ── CARDS ── */
 .card {
   background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  margin-bottom: 10px;
-  padding: 12px;
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02), 0 0 0 1px var(--border);
   cursor: grab;
-  position: relative;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.card:hover { border-color: var(--green-mid); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-.card.dragging { opacity: 0.4; }
 
-.card-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
-.card-meta { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px;}
-.pill { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; }
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05), 0 0 0 1px var(--green-mid);
+}
+
+.card-task {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
 
 /* ── MODAL ── */
-.modal-backdrop {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100;
-  align-items: center; justify-content: center;
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 28, 27, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
 }
-.modal-backdrop.open { display: flex; }
-.modal { background: white; width: 100%; max-width: 500px; border-radius: var(--r); overflow: hidden; }
-.modal-header { padding: 15px; background: var(--green); color: white; display: flex; justify-content: space-between; }
-.modal-body { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-.m-input { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 4px; }
 
-.btn { padding: 10px 20px; border-radius: 5px; cursor: pointer; border: none; font-weight: 600; }
+.modal-overlay.open { display: flex; }
+
+.modal-content {
+  background: var(--white);
+  width: 90%;
+  max-width: 520px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-header {
+  padding: 24px 32px;
+  background: var(--green);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 { font-family: var(--font-serif); font-size: 20px; }
+
+.modal-body {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+
+.input-field {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  outline: none;
+}
+
+.input-field:focus { border-color: var(--green); }
+
+.btn {
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-sans);
+  transition: all 0.2s;
+}
+
 .btn-primary { background: var(--green); color: white; }
-.btn-ghost { background: var(--cream-3); color: var(--ink); }
+.btn-primary:hover { background: var(--green-hover); }
+.btn-secondary { background: var(--cream-dark); color: var(--ink); }
 
-#loading-overlay { 
-    display: none; position: fixed; inset: 0; background: var(--white); 
-    z-index: 1000; flex-direction: column; align-items: center; justify-content: center;
+#loading {
+  display: none; position: fixed; inset: 0; background: var(--cream); z-index: 200;
+  flex-direction: column; align-items: center; justify-content: center;
 }
-#loading-overlay.active { display: flex; }
+#loading.active { display: flex; }
+
 </style>
 </head>
 <body>
 
-<div id="loading-overlay">
-    <div class="loading-text">Synchronizing...</div>
-</div>
+<div id="loading"><div class="brand">Synchronizing Data...</div></div>
 
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-card-header"><h1>Select User</h1></div>
-    <div id="user-grid"></div>
-  </div>
-</div>
-
-<div id="pin-screen">
-    <div class="login-card">
-        <div class="login-card-header"><h1 id="pin-target-name">Enter PIN</h1></div>
-        <div class="pin-input-wrap">
-            <input type="password" id="pin-field" class="pin-field" maxlength="4" placeholder="••••">
-            <button class="btn btn-primary" id="pin-submit">Verify</button>
-            <button class="btn btn-ghost" onclick="showLogin()">Cancel</button>
-        </div>
+<section id="login-screen" class="auth-layout">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>ACG Discovery</h1>
+      <p>Identify yourself to access your board</p>
     </div>
-</div>
+    <div id="user-grid" class="user-list"></div>
+  </div>
+</section>
 
-<div id="board-screen">
-  <div id="topbar">
-    <div class="container topbar-content">
-        <div class="topbar-left"><strong>ProcessFlows</strong> / <span id="board-title"></span></div>
-        <div id="item-count" class="topbar-right"></div>
+<section id="pin-screen" class="auth-layout" style="display:none;">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1 id="pin-target-name">Enter PIN</h1>
+      <p>Secure access required</p>
+    </div>
+    <div class="pin-wrap">
+      <input type="password" id="pin-field" class="pin-field" maxlength="4" placeholder="••••">
+      <button class="btn btn-primary" onclick="verifyPin()">Verify Access</button>
+      <button class="btn btn-secondary" onclick="location.reload()">Back</button>
     </div>
   </div>
+</section>
+
+<section id="board-screen" style="display:none;">
+  <header id="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">ACG Discovery / <span id="board-title" style="color: var(--muted); font-weight: 400;"></span></div>
+      <div id="item-count" style="font-size: 12px; font-weight: 600; color: var(--muted);"></div>
+    </div>
+  </header>
   <div class="container">
-    <div id="board-body"></div>
+    <div id="board-body" class="board-grid"></div>
   </div>
-</div>
+</section>
 
-<div class="modal-backdrop" id="modal-backdrop">
-    <div class="modal">
-        <div class="modal-header"><span id="modal-record-title">Edit Task</span><button onclick="closeModal()">×</button></div>
-        <div class="modal-body">
-            <textarea id="f-task" class="m-input" rows="3"></textarea>
-            <select id="f-status" class="m-input">
-                <option>To Do</option><option>In Progress</option><option>Done</option>
-            </select>
-            <select id="f-priority" class="m-input">
-                <option value="">No Priority</option>
-                <option>P0</option><option>P1</option><option>P2</option><option>P3</option>
-            </select>
-            <textarea id="f-context" class="m-input" placeholder="Context..."></textarea>
-            <button class="btn btn-primary" id="save-btn">Save Changes</button>
-        </div>
+<div class="modal-overlay" id="modal-backdrop">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Action Item Detail</h2>
+      <button onclick="closeModal()" style="background:transparent; border:none; color:white; font-size:24px; cursor:pointer;">×</button>
     </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="label">Task Title</div>
+        <textarea id="f-task" class="input-field" rows="3"></textarea>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <div class="label">Status</div>
+          <select id="f-status" class="input-field">
+            <option>To Do</option><option>In Progress</option><option>Done</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="label">Priority</div>
+          <select id="f-priority" class="input-field">
+            <option value="">No Priority</option>
+            <option>P0</option><option>P1</option><option>P2</option><option>P3</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">Context & Notes</div>
+        <textarea id="f-context" class="input-field" rows="5"></textarea>
+      </div>
+      <button class="btn btn-primary" id="save-btn">Save Changes</button>
+    </div>
+  </div>
 </div>
 
 <script>
-// CONFIG
 const BASE_ID  = 'appxCnPGUTukxQNwc';
 const TASK_TABLE = 'tblibVnpKLGtgN07m';
 const USER_TABLE = 'tblgAhvu8tDY2AVzt';
@@ -271,7 +389,6 @@ const PRIORITY_ORDER = { 'P0': 0, 'P1': 1, 'P2': 2, 'P3': 3, '': 4 };
 let currentUser = null;
 let records = [];
 let editingId = null;
-window.isProcessing = false;
 
 function init() {
   const grid = document.getElementById('user-grid');
@@ -279,25 +396,32 @@ function init() {
     const btn = document.createElement('button');
     btn.className = 'user-btn';
     btn.textContent = name;
-    btn.onclick = () => { currentUser = name; document.getElementById('login-screen').style.display='none'; document.getElementById('pin-screen').style.display='flex'; };
+    btn.onclick = () => {
+      currentUser = name;
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('pin-screen').style.display='flex';
+      document.getElementById('pin-target-name').textContent = name;
+      document.getElementById('pin-field').focus();
+    };
     grid.appendChild(btn);
   });
-  document.getElementById('pin-submit').onclick = verifyPin;
+  document.getElementById('pin-field').onkeypress = (e) => { if(e.key === 'Enter') verifyPin(); };
 }
 
 async function verifyPin() {
     const pin = document.getElementById('pin-field').value;
+    if(!pin) return;
     const filter = `Name="${currentUser}"`;
     const resp = await fetch(`${API_ROOT}/${USER_TABLE}?filterByFormula=${encodeURIComponent(filter)}`, { headers: HEADERS });
     const data = await resp.json();
-    if (data.records && String(data.records[0].fields.PIN) === pin) {
+    if (data.records && data.records.length > 0 && String(data.records[0].fields.PIN) === pin) {
         document.getElementById('pin-screen').style.display='none';
         loadBoard();
-    } else { alert('Wrong PIN'); }
+    } else { alert('Access Denied: Incorrect PIN'); document.getElementById('pin-field').value = ''; }
 }
 
 async function loadBoard() {
-    document.getElementById('loading-overlay').classList.add('active');
+    document.getElementById('loading').classList.add('active');
     records = [];
     const filter = `FIND("${currentUser}", {Source Interview})`;
     let offset = null;
@@ -308,44 +432,36 @@ async function loadBoard() {
         data.records.forEach(r => records.push({ id: r.id, ...r.fields }));
         offset = data.offset;
     } while(offset);
-    
     renderBoard();
-    document.getElementById('loading-overlay').classList.remove('active');
+    document.getElementById('loading').classList.remove('active');
     document.getElementById('board-screen').style.display='block';
 }
 
 function renderBoard() {
-    document.getElementById('board-title').textContent = currentUser;
     const body = document.getElementById('board-body');
     body.innerHTML = '';
+    document.getElementById('item-count').textContent = `${records.length} ACTIVE ITEMS`;
     
     STATUSES.forEach(status => {
         const col = document.createElement('div');
         col.className = 'column';
-        col.innerHTML = `<div class="col-header"><span class="col-name">${status}</span></div>`;
+        col.innerHTML = `<div class="column-title">${status} <span>${records.filter(r => (r.Status || 'To Do') === status).length}</span></div>`;
         
         const zone = document.createElement('div');
         zone.className = 'drop-zone';
         zone.dataset.status = status;
         
-        // SORTING: Priority first, then Alphabetical
         const filtered = records.filter(r => (r.Status || 'To Do') === status)
-            .sort((a, b) => {
-                const priA = PRIORITY_ORDER[a.Priority || ''] || 4;
-                const priB = PRIORITY_ORDER[b.Priority || ''] || 4;
-                return priA - priB || (a.Task || '').localeCompare(b.Task || '');
-            });
+            .sort((a, b) => (PRIORITY_ORDER[a.Priority || ''] || 4) - (PRIORITY_ORDER[b.Priority || ''] || 4) || (a.Task || '').localeCompare(b.Task || ''));
 
         filtered.forEach(r => {
             const card = document.createElement('div');
             card.className = 'card';
             card.draggable = true;
-            const priClass = r.Priority ? `pill-${r.Priority.toLowerCase()}` : '';
+            const priStyle = r.Priority ? `background: var(--${r.Priority.toLowerCase()}-bg); color: var(--${r.Priority.toLowerCase()}-fg);` : 'display:none;';
             card.innerHTML = `
-                <div class="card-title">${r.Task || 'Untitled'}</div>
-                <div class="card-meta">
-                    ${r.Priority ? `<span class="pill ${priClass}">${r.Priority}</span>` : ''}
-                </div>
+                <div class="card-task">${r.Task || 'Untitled Action'}</div>
+                <div class="card-meta"><span class="pill" style="${priStyle}">${r.Priority}</span></div>
             `;
             card.onclick = () => openModal(r);
             card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', r.id); card.classList.add('dragging'); };
@@ -353,7 +469,6 @@ function renderBoard() {
             zone.appendChild(card);
         });
 
-        // Drag handlers
         zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('drag-over'); };
         zone.ondragleave = () => zone.classList.remove('drag-over');
         zone.ondrop = async (e) => {
@@ -402,8 +517,6 @@ async function saveModal() {
         method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields })
     });
 }
-
-function showLogin() { location.reload(); }
 
 init();
 </script>
