@@ -16,6 +16,7 @@
   --cream-dark:  #f0ede8;
   --white:       #ffffff;
   --green:       #1a5c3a;
+  --green-hover: #14472d;
   --ink:         #1c1c1b;
   --muted:       #70706b;
   --border:      #e5e3de;
@@ -29,125 +30,71 @@
 
 body { font-family: var(--font-sans); background: var(--cream); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-/* ── REFINED LOGO STYLING ── */
-.acg-brand-style {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.01em;
-}
-.acg-brand-style em {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  color: #e8f2ec; 
-  margin-left: 2px;
-}
+/* ── BRANDING ── */
+.acg-brand-style { font-family: var(--font-serif); font-weight: 700; color: #ffffff; letter-spacing: -0.01em; }
+.acg-brand-style em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #e8f2ec; margin-left: 2px; }
 
-.acg-brand-dark {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  color: #000000;
-}
-.acg-brand-dark em {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--green);
-  margin-left: 2px;
-}
+.acg-brand-dark { font-family: var(--font-serif); font-weight: 700; color: #000000; }
+.acg-brand-dark em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--green); margin-left: 2px; }
 
-.container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
-
-/* ── AUTH (REDUCED SIZES) ── */
+/* ── AUTH ── */
 .auth-layout { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.auth-card { 
-  background: var(--white); 
-  border-radius: 10px; 
-  width: 100%; 
-  max-width: 320px; /* Reduced from 360px */
-  box-shadow: 0 8px 32px rgba(0,0,0,0.06); 
-  overflow: hidden; 
-  border: 1px solid var(--border); 
-}
-.auth-header { 
-  padding: 30px 20px 20px; /* Reduced padding */
-  text-align: center; 
-  background: var(--green); 
-  color: white; 
-}
-.auth-header p { 
-  font-size: 11px; /* Reduced from 13px */
-  opacity: 0.9; 
-  margin-top: 6px; 
-  font-weight: 500; 
-  letter-spacing: 0.05em; 
-  text-transform: uppercase; 
-}
+.auth-card { background: var(--white); border-radius: 10px; width: 100%; max-width: 320px; box-shadow: 0 8px 32px rgba(0,0,0,0.06); overflow: hidden; border: 1px solid var(--border); }
+.auth-header { padding: 30px 20px 20px; text-align: center; background: var(--green); color: white; }
+.auth-header p { font-family: var(--font-sans); font-size: 11px; opacity: 0.9; margin-top: 6px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
 
 .user-grid { background: var(--white); display: flex; flex-direction: column; }
-.user-btn { 
-  width: 100%; 
-  padding: 14px 20px; /* Reduced from 20px */
-  border: none; 
-  background: transparent; 
-  text-align: left; 
-  font-family: var(--font-sans); 
-  font-size: 13px; /* Reduced from 15px */
-  font-weight: 500; 
-  cursor: pointer; 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  border-bottom: 1px solid var(--border); 
-  transition: 0.2s; 
-}
-.user-btn:last-child { border-bottom: none; }
-.user-btn:hover { background: var(--green-tint); color: var(--green); }
-.user-btn span { opacity: 0.3; font-size: 14px; }
+.user-btn { width: 100%; padding: 14px 20px; border: none; background: transparent; text-align: left; font-family: var(--font-sans); font-size: 13px; font-weight: 500; cursor: pointer; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); transition: 0.2s; color: var(--ink); }
+.user-btn:hover { background: #f0f5f2; color: var(--green); }
 
-/* ── BOARD STYLING (UNCHANGED) ── */
+/* ── KANBAN ── */
 #topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 12px 0; position: sticky; top: 0; z-index: 50; }
-.topbar-inner { display: flex; justify-content: space-between; align-items: center; }
-.topbar-logo { font-size: 18px; display: flex; align-items: center; }
-.topbar-actions { display: flex; align-items: center; gap: 15px; }
+.topbar-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1240px; margin: 0 auto; padding: 0 20px; }
+.btn-new { background: var(--green); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-.btn-new { background: var(--green); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-.btn-new:hover { transform: scale(1.1); }
-
-.board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 24px 0; }
+.board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 24px 0; max-width: 1240px; margin: 0 auto; padding: 24px 20px; }
 .column { background: rgba(229, 227, 222, 0.4); border-radius: 10px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
 .col-header { padding: 12px 14px; display: flex; align-items: center; background: var(--white); border-bottom: 1px solid var(--border); }
 .col-status-bar { width: 4px; height: 14px; border-radius: 2px; margin-right: 8px; }
-.column-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); flex-grow: 1; display: flex; justify-content: space-between; }
-
-.drop-zone { min-height: 75vh; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+.column-title { font-family: var(--font-sans); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); flex-grow: 1; display: flex; justify-content: space-between; }
 
 /* ── CARDS ── */
 .card { background: var(--white); border-radius: 8px; padding: 0; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 0 0 1px var(--border); cursor: grab; transition: all 0.2s; overflow: hidden; display: flex; }
 .card:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
 .card-accent { width: 4px; flex-shrink: 0; }
 .card-inner { padding: 14px; flex-grow: 1; }
-.card-task { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 6px; }
-.card-context { font-size: 11px; color: var(--muted); line-height: 1.4; padding-top: 8px; border-top: 1px solid #f0f0ee; margin-top: 8px; }
+.card-task { font-family: var(--font-sans); font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 6px; }
+.card-context { font-family: var(--font-sans); font-size: 11px; color: var(--muted); line-height: 1.4; padding-top: 8px; border-top: 1px solid #f0f0ee; margin-top: 8px; }
 
 /* ── MODAL ── */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(28, 28, 27, 0.5); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
 .modal-content { background: var(--white); width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
 .modal-header { padding: 16px 20px; background: var(--green); color: white; display: flex; justify-content: space-between; align-items: center; }
+.modal-header h2 { font-family: var(--font-serif); font-size: 16px; font-weight: 600; }
 .modal-body { padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; overflow-y: auto; max-height: 80vh; }
 .form-group { display: flex; flex-direction: column; gap: 4px; }
 .form-group.full { grid-column: span 2; }
-.label { font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
-.input-field { padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; outline: none; background: #fafafa; }
-.modal-footer { padding: 14px 20px; background: #f9f9f8; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+.label { font-family: var(--font-sans); font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+.input-field { padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; outline: none; background: #fafafa; font-family: var(--font-sans); }
+.input-field:focus { border-color: var(--green); background: white; }
 
-.btn { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 12px; }
+/* Custom File Button */
+.file-upload-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px;
+    background: white; color: var(--ink); font-size: 12px; font-family: var(--font-sans);
+    cursor: pointer; gap: 6px; transition: 0.2s;
+}
+.file-upload-btn:hover { border-color: var(--green); background: var(--cream); }
+.file-list-modal { font-family: var(--font-sans); font-size: 11px; color: var(--green); margin-top: 6px; line-height: 1.6; }
+
+.modal-footer { padding: 14px 20px; background: #f9f9f8; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+.btn { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 12px; font-family: var(--font-sans); }
 .btn-primary { background: var(--green); color: white; }
 .btn-secondary { background: var(--cream-dark); color: var(--ink); }
 
-#loading { display: none; position: fixed; inset: 0; background: var(--cream); z-index: 200; flex-direction: column; align-items: center; justify-content: center; font-size: 18px; color: var(--green); }
+#loading { display: none; position: fixed; inset: 0; background: var(--cream); z-index: 200; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 18px; color: var(--green); }
 #loading.active { display: flex; }
 </style>
 </head>
@@ -177,22 +124,22 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
 
 <section id="board-screen" style="display:none;">
   <header id="topbar">
-    <div class="container topbar-inner">
+    <div class="topbar-inner">
       <div class="topbar-logo"><span class="acg-brand-dark" style="font-size:18px;">ACG <em>Discovery</em></span><span style="color:var(--muted); font-size:13px; margin-left:6px;">/ <span id="board-title"></span></span></div>
       <div class="topbar-actions">
-        <div id="item-count" style="font-size: 10px; font-weight: 700; color: var(--muted);"></div>
-        <button class="btn-new" onclick="openModal(null)" title="New Task">+</button>
+        <div id="item-count" style="font-family: var(--font-sans); font-size: 10px; font-weight: 700; color: var(--muted);"></div>
+        <button class="btn-new" onclick="openModal(null)">+</button>
       </div>
     </div>
   </header>
-  <div class="container"><div id="board-body" class="board-grid"></div></div>
+  <div class="board-grid" id="board-body"></div>
 </section>
 
 <div class="modal-overlay" id="modal-backdrop">
   <div class="modal-content">
-    <div class="modal-header"><h2 id="modal-type-label" style="font-size: 16px;">Edit Action Item</h2><button onclick="closeModal()" style="background:transparent; border:none; color:white; font-size:20px; cursor:pointer;">&times;</button></div>
+    <div class="modal-header"><h2 id="modal-type-label">Edit Action Item</h2><button onclick="closeModal()" style="background:transparent; border:none; color:white; font-size:20px; cursor:pointer;">&times;</button></div>
     <div class="modal-body">
-      <div class="form-group full"><div class="label">Task</div><textarea id="f-task" class="input-field" rows="2"></textarea></div>
+      <div class="form-group full"><div class="label">Task Title</div><textarea id="f-task" class="input-field" rows="2"></textarea></div>
       <div class="form-group"><div class="label">Status</div><select id="f-status" class="input-field"><option>To Do</option><option>In Progress</option><option>Done</option></select></div>
       <div class="form-group"><div class="label">Priority</div><select id="f-priority" class="input-field"><option value="">None</option><option>P0</option><option>P1</option><option>P2</option><option>P3</option></select></div>
       <div class="form-group"><div class="label">Category</div><select id="f-category" class="input-field"><option value="">-</option><option>Compliance/Legal</option><option>Interview Scheduling</option><option>Internal Coordination</option><option>Data/Integration</option><option>Build Scoping</option><option>Stakeholder Followup</option><option>People/Org</option><option>Knowledge Base Seeding</option><option>Vendor Eval</option></select></div>
@@ -200,15 +147,18 @@ body { font-family: var(--font-sans); background: var(--cream); color: var(--ink
         <option>Sean</option><option>Sameer</option><option>Craig</option><option>Ryan</option><option>Anthony</option><option>Ethan</option><option>Henry</option><option>Gordon</option><option>Adam</option><option>Dan</option><option>Brian</option><option>Chris</option><option>Ben</option><option>John C.</option>
       </select></div>
       <div class="form-group full">
-        <div class="label">Add files</div>
-        <input type="file" id="f-file-picker" style="font-size:10px; margin-bottom:4px;">
-        <div id="f-files-display" class="file-list" style="font-size: 10px;"></div>
+        <div class="label">Attachments</div>
+        <label class="file-upload-btn">
+          📎 Upload File (via URL)
+          <input type="text" id="f-file-url" placeholder="Paste link here..." class="input-field" style="flex:1; padding:4px 8px; font-size:11px;">
+        </label>
+        <div id="f-files-display" class="file-list-modal"></div>
       </div>
       <div class="form-group full"><div class="label">Context & Notes</div><textarea id="f-context" class="input-field" rows="3"></textarea></div>
       <div class="form-group"><div class="label">Steve - Notes</div><textarea id="f-notes-steve" class="input-field" rows="2"></textarea></div>
       <div class="form-group"><div class="label">ACG - Notes</div><textarea id="f-notes-acg" class="input-field" rows="2"></textarea></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="save-btn">Save</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="save-btn">Save Changes</button></div>
   </div>
 </div>
 
@@ -226,12 +176,15 @@ const FIELD = { task: 'Task', category: 'Category', context: 'Context', status: 
 
 function init() {
   const grid = document.getElementById('user-grid');
-  grid.innerHTML = '';
-  USERS.forEach(name => {
-    const btn = document.createElement('button'); btn.className = 'user-btn'; btn.innerHTML = `${name} <span>&rarr;</span>`;
-    btn.onclick = () => { currentUser = name; document.getElementById('login-screen').style.display='none'; document.getElementById('pin-screen').style.display='flex'; document.getElementById('pin-field').focus(); };
-    grid.appendChild(btn);
-  });
+  grid.innerHTML = USERS.map(u => `<button class="user-btn" onclick="selectUser('${u}')">${u} <span>&rarr;</span></button>`).join('');
+  document.getElementById('pin-field').onkeypress = (e) => { if (e.key === 'Enter') verifyPin(); };
+}
+
+function selectUser(u) {
+    currentUser = u;
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('pin-screen').style.display='flex';
+    document.getElementById('pin-field').focus();
 }
 
 async function verifyPin() {
@@ -239,8 +192,10 @@ async function verifyPin() {
     const filter = `Name="${currentUser}"`;
     const resp = await fetch(`${API_ROOT}/${USER_TABLE}?filterByFormula=${encodeURIComponent(filter)}`, { headers: HEADERS });
     const data = await resp.json();
-    if (data.records && String(data.records[0].fields.PIN) === pin) { document.getElementById('pin-screen').style.display = 'none'; loadBoard(); }
-    else { alert('Incorrect PIN'); }
+    if (data.records && String(data.records[0].fields.PIN) === pin) { 
+        document.getElementById('pin-screen').style.display = 'none'; 
+        loadBoard(); 
+    } else { alert('Incorrect PIN'); }
 }
 
 async function loadBoard() {
@@ -259,7 +214,7 @@ async function loadBoard() {
 function renderBoard() {
     document.getElementById('board-title').textContent = currentUser;
     const body = document.getElementById('board-body'); body.innerHTML = '';
-    document.getElementById('item-count').textContent = `${records.length} ITEMS`;
+    document.getElementById('item-count').textContent = `${records.length} ACTIVE ITEMS`;
     STATUSES.forEach(status => {
         const colRecords = records.filter(r => (r.Status || 'To Do') === status);
         const col = document.createElement('div'); col.className = 'column';
@@ -284,16 +239,16 @@ function renderBoard() {
 
 function openModal(r) {
     editingId = r ? r.id : null;
-    document.getElementById('modal-type-label').textContent = r ? 'Edit Action Item' : 'Create New Action Item';
-    document.getElementById('f-task').value = r ? r[FIELD.task] : '';
-    document.getElementById('f-status').value = r ? r[FIELD.status] : 'To Do';
-    document.getElementById('f-priority').value = r ? r[FIELD.priority] : '';
-    document.getElementById('f-category').value = r ? r[FIELD.category] : '';
-    document.getElementById('f-source').value = r ? r[FIELD.source] : currentUser;
-    document.getElementById('f-context').value = r ? r[FIELD.context] : '';
-    document.getElementById('f-notes-steve').value = r ? r[FIELD.notesSteve] : '';
-    document.getElementById('f-notes-acg').value = r ? r[FIELD.notesACG] : '';
-    document.getElementById('f-file-picker').value = '';
+    document.getElementById('modal-type-label').textContent = r ? 'Edit Action Item' : 'New Action Item';
+    document.getElementById('f-task').value = r ? (r[FIELD.task] || '') : '';
+    document.getElementById('f-status').value = r ? (r[FIELD.status] || 'To Do') : 'To Do';
+    document.getElementById('f-priority').value = r ? (r[FIELD.priority] || '') : '';
+    document.getElementById('f-category').value = r ? (r[FIELD.category] || '') : '';
+    document.getElementById('f-source').value = r ? (r[FIELD.source] || currentUser) : currentUser;
+    document.getElementById('f-context').value = r ? (r[FIELD.context] || '') : '';
+    document.getElementById('f-notes-steve').value = r ? (r[FIELD.notesSteve] || '') : '';
+    document.getElementById('f-notes-acg').value = r ? (r[FIELD.notesACG] || '') : '';
+    document.getElementById('f-file-url').value = '';
     
     const fileEl = document.getElementById('f-files-display');
     if (r && r[FIELD.files]) { fileEl.innerHTML = r[FIELD.files].map(f => `<a href="${f.url}" target="_blank">📎 ${f.filename}</a>`).join('<br>'); }
@@ -308,6 +263,9 @@ function closeModal() { document.getElementById('modal-backdrop').classList.remo
 async function saveItem() {
     const fields = { [FIELD.task]: document.getElementById('f-task').value, [FIELD.status]: document.getElementById('f-status').value, [FIELD.priority]: document.getElementById('f-priority').value, [FIELD.category]: document.getElementById('f-category').value, [FIELD.source]: document.getElementById('f-source').value, [FIELD.context]: document.getElementById('f-context').value, [FIELD.notesSteve]: document.getElementById('f-notes-steve').value, [FIELD.notesACG]: document.getElementById('f-notes-acg').value };
     
+    const fileUrl = document.getElementById('f-file-url').value;
+    if (fileUrl) { fields[FIELD.files] = [{ url: fileUrl }]; }
+
     closeModal();
     document.getElementById('loading').classList.add('active');
     
