@@ -725,6 +725,9 @@ async function loadRecords() {
     const params = new URLSearchParams();
     params.set('filterByFormula', filterFormula);
     params.set('pageSize', '100');
+    // CACHE BUSTER: Ensures we get fresh Record IDs from Airtable every time
+    params.set('nocache', Date.now()); 
+    
     if (offset) params.set('offset', offset);
     const resp = await fetch(`${API}?${params}`, { headers: HEADERS });
     if (!resp.ok) { const b = await resp.text(); throw new Error(`Airtable error ${resp.status}: ${b}`); }
