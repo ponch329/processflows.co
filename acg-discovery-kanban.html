@@ -14,14 +14,13 @@
   --cream:       #f8f6f2;
   --cream-dark:  #f0ede8;
   --white:       #ffffff;
-  --green:       #1a5c3a; /* Deep, professional green */
+  --green:       #1a5c3a;
   --green-hover: #14472d;
   --green-tint:  #f0f5f2;
   --ink:         #1c1c1b;
   --muted:       #70706b;
   --border:      #e5e3de;
   
-  /* Status/Priority Colors - Softened for classier look */
   --p0-bg: #fff1f1; --p0-fg: #c53030;
   --p1-bg: #fff8eb; --p1-fg: #b45309;
   --p2-bg: #f0fdf4; --p2-fg: #166534;
@@ -39,291 +38,74 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
+.container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
 
-/* ── AUTH SCREENS ── */
-.auth-layout {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+/* ── AUTH ── */
+.auth-layout { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.auth-card { background: var(--white); border-radius: 12px; width: 100%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.04), 0 0 0 1px var(--border); overflow: hidden; }
+.auth-header { padding: 32px 24px; text-align: center; border-bottom: 1px solid var(--border); background: var(--green); color: white; }
+.auth-header h1 { font-family: var(--font-serif); font-size: 24px; margin-bottom: 4px; }
+.auth-header p { font-size: 13px; opacity: 0.8; }
+.user-list { padding: 8px; }
+.user-btn { width: 100%; padding: 14px 20px; border: none; background: transparent; text-align: left; font-family: var(--font-sans); font-size: 15px; cursor: pointer; border-radius: 6px; display: flex; justify-content: space-between; transition: all 0.2s; }
+.user-btn:hover { background: var(--green-tint); color: var(--green); }
 
-.auth-card {
-  background: var(--white);
-  border-radius: 16px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.04), 0 0 0 1px var(--border);
-  overflow: hidden;
-}
+/* ── KANBAN ── */
+#topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 0; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+.topbar-inner { display: flex; justify-content: space-between; align-items: center; }
+.brand { font-family: var(--font-serif); font-size: 20px; font-weight: 600; color: var(--green); }
 
-.auth-header {
-  padding: 40px 32px 24px;
-  text-align: center;
-}
-
-.auth-header h1 {
-  font-family: var(--font-serif);
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: var(--green);
-}
-
-.auth-header p {
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.user-list {
-  padding: 8px;
-}
-
-.user-btn {
-  width: 100%;
-  padding: 16px 24px;
-  border: none;
-  background: transparent;
-  text-align: left;
-  font-family: var(--font-sans);
-  font-size: 15px;
-  cursor: pointer;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.2s;
-}
-
-.user-btn:hover {
-  background: var(--green-tint);
-  color: var(--green);
-}
-
-.user-btn::after {
-  content: '→';
-  opacity: 0;
-  transform: translateX(-10px);
-  transition: all 0.2s;
-}
-
-.user-btn:hover::after {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* ── PIN SCREEN ── */
-.pin-wrap {
-  padding: 0 32px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.pin-field {
-  width: 100%;
-  height: 60px;
-  font-size: 32px;
-  text-align: center;
-  letter-spacing: 12px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--cream);
-  font-family: var(--font-sans);
-}
-
-/* ── KANBAN BOARD ── */
-#topbar {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: 16px 0;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-
-.topbar-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.brand {
-  font-family: var(--font-serif);
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--green);
-}
-
-.board-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  padding: 40px 0;
-}
-
-.column-title {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--muted);
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.drop-zone {
-  min-height: 600px;
-  background: rgba(229, 227, 222, 0.3);
-  border-radius: 12px;
-  padding: 12px;
-  transition: background 0.3s;
-}
-
-.drop-zone.drag-over {
-  background: rgba(26, 92, 58, 0.05);
-  box-shadow: inset 0 0 0 2px var(--green-mid);
-}
+.board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 32px 0; align-items: stretch; }
+.column-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; padding: 0 4px; }
+.drop-zone { min-height: 70vh; background: rgba(229, 227, 222, 0.4); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+.drop-zone.drag-over { background: rgba(26, 92, 58, 0.08); outline: 2px dashed var(--green); }
 
 /* ── CARDS ── */
-.card {
-  background: var(--white);
-  border-radius: 10px;
-  padding: 18px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02), 0 0 0 1px var(--border);
-  cursor: grab;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05), 0 0 0 1px var(--green-mid);
-}
-
-.card-task {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.5;
-  margin-bottom: 12px;
-}
-
-.pill {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 6px;
-  display: inline-block;
-}
+.card { background: var(--white); border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 0 0 1px var(--border); cursor: grab; transition: all 0.2s; position: relative; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.06), 0 0 0 1px var(--green); }
+.card-task { font-size: 13.5px; font-weight: 600; line-height: 1.4; margin-bottom: 10px; color: var(--ink); }
+.card-context { font-size: 11.5px; color: var(--muted); line-height: 1.5; padding-top: 10px; border-top: 1px solid #f0f0ee; margin-top: 10px; }
+.pill { font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 
 /* ── MODAL ── */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(28, 28, 27, 0.6);
-  backdrop-filter: blur(8px);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
-}
-
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(28, 28, 27, 0.5); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .modal-overlay.open { display: flex; }
+.modal-content { background: var(--white); width: 100%; max-width: 640px; border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); margin: auto; }
+.modal-header { padding: 20px 24px; background: var(--green); color: white; display: flex; justify-content: space-between; align-items: center; }
+.modal-body { padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: span 2; }
+.label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; }
+.input-field { padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-family: var(--font-sans); font-size: 13.5px; outline: none; background: #fafafa; }
+.input-field:focus { border-color: var(--green); background: white; }
+.modal-footer { padding: 16px 24px; background: #f9f9f8; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; }
 
-.modal-content {
-  background: var(--white);
-  width: 90%;
-  max-width: 520px;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-.modal-header {
-  padding: 24px 32px;
-  background: var(--green);
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h2 { font-family: var(--font-serif); font-size: 20px; }
-
-.modal-body {
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.form-group { display: flex; flex-direction: column; gap: 8px; }
-.label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
-
-.input-field {
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  outline: none;
-}
-
-.input-field:focus { border-color: var(--green); }
-
-.btn {
-  padding: 14px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  font-family: var(--font-sans);
-  transition: all 0.2s;
-}
-
+.btn { padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-family: var(--font-sans); font-size: 13px; }
 .btn-primary { background: var(--green); color: white; }
-.btn-primary:hover { background: var(--green-hover); }
 .btn-secondary { background: var(--cream-dark); color: var(--ink); }
 
-#loading {
-  display: none; position: fixed; inset: 0; background: var(--cream); z-index: 200;
-  flex-direction: column; align-items: center; justify-content: center;
-}
+#loading { display: none; position: fixed; inset: 0; background: var(--cream); z-index: 200; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 20px; color: var(--green); }
 #loading.active { display: flex; }
-
 </style>
 </head>
 <body>
 
-<div id="loading"><div class="brand">Synchronizing Data...</div></div>
+<div id="loading">Synchronizing...</div>
 
 <section id="login-screen" class="auth-layout">
   <div class="auth-card">
-    <div class="auth-header">
-      <h1>ACG Discovery</h1>
-      <p>Identify yourself to access your board</p>
-    </div>
+    <div class="auth-header"><h1>ACG Discovery</h1><p>Select your name to continue</p></div>
     <div id="user-grid" class="user-list"></div>
   </div>
 </section>
 
 <section id="pin-screen" class="auth-layout" style="display:none;">
   <div class="auth-card">
-    <div class="auth-header">
-      <h1 id="pin-target-name">Enter PIN</h1>
-      <p>Secure access required</p>
-    </div>
-    <div class="pin-wrap">
-      <input type="password" id="pin-field" class="pin-field" maxlength="4" placeholder="••••">
-      <button class="btn btn-primary" onclick="verifyPin()">Verify Access</button>
-      <button class="btn btn-secondary" onclick="location.reload()">Back</button>
+    <div class="auth-header"><h1 id="pin-target-name">Enter PIN</h1><p>Secure access required</p></div>
+    <div style="padding: 24px;">
+      <input type="password" id="pin-field" style="width:100%; height:54px; text-align:center; font-size:24px; letter-spacing:8px; border:1px solid var(--border); border-radius:8px; margin-bottom:16px;">
+      <button class="btn btn-primary" style="width:100%;" onclick="verifyPin()">Unlock Board</button>
+      <button class="btn btn-secondary" style="width:100%; margin-top:8px;" onclick="location.reload()">Cancel</button>
     </div>
   </div>
 </section>
@@ -331,8 +113,8 @@ body {
 <section id="board-screen" style="display:none;">
   <header id="topbar">
     <div class="container topbar-inner">
-      <div class="brand">ACG Discovery / <span id="board-title" style="color: var(--muted); font-weight: 400;"></span></div>
-      <div id="item-count" style="font-size: 12px; font-weight: 600; color: var(--muted);"></div>
+      <div class="brand">ACG Discovery / <span id="board-title" style="font-weight: 400; color: var(--muted);"></span></div>
+      <div id="item-count" style="font-size: 11px; font-weight: 700; color: var(--muted); opacity: 0.7;"></div>
     </div>
   </header>
   <div class="container">
@@ -342,160 +124,109 @@ body {
 
 <div class="modal-overlay" id="modal-backdrop">
   <div class="modal-content">
-    <div class="modal-header">
-      <h2>Action Item Detail</h2>
-      <button onclick="closeModal()" style="background:transparent; border:none; color:white; font-size:24px; cursor:pointer;">×</button>
-    </div>
+    <div class="modal-header"><h2>Edit Action Item</h2><button onclick="closeModal()" style="background:transparent; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button></div>
     <div class="modal-body">
-      <div class="form-group">
-        <div class="label">Task Title</div>
-        <textarea id="f-task" class="input-field" rows="3"></textarea>
-      </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-        <div class="form-group">
-          <div class="label">Status</div>
-          <select id="f-status" class="input-field">
-            <option>To Do</option><option>In Progress</option><option>Done</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <div class="label">Priority</div>
-          <select id="f-priority" class="input-field">
-            <option value="">No Priority</option>
-            <option>P0</option><option>P1</option><option>P2</option><option>P3</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="label">Context & Notes</div>
-        <textarea id="f-context" class="input-field" rows="5"></textarea>
-      </div>
-      <button class="btn btn-primary" id="save-btn">Save Changes</button>
+      <div class="form-group full"><div class="label">Task</div><textarea id="f-task" class="input-field" rows="2"></textarea></div>
+      <div class="form-group"><div class="label">Status</div><select id="f-status" class="input-field"><option>To Do</option><option>In Progress</option><option>Done</option></select></div>
+      <div class="form-group"><div class="label">Priority</div><select id="f-priority" class="input-field"><option value="">None</option><option>P0</option><option>P1</option><option>P2</option><option>P3</option></select></div>
+      <div class="form-group"><div class="label">Category</div><select id="f-category" class="input-field">
+        <option value="">—</option><option>Compliance/Legal</option><option>Interview Scheduling</option><option>Internal Coordination</option><option>Data/Integration</option><option>Build Scoping</option><option>Stakeholder Followup</option><option>People/Org</option><option>Knowledge Base Seeding</option><option>Vendor Eval</option>
+      </select></div>
+      <div class="form-group"><div class="label">Source Interview</div><select id="f-source" class="input-field">
+        <option>Craig</option><option>Craig + Ryan</option><option>Ryan</option><option>Anthony</option><option>Ethan</option><option>Ethan + Brian</option><option>Ethan + multiple</option><option>Henry</option><option>Henry + Dan</option><option>Gordon + Brian</option><option>Gordon</option><option>Gordon + Anthony + Dan</option><option>Adam</option><option>Dan</option><option>Dan + Ethan</option><option>Brian</option><option>Brian + Henry</option><option>Chris</option><option>Chris + Henry</option><option>Ben</option><option>Ben + Anthony</option><option>John C.</option>
+      </select></div>
+      <div class="form-group full"><div class="label">Context & Notes</div><textarea id="f-context" class="input-field" rows="3"></textarea></div>
+      <div class="form-group"><div class="label">Steve — Notes</div><textarea id="f-notes-steve" class="input-field" rows="2"></textarea></div>
+      <div class="form-group"><div class="label">ACG — Notes</div><textarea id="f-notes-acg" class="input-field" rows="2"></textarea></div>
     </div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="save-btn">Update Item</button></div>
   </div>
 </div>
 
 <script>
-const BASE_ID  = 'appxCnPGUTukxQNwc';
-const TASK_TABLE = 'tblibVnpKLGtgN07m';
-const USER_TABLE = 'tblgAhvu8tDY2AVzt';
-const API_ROOT   = `https://steep-limit-b79a.stephen-b11.workers.dev/airtable/v0/${BASE_ID}`;
-const HEADERS  = { 'Content-Type': 'application/json' };
-
-const STATUSES = ['To Do', 'In Progress', 'Done'];
-const USERS = ['Craig','Ryan','Anthony','Ethan','Henry','Gordon','Adam','Dan','Brian','Chris','Ben','John C.'];
+const BASE_ID = 'appxCnPGUTukxQNwc', TASK_TABLE = 'tblibVnpKLGtgN07m', USER_TABLE = 'tblgAhvu8tDY2AVzt';
+const API_ROOT = `https://steep-limit-b79a.stephen-b11.workers.dev/airtable/v0/${BASE_ID}`, HEADERS = { 'Content-Type': 'application/json' };
+const STATUSES = ['To Do', 'In Progress', 'Done'], USERS = ['Craig','Ryan','Anthony','Ethan','Henry','Gordon','Adam','Dan','Brian','Chris','Ben','John C.'];
 const PRIORITY_ORDER = { 'P0': 0, 'P1': 1, 'P2': 2, 'P3': 3, '': 4 };
 
-let currentUser = null;
-let records = [];
-let editingId = null;
+let currentUser = null, records = [], editingId = null;
+
+const FIELD = {
+  task: 'Task', category: 'Category', context: 'Context', status: 'Status', priority: 'Priority',
+  source: 'Source Interview', notesSteve: 'Steve - Notes/Action', notesACG: 'ACG - Notes/Action'
+};
 
 function init() {
   const grid = document.getElementById('user-grid');
   USERS.forEach(name => {
-    const btn = document.createElement('button');
-    btn.className = 'user-btn';
-    btn.textContent = name;
-    btn.onclick = () => {
-      currentUser = name;
-      document.getElementById('login-screen').style.display='none';
-      document.getElementById('pin-screen').style.display='flex';
-      document.getElementById('pin-target-name').textContent = name;
-      document.getElementById('pin-field').focus();
-    };
+    const btn = document.createElement('button'); btn.className = 'user-btn'; btn.innerHTML = `${name} <span>&rarr;</span>`;
+    btn.onclick = () => { currentUser = name; document.getElementById('login-screen').style.display='none'; document.getElementById('pin-screen').style.display='flex'; document.getElementById('pin-target-name').textContent = name; document.getElementById('pin-field').focus(); };
     grid.appendChild(btn);
   });
   document.getElementById('pin-field').onkeypress = (e) => { if(e.key === 'Enter') verifyPin(); };
 }
 
 async function verifyPin() {
-    const pin = document.getElementById('pin-field').value;
-    if(!pin) return;
+    const pin = document.getElementById('pin-field').value; if(!pin) return;
     const filter = `Name="${currentUser}"`;
     const resp = await fetch(`${API_ROOT}/${USER_TABLE}?filterByFormula=${encodeURIComponent(filter)}`, { headers: HEADERS });
     const data = await resp.json();
     if (data.records && data.records.length > 0 && String(data.records[0].fields.PIN) === pin) {
-        document.getElementById('pin-screen').style.display='none';
-        loadBoard();
-    } else { alert('Access Denied: Incorrect PIN'); document.getElementById('pin-field').value = ''; }
+        document.getElementById('pin-screen').style.display='none'; loadBoard();
+    } else { alert('Incorrect PIN'); document.getElementById('pin-field').value = ''; }
 }
 
 async function loadBoard() {
-    document.getElementById('loading').classList.add('active');
-    records = [];
+    document.getElementById('loading').classList.add('active'); records = [];
     const filter = `FIND("${currentUser}", {Source Interview})`;
     let offset = null;
     do {
         const url = `${API_ROOT}/${TASK_TABLE}?filterByFormula=${encodeURIComponent(filter)}${offset ? `&offset=${offset}` : ''}`;
-        const resp = await fetch(url, { headers: HEADERS });
-        const data = await resp.json();
+        const resp = await fetch(url, { headers: HEADERS }); const data = await resp.json();
         data.records.forEach(r => records.push({ id: r.id, ...r.fields }));
         offset = data.offset;
     } while(offset);
-    renderBoard();
-    document.getElementById('loading').classList.remove('active');
-    document.getElementById('board-screen').style.display='block';
+    renderBoard(); document.getElementById('loading').classList.remove('active'); document.getElementById('board-screen').style.display='block';
 }
 
 function renderBoard() {
-    const body = document.getElementById('board-body');
-    body.innerHTML = '';
-    document.getElementById('item-count').textContent = `${records.length} ACTIVE ITEMS`;
-    
+    document.getElementById('board-title').textContent = currentUser;
+    const body = document.getElementById('board-body'); body.innerHTML = '';
+    document.getElementById('item-count').textContent = `${records.length} TOTAL ITEMS`;
     STATUSES.forEach(status => {
-        const col = document.createElement('div');
-        col.className = 'column';
-        col.innerHTML = `<div class="column-title">${status} <span>${records.filter(r => (r.Status || 'To Do') === status).length}</span></div>`;
-        
-        const zone = document.createElement('div');
-        zone.className = 'drop-zone';
-        zone.dataset.status = status;
-        
-        const filtered = records.filter(r => (r.Status || 'To Do') === status)
-            .sort((a, b) => (PRIORITY_ORDER[a.Priority || ''] || 4) - (PRIORITY_ORDER[b.Priority || ''] || 4) || (a.Task || '').localeCompare(b.Task || ''));
-
-        filtered.forEach(r => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.draggable = true;
-            const priStyle = r.Priority ? `background: var(--${r.Priority.toLowerCase()}-bg); color: var(--${r.Priority.toLowerCase()}-fg);` : 'display:none;';
-            card.innerHTML = `
-                <div class="card-task">${r.Task || 'Untitled Action'}</div>
-                <div class="card-meta"><span class="pill" style="${priStyle}">${r.Priority}</span></div>
-            `;
+        const colRecords = records.filter(r => (r.Status || 'To Do') === status);
+        const col = document.createElement('div'); col.className = 'column';
+        col.innerHTML = `<div class="column-title">${status} <span>${colRecords.length}</span></div>`;
+        const zone = document.createElement('div'); zone.className = 'drop-zone'; zone.dataset.status = status;
+        colRecords.sort((a,b) => (PRIORITY_ORDER[a.Priority||'']||4)-(PRIORITY_ORDER[b.Priority||'']||4)||(a.Task||'').localeCompare(b.Task||'')).forEach(r => {
+            const card = document.createElement('div'); card.className = 'card'; card.draggable = true;
+            const priStyle = r.Priority ? `background:var(--${r.Priority.toLowerCase()}-bg); color:var(--${r.Priority.toLowerCase()}-fg);` : 'display:none;';
+            const ctxSnippet = r.Context ? `<div class="card-context">${r.Context.length > 90 ? r.Context.substring(0, 90) + '...' : r.Context}</div>` : '';
+            card.innerHTML = `<div class="card-task">${r.Task||'Untitled'}</div><span class="pill" style="${priStyle}">${r.Priority}</span>${ctxSnippet}`;
             card.onclick = () => openModal(r);
             card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', r.id); card.classList.add('dragging'); };
             card.ondragend = () => card.classList.remove('dragging');
             zone.appendChild(card);
         });
-
-        zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('drag-over'); };
-        zone.ondragleave = () => zone.classList.remove('drag-over');
-        zone.ondrop = async (e) => {
-            e.preventDefault();
-            zone.classList.remove('drag-over');
-            const id = e.dataTransfer.getData('text/plain');
-            const newStatus = zone.dataset.status;
-            const rec = records.find(r => r.id === id);
-            if(rec && rec.Status !== newStatus) {
-                rec.Status = newStatus;
-                renderBoard();
-                await fetch(`${API_ROOT}/${TASK_TABLE}/${id}`, {
-                    method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields: { Status: newStatus } })
-                });
-            }
+        zone.ondragover=(e)=>{e.preventDefault(); zone.classList.add('drag-over');}; zone.ondragleave=()=>zone.classList.remove('drag-over');
+        zone.ondrop=async(e)=>{
+            e.preventDefault(); zone.classList.remove('drag-over'); const id = e.dataTransfer.getData('text/plain'); const newStatus = zone.dataset.status;
+            const rec = records.find(r => r.id === id); if(rec && rec.Status !== newStatus) { rec.Status = newStatus; renderBoard(); await fetch(`${API_ROOT}/${TASK_TABLE}/${id}`, { method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields: { Status: newStatus } }) }); }
         };
-        col.appendChild(zone);
-        body.appendChild(col);
+        col.appendChild(zone); body.appendChild(col);
     });
 }
 
 function openModal(r) {
     editingId = r.id;
-    document.getElementById('f-task').value = r.Task || '';
-    document.getElementById('f-status').value = r.Status || 'To Do';
-    document.getElementById('f-priority').value = r.Priority || '';
-    document.getElementById('f-context').value = r.Context || '';
+    document.getElementById('f-task').value = r[FIELD.task] || '';
+    document.getElementById('f-status').value = r[FIELD.status] || 'To Do';
+    document.getElementById('f-priority').value = r[FIELD.priority] || '';
+    document.getElementById('f-category').value = r[FIELD.category] || '';
+    document.getElementById('f-source').value = r[FIELD.source] || '';
+    document.getElementById('f-context').value = r[FIELD.context] || '';
+    document.getElementById('f-notes-steve').value = r[FIELD.notesSteve] || '';
+    document.getElementById('f-notes-acg').value = r[FIELD.notesACG] || '';
     document.getElementById('modal-backdrop').classList.add('open');
     document.getElementById('save-btn').onclick = saveModal;
 }
@@ -504,18 +235,18 @@ function closeModal() { document.getElementById('modal-backdrop').classList.remo
 
 async function saveModal() {
     const fields = {
-        'Task': document.getElementById('f-task').value,
-        'Status': document.getElementById('f-status').value,
-        'Priority': document.getElementById('f-priority').value,
-        'Context': document.getElementById('f-context').value
+        [FIELD.task]: document.getElementById('f-task').value,
+        [FIELD.status]: document.getElementById('f-status').value,
+        [FIELD.priority]: document.getElementById('f-priority').value,
+        [FIELD.category]: document.getElementById('f-category').value,
+        [FIELD.source]: document.getElementById('f-source').value,
+        [FIELD.context]: document.getElementById('f-context').value,
+        [FIELD.notesSteve]: document.getElementById('f-notes-steve').value,
+        [FIELD.notesACG]: document.getElementById('f-notes-acg').value
     };
-    const rec = records.find(r => r.id === editingId);
-    Object.assign(rec, fields);
-    renderBoard();
-    closeModal();
-    await fetch(`${API_ROOT}/${TASK_TABLE}/${editingId}`, {
-        method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields })
-    });
+    const rec = records.find(r => r.id === editingId); Object.assign(rec, fields);
+    renderBoard(); closeModal();
+    await fetch(`${API_ROOT}/${TASK_TABLE}/${editingId}`, { method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields }) });
 }
 
 init();
