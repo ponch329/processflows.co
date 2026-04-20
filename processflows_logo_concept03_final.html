@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,300;1,9..144,400&family=Instrument+Sans:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: transparent; }
+  .logo-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .logo-card {
+    padding: 52px 56px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    position: relative;
+  }
+  .card-light { background: #ffffff; border: 1px solid #e2ddd5; border-radius: 8px; margin-bottom: 10px; }
+  .card-warm  { background: #f5f3ee; border: 1px solid #e2ddd5; border-radius: 8px; margin-bottom: 10px; }
+  .card-dark  { background: #0f0f0f; border: 1px solid #222; border-radius: 8px; margin-bottom: 10px; }
+  .card-green { background: #1a6b45; border: 1px solid #155836; border-radius: 8px; margin-bottom: 0; }
+
+  .mark svg { display: block; }
+
+  .wordmark {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    gap: 2px;
+  }
+  .w-process {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 800;
+    font-size: 52px;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .w-flows {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 52px;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .tagline {
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+
+  .card-num {
+    position: absolute;
+    top: 14px; left: 56px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .usage-tag {
+    position: absolute;
+    bottom: 14px; right: 20px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.07em;
+  }
+
+  /* colors per card */
+  .card-light .w-process, .card-warm .w-process { color: #0f0f0f; }
+  .card-light .w-flows,   .card-warm .w-flows   { color: #1a6b45; }
+  .card-light .tagline,   .card-warm .tagline   { color: #b0a898; }
+  .card-light .card-num,  .card-warm .card-num  { color: #2d9b65; }
+  .card-light .usage-tag, .card-warm .usage-tag { color: #c8c0b4; }
+
+  .card-dark .w-process { color: #ffffff; }
+  .card-dark .w-flows   { color: #2d9b65; }
+  .card-dark .tagline   { color: #444; }
+  .card-dark .card-num  { color: #2d9b65; }
+  .card-dark .usage-tag { color: #444; }
+
+  .card-green .w-process { color: #ffffff; }
+  .card-green .w-flows   { color: #e8f5ee; }
+  .card-green .tagline   { color: rgba(255,255,255,0.45); }
+  .card-green .card-num  { color: rgba(255,255,255,0.5); }
+  .card-green .usage-tag { color: rgba(255,255,255,0.35); }
+</style>
+</head>
+<body>
+<div class="logo-stage">
+
+  <!-- CARD 1: White bg -->
+  <div class="logo-card card-light">
+    <span class="card-num">03 — Node Chain Mark · Primary</span>
+    <div class="mark">
+      <svg width="88" height="36" viewBox="0 0 88 36">
+        <circle cx="10" cy="18" r="8.5" fill="none" stroke="#c8c0b4" stroke-width="2"/>
+        <line x1="19" y1="18" x2="35" y2="18" stroke="#c8c0b4" stroke-width="1.5"/>
+        <circle cx="44" cy="18" r="8.5" fill="none" stroke="#1a6b45" stroke-width="2"/>
+        <circle cx="44" cy="18" r="3.5" fill="#1a6b45"/>
+        <line x1="53" y1="18" x2="66" y2="18" stroke="#1a6b45" stroke-width="1.5"/>
+        <path d="M63 12 L73 18 L63 24" fill="none" stroke="#1a6b45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="wordmark">
+      <span class="w-process">Process</span>
+      <span class="w-flows">Flows</span>
+      <span class="tagline">Fewer instructions. Faster results.</span>
+    </div>
+    <span class="usage-tag">White background · Primary</span>
+  </div>
+
+  <!-- CARD 2: Warm bg -->
+  <div class="logo-card card-warm">
+    <span class="card-num">03 — Node Chain Mark · Warm</span>
+    <div class="mark">
+      <svg width="88" height="36" viewBox="0 0 88 36">
+        <circle cx="10" cy="18" r="8.5" fill="none" stroke="#c8c0b4" stroke-width="2"/>
+        <line x1="19" y1="18" x2="35" y2="18" stroke="#c8c0b4" stroke-width="1.5"/>
+        <circle cx="44" cy="18" r="8.5" fill="none" stroke="#1a6b45" stroke-width="2"/>
+        <circle cx="44" cy="18" r="3.5" fill="#1a6b45"/>
+        <line x1="53" y1="18" x2="66" y2="18" stroke="#1a6b45" stroke-width="1.5"/>
+        <path d="M63 12 L73 18 L63 24" fill="none" stroke="#1a6b45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="wordmark">
+      <span class="w-process">Process</span>
+      <span class="w-flows">Flows</span>
+      <span class="tagline">Fewer instructions. Faster results.</span>
+    </div>
+    <span class="usage-tag">Warm background · Web default</span>
+  </div>
+
+  <!-- CARD 3: Dark bg -->
+  <div class="logo-card card-dark">
+    <span class="card-num">03 — Node Chain Mark · Dark</span>
+    <div class="mark">
+      <svg width="88" height="36" viewBox="0 0 88 36">
+        <circle cx="10" cy="18" r="8.5" fill="none" stroke="#444" stroke-width="2"/>
+        <line x1="19" y1="18" x2="35" y2="18" stroke="#444" stroke-width="1.5"/>
+        <circle cx="44" cy="18" r="8.5" fill="none" stroke="#2d9b65" stroke-width="2"/>
+        <circle cx="44" cy="18" r="3.5" fill="#2d9b65"/>
+        <line x1="53" y1="18" x2="66" y2="18" stroke="#2d9b65" stroke-width="1.5"/>
+        <path d="M63 12 L73 18 L63 24" fill="none" stroke="#2d9b65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="wordmark">
+      <span class="w-process">Process</span>
+      <span class="w-flows">Flows</span>
+      <span class="tagline">Fewer instructions. Faster results.</span>
+    </div>
+    <span class="usage-tag">Dark background · Reversed</span>
+  </div>
+
+  <!-- CARD 4: Green bg -->
+  <div class="logo-card card-green">
+    <span class="card-num">03 — Node Chain Mark · Green</span>
+    <div class="mark">
+      <svg width="88" height="36" viewBox="0 0 88 36">
+        <circle cx="10" cy="18" r="8.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+        <line x1="19" y1="18" x2="35" y2="18" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <circle cx="44" cy="18" r="8.5" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
+        <circle cx="44" cy="18" r="3.5" fill="#ffffff"/>
+        <line x1="53" y1="18" x2="66" y2="18" stroke="rgba(255,255,255,0.85)" stroke-width="1.5"/>
+        <path d="M63 12 L73 18 L63 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="wordmark">
+      <span class="w-process">Process</span>
+      <span class="w-flows">Flows</span>
+      <span class="tagline">Fewer instructions. Faster results.</span>
+    </div>
+    <span class="usage-tag">Green background · Brand moments</span>
+  </div>
+
+</div>
+</body>
+</html>
