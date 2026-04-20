@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ACG Discovery - Action Board</title>
-<link rel="icon" href="logo.png?v=2">
+<link rel="icon" href="logo.png?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -15,9 +15,7 @@
   --cream:       #f8f6f2;
   --cream-dark:  #f0ede8;
   --white:       #ffffff;
-  --green:       #1a5c3a; 
-  --green-hover: #14472d;
-  --green-tint:  #f0f5f2;
+  --green:       #1a5c3a; /* Your signature green */
   --ink:         #1c1c1b;
   --muted:       #70706b;
   --border:      #e5e3de;
@@ -39,37 +37,49 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── BRANDING HELPER ── */
-.brand-name {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--ink);
+/* ── THE "SCREENSHOTTED" BRANDING HELPER ── */
+.brand-image-style {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: #000000; /* Process is strong black */
+  letter-spacing: -0.01em;
 }
-.brand-name em {
-  font-family: var(--font-sans);
+.brand-image-style em {
+  font-family: var(--font-serif);
   font-style: italic;
-  font-weight: 500;
-  color: var(--green);
+  font-weight: 400;
+  color: #e8f2ec; /* Flows is green from screenshot */
+  margin-left: -2px;
 }
 
 .container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
 
 /* ── AUTH ── */
 .auth-layout { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.auth-card { background: var(--white); border-radius: 12px; width: 100%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.04), 0 0 0 1px var(--border); overflow: hidden; }
-.auth-header { padding: 32px 24px; text-align: center; border-bottom: 1px solid var(--border); background: var(--white); }
-.auth-header h1 { font-family: var(--font-serif); font-size: 24px; margin-bottom: 8px; font-weight: 600; }
-.auth-header h1 em { font-style: italic; color: var(--green); font-weight: 400; }
-.auth-header p { font-size: 13px; color: var(--muted); }
-.user-grid { padding: 8px; }
-.user-btn { width: 100%; padding: 14px 20px; border: none; background: transparent; text-align: left; font-family: var(--font-sans); font-size: 15px; cursor: pointer; border-radius: 6px; display: flex; justify-content: space-between; transition: all 0.2s; }
+.auth-card { background: var(--white); border-radius: 12px; width: 100%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.05), 0 0 0 1px var(--border); overflow: hidden; }
+
+/* Fixed Header: Green background with specified logo style */
+.auth-header { padding: 32px 24px 20px; text-align: center; background: var(--green); color: white; border-bottom: 1px solid rgba(0,0,0,0.1); }
+.auth-header .acg-discovery-text { font-size: 14px; opacity: 0.8; margin-top: 5px; }
+
+.user-grid { padding: 0; }
+.user-btn { width: 100%; padding: 18px 24px; border: none; background: transparent; text-align: left; font-family: var(--font-sans); font-size: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; 
+
+  /* The requested separators */
+  border-bottom: 1px solid var(--border);
+}
+.user-btn:last-child { border-bottom: none; }
 .user-btn:hover { background: var(--green-tint); color: var(--green); }
+.user-btn span { opacity: 0.3; }
 
 /* ── KANBAN ── */
-#topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 0; position: sticky; top: 0; z-index: 50; }
+#topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 0; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 .topbar-inner { display: flex; justify-content: space-between; align-items: center; }
-.topbar-logo { font-size: 18px; text-decoration: none; }
+
+/* Fixed Kanban Logo: Also using the screenshotted look */
+.topbar-logo { font-size: 18px; display: flex; align-items: center; gap: 8px; }
+.topbar-logo-green { color: var(--green); }
+.topbar-logo-title { font-size: 16px; color: var(--muted); margin-left: 5px; font-weight: 400; }
 
 .board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 32px 0; align-items: stretch; }
 .column-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; padding: 0 4px; }
@@ -107,16 +117,21 @@ body {
 <div id="loading">Synchronizing...</div>
 
 <section id="login-screen" class="auth-layout">
-  <div style="margin-bottom: 2rem;"><span class="brand-name" style="font-size: 24px;">Process<em>Flows</em></span></div>
   <div class="auth-card">
-    <div class="auth-header"><h1>ACG <em>Discovery</em></h1><p>Select your name to begin</p></div>
+    <div class="auth-header">
+        <span class="brand-image-style" style="font-size: 24px;">Process<em>Flows</em></span>
+        <div class="acg-discovery-text">ACG Discovery</div>
+    </div>
     <div id="user-grid" class="user-grid"></div>
   </div>
 </section>
 
 <section id="pin-screen" class="auth-layout" style="display:none;">
   <div class="auth-card">
-    <div class="auth-header"><h1 id="pin-target-name">Enter PIN</h1><p>Secure access required</p></div>
+    <div class="auth-header">
+        <span class="brand-image-style" style="font-size: 24px;">Process<em>Flows</em></span>
+        <h1 id="pin-target-name" style="font-size: 16px; margin-top:5px;">Enter PIN</h1>
+    </div>
     <div style="padding: 24px;">
       <input type="password" id="pin-field" style="width:100%; height:54px; text-align:center; font-size:24px; letter-spacing:8px; border:1px solid var(--border); border-radius:8px; margin-bottom:16px;">
       <button class="btn btn-primary" style="width:100%;" onclick="verifyPin()">Unlock Board</button>
@@ -129,12 +144,12 @@ body {
   <header id="topbar">
     <div class="container topbar-inner">
       <div class="topbar-logo">
-        <span class="brand-name">Process<em>Flows</em></span>
-        <span style="color: var(--border); margin: 0 10px;">|</span>
-        <span style="font-family: var(--font-serif); font-size: 16px; color: var(--ink);">ACG <em style="color: var(--green); font-style: italic;">Discovery</em></span>
-        <span style="color: var(--muted); font-size: 16px; margin-left: 5px;">/ <span id="board-title" style="font-weight: 400;"></span></span>
+        <span class="brand-image-style topbar-logo-green">Process<em>Flows</em></span>
+        <span style="color: var(--border); margin: 0 8px;">|</span>
+        <span style="font-family: var(--font-serif); font-size: 15px; color: var(--green); font-style:italic;">ACG Discovery</span>
+        <span class="topbar-logo-title">/ <span id="board-title"></span></span>
       </div>
-      <div id="item-count" style="font-size: 11px; font-weight: 700; color: var(--muted);"></div>
+      <div id="item-count" style="font-size: 11px; font-weight: 700; color: var(--muted); opacity:0.8;"></div>
     </div>
   </header>
   <div class="container">
@@ -144,7 +159,7 @@ body {
 
 <div class="modal-overlay" id="modal-backdrop">
   <div class="modal-content">
-    <div class="modal-header"><h2>Action Item</h2><button onclick="closeModal()" style="background:transparent; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button></div>
+    <div class="modal-header"><h2>Edit Action Item</h2><button onclick="closeModal()" style="background:transparent; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button></div>
     <div class="modal-body">
       <div class="form-group full"><div class="label">Task</div><textarea id="f-task" class="input-field" rows="2"></textarea></div>
       <div class="form-group"><div class="label">Status</div><select id="f-status" class="input-field"><option>To Do</option><option>In Progress</option><option>Done</option></select></div>
@@ -167,109 +182,4 @@ body {
 const BASE_ID = 'appxCnPGUTukxQNwc', TASK_TABLE = 'tblibVnpKLGtgN07m', USER_TABLE = 'tblgAhvu8tDY2AVzt';
 const API_ROOT = `https://steep-limit-b79a.stephen-b11.workers.dev/airtable/v0/${BASE_ID}`, HEADERS = { 'Content-Type': 'application/json' };
 const STATUSES = ['To Do', 'In Progress', 'Done'], USERS = ['Craig','Ryan','Anthony','Ethan','Henry','Gordon','Adam','Dan','Brian','Chris','Ben','John C.'];
-const PRIORITY_ORDER = { 'P0': 0, 'P1': 1, 'P2': 2, 'P3': 3, '': 4 };
-
-let currentUser = null, records = [], editingId = null;
-
-const FIELD = {
-  task: 'Task', category: 'Category', context: 'Context', status: 'Status', priority: 'Priority',
-  source: 'Source Interview', notesSteve: 'Steve - Notes/Action', notesACG: 'ACG - Notes/Action'
-};
-
-function init() {
-  const grid = document.getElementById('user-grid');
-  USERS.forEach(name => {
-    const btn = document.createElement('button'); btn.className = 'user-btn'; btn.innerHTML = `${name} <span>&rarr;</span>`;
-    btn.onclick = () => { currentUser = name; document.getElementById('login-screen').style.display='none'; document.getElementById('pin-screen').style.display='flex'; document.getElementById('pin-target-name').textContent = name; document.getElementById('pin-field').focus(); };
-    grid.appendChild(btn);
-  });
-  document.getElementById('pin-field').onkeypress = (e) => { if(e.key === 'Enter') verifyPin(); };
-}
-
-async function verifyPin() {
-    const pin = document.getElementById('pin-field').value; if(!pin) return;
-    const filter = `Name="${currentUser}"`;
-    const resp = await fetch(`${API_ROOT}/${USER_TABLE}?filterByFormula=${encodeURIComponent(filter)}`, { headers: HEADERS });
-    const data = await resp.json();
-    if (data.records && data.records.length > 0 && String(data.records[0].fields.PIN) === pin) {
-        document.getElementById('pin-screen').style.display='none'; loadBoard();
-    } else { alert('Incorrect PIN'); document.getElementById('pin-field').value = ''; }
-}
-
-async function loadBoard() {
-    document.getElementById('loading').classList.add('active'); records = [];
-    const filter = `FIND("${currentUser}", {Source Interview})`;
-    let offset = null;
-    do {
-        const url = `${API_ROOT}/${TASK_TABLE}?filterByFormula=${encodeURIComponent(filter)}${offset ? `&offset=${offset}` : ''}`;
-        const resp = await fetch(url, { headers: HEADERS }); const data = await resp.json();
-        data.records.forEach(r => records.push({ id: r.id, ...r.fields }));
-        offset = data.offset;
-    } while(offset);
-    renderBoard(); document.getElementById('loading').classList.remove('active'); document.getElementById('board-screen').style.display='block';
-}
-
-function renderBoard() {
-    document.getElementById('board-title').textContent = currentUser;
-    const body = document.getElementById('board-body'); body.innerHTML = '';
-    document.getElementById('item-count').textContent = `${records.length} ITEMS`;
-    STATUSES.forEach(status => {
-        const colRecords = records.filter(r => (r.Status || 'To Do') === status);
-        const col = document.createElement('div'); col.className = 'column';
-        col.innerHTML = `<div class="column-title">${status} <span>${colRecords.length}</span></div>`;
-        const zone = document.createElement('div'); zone.className = 'drop-zone'; zone.dataset.status = status;
-        colRecords.sort((a,b) => (PRIORITY_ORDER[a.Priority||'']||4)-(PRIORITY_ORDER[b.Priority||'']||4)||(a.Task||'').localeCompare(b.Task||'')).forEach(r => {
-            const card = document.createElement('div'); card.className = 'card'; card.draggable = true;
-            const priStyle = r.Priority ? `background:var(--${r.Priority.toLowerCase()}-bg); color:var(--${r.Priority.toLowerCase()}-fg);` : 'display:none;';
-            const ctxSnippet = r.Context ? `<div class="card-context">${r.Context.length > 90 ? r.Context.substring(0, 90) + '...' : r.Context}</div>` : '';
-            card.innerHTML = `<div class="card-task">${r.Task||'Untitled'}</div><span class="pill" style="${priStyle}">${r.Priority}</span>${ctxSnippet}`;
-            card.onclick = () => openModal(r);
-            card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', r.id); card.classList.add('dragging'); };
-            card.ondragend = () => card.classList.remove('dragging');
-            zone.appendChild(card);
-        });
-        zone.ondragover=(e)=>{e.preventDefault(); zone.classList.add('drag-over');}; zone.ondragleave=()=>zone.classList.remove('drag-over');
-        zone.ondrop=async(e)=>{
-            e.preventDefault(); zone.classList.remove('drag-over'); const id = e.dataTransfer.getData('text/plain'); const newStatus = zone.dataset.status;
-            const rec = records.find(r => r.id === id); if(rec && rec.Status !== newStatus) { rec.Status = newStatus; renderBoard(); await fetch(`${API_ROOT}/${TASK_TABLE}/${id}`, { method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields: { Status: newStatus } }) }); }
-        };
-        col.appendChild(zone); body.appendChild(col);
-    });
-}
-
-function openModal(r) {
-    editingId = r.id;
-    document.getElementById('f-task').value = r[FIELD.task] || '';
-    document.getElementById('f-status').value = r[FIELD.status] || 'To Do';
-    document.getElementById('f-priority').value = r[FIELD.priority] || '';
-    document.getElementById('f-category').value = r[FIELD.category] || '';
-    document.getElementById('f-source').value = r[FIELD.source] || '';
-    document.getElementById('f-context').value = r[FIELD.context] || '';
-    document.getElementById('f-notes-steve').value = r[FIELD.notesSteve] || '';
-    document.getElementById('f-notes-acg').value = r[FIELD.notesACG] || '';
-    document.getElementById('modal-backdrop').classList.add('open');
-    document.getElementById('save-btn').onclick = saveModal;
-}
-
-function closeModal() { document.getElementById('modal-backdrop').classList.remove('open'); }
-
-async function saveModal() {
-    const fields = {
-        [FIELD.task]: document.getElementById('f-task').value,
-        [FIELD.status]: document.getElementById('f-status').value,
-        [FIELD.priority]: document.getElementById('f-priority').value,
-        [FIELD.category]: document.getElementById('f-category').value,
-        [FIELD.source]: document.getElementById('f-source').value,
-        [FIELD.context]: document.getElementById('f-context').value,
-        [FIELD.notesSteve]: document.getElementById('f-notes-steve').value,
-        [FIELD.notesACG]: document.getElementById('f-notes-acg').value
-    };
-    const rec = records.find(r => r.id === editingId); Object.assign(rec, fields);
-    renderBoard(); closeModal();
-    await fetch(`${API_ROOT}/${TASK_TABLE}/${editingId}`, { method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields }) });
-}
-
-init();
-</script>
-</body>
-</html>
+const PRIORITY_ORDER = { 'P0': 0, 'P1': 1, 'P2': 2, 'P3
