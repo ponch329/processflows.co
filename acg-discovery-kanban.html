@@ -58,7 +58,7 @@ body {
 }
 
 /* ── LOGIN ── */
-#login-screen {
+#login-screen, #pin-screen {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -67,6 +67,8 @@ body {
   padding: 2rem;
   background: var(--cream);
 }
+
+#pin-screen { display: none; }
 
 .login-brand {
   display: flex;
@@ -139,28 +141,26 @@ body {
 }
 .user-btn:last-child { border-bottom: none; }
 .user-btn:hover { background: var(--cream); }
-.user-btn:hover .user-arrow { opacity: 1; transform: translateX(0); color: var(--green); }
-.user-avatar {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: var(--green-light);
-  color: var(--green);
-  font-size: 10px;
-  font-weight: 600;
+
+/* ── PIN ENTRY ── */
+.pin-input-wrap {
+  padding: 2rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  letter-spacing: 0.02em;
+  flex-direction: column;
+  gap: 1.5rem;
 }
-.user-name { flex: 1; }
-.user-arrow {
-  color: var(--muted-3);
-  font-size: 14px;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.12s, transform 0.12s, color 0.12s;
+.pin-field {
+  width: 100%;
+  height: 50px;
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--cream);
+  outline: none;
 }
+.pin-field:focus { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-light); }
 
 /* ── TOPBAR ── */
 #board-screen { display: none; min-height: 100vh; background: var(--cream); }
@@ -520,15 +520,32 @@ body {
   <div class="login-card">
     <div class="login-card-header">
       <h1>ACG <em>Discovery</em></h1>
-      <p>Select your name to view your follow-up items</p>
+      <p>Select your name to login</p>
     </div>
     <div id="user-grid"></div>
   </div>
 </div>
 
+<div id="pin-screen">
+    <div class="login-brand">
+        <span class="login-brand-name">Process<em>Flows</em></span>
+    </div>
+    <div class="login-card">
+        <div class="login-card-header">
+            <h1 id="pin-target-name">Enter PIN</h1>
+            <p>Please enter your 4-digit access code</p>
+        </div>
+        <div class="pin-input-wrap">
+            <input type="password" id="pin-field" class="pin-field" maxlength="4" placeholder="0000">
+            <button class="btn btn-primary" id="pin-submit">Unlock Board</button>
+            <button class="btn btn-ghost" onclick="showLogin()">Back to Users</button>
+        </div>
+    </div>
+</div>
+
 <div id="loading-overlay">
   <div class="spinner"></div>
-  <div class="loading-text" id="loading-text">Loading your items...</div>
+  <div class="loading-text" id="loading-text">Loading...</div>
 </div>
 
 <div id="board-screen">
@@ -632,8 +649,9 @@ body {
 
 <script>
 const BASE_ID  = 'appxCnPGUTukxQNwc';
-const TABLE_ID = 'tblibVnpKLGtgN07m';
-const API      = `https://steep-limit-b79a.stephen-b11.workers.dev/airtable/v0/${BASE_ID}/${TABLE_ID}`;
+const TASK_TABLE = 'tblibVnpKLGtgN07m';
+const USER_TABLE = 'tblgAhvu8tDY2AVzt';
+const API_ROOT   = `https://steep-limit-b79a.stephen-b11.workers.dev/airtable/v0/${BASE_ID}`;
 const HEADERS  = { 'Content-Type': 'application/json' };
 
 const FIELD = {
@@ -658,21 +676,9 @@ let records = [];
 let editingId = null;
 let dragId = null;
 let isDragging = false;
-
-// CRITICAL: Global Mutex to prevent duplicate Airtable calls
 window.isProcessing = false;
 
 function init() {
-  const params = new URLSearchParams(window.location.search);
-  const urlUser = params.get('user');
-  if (urlUser) {
-    const matched = USERS.find(u => u.toLowerCase() === urlUser.toLowerCase());
-    if (matched) {
-      document.getElementById('login-screen').style.display = 'none';
-      selectUser(matched);
-      return;
-    }
-  }
   const grid = document.getElementById('user-grid');
   USERS.forEach(name => {
     const btn = document.createElement('button');
@@ -683,30 +689,61 @@ function init() {
       <span class="user-name">${name}</span>
       <span class="user-arrow">→</span>
     `;
-    btn.onclick = () => selectUser(name);
+    btn.onclick = () => initiateLogin(name);
     grid.appendChild(btn);
   });
+
+  // Attach PIN submit listener
+  document.getElementById('pin-submit').onclick = verifyPin;
+  document.getElementById('pin-field').onkeypress = (e) => { if(e.key === 'Enter') verifyPin(); };
 }
 
 function showLogin() {
   document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pin-screen').style.display = 'none';
   document.getElementById('board-screen').style.display = 'none';
   currentUser = null;
 }
 
-async function selectUser(name) {
-  currentUser = name;
-  document.getElementById('login-screen').style.display = 'none';
-  showLoading('Loading your items...');
-  try {
-    await loadRecords();
-    hideLoading();
-    renderBoard();
-  } catch(e) {
-    hideLoading();
-    alert('Failed to load records: ' + e.message);
-    showLogin();
-  }
+function initiateLogin(name) {
+    currentUser = name;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('pin-screen').style.display = 'flex';
+    document.getElementById('pin-target-name').textContent = name;
+    document.getElementById('pin-field').value = '';
+    document.getElementById('pin-field').focus();
+}
+
+async function verifyPin() {
+    const entered = document.getElementById('pin-field').value;
+    if (!entered) return;
+
+    showLoading('Verifying PIN...');
+    try {
+        // Fetch the user's PIN from the new Users table
+        const filter = `Name="${currentUser}"`;
+        const resp = await fetch(`${API_ROOT}/${USER_TABLE}?filterByFormula=${encodeURIComponent(filter)}`, { headers: HEADERS });
+        const data = await resp.json();
+        
+        if (data.records.length > 0) {
+            const actualPin = String(data.records[0].fields.PIN); // Ensure PIN is the field name in Airtable
+            if (entered === actualPin) {
+                await loadRecords();
+                hideLoading();
+                renderBoard();
+                document.getElementById('pin-screen').style.display = 'none';
+            } else {
+                hideLoading();
+                alert('Invalid PIN. Access denied.');
+            }
+        } else {
+            hideLoading();
+            alert('User configuration not found in Airtable.');
+        }
+    } catch (e) {
+        hideLoading();
+        alert('Verification failed: ' + e.message);
+    }
 }
 
 function showLoading(msg) {
@@ -725,11 +762,10 @@ async function loadRecords() {
     const params = new URLSearchParams();
     params.set('filterByFormula', filterFormula);
     params.set('pageSize', '100');
-    // CACHE BUSTER: Ensures we get fresh Record IDs from Airtable every time
     params.set('nocache', Date.now()); 
     
     if (offset) params.set('offset', offset);
-    const resp = await fetch(`${API}?${params}`, { headers: HEADERS });
+    const resp = await fetch(`${API_ROOT}/${TASK_TABLE}?${params}`, { headers: HEADERS });
     if (!resp.ok) { const b = await resp.text(); throw new Error(`Airtable error ${resp.status}: ${b}`); }
     const data = await resp.json();
     data.records.forEach(r => records.push(parseRecord(r)));
@@ -755,22 +791,13 @@ function parseRecord(r) {
 
 async function patchRecord(id, fields) {
   if (!id || !id.startsWith('rec')) throw new Error('Invalid record ID: ' + id);
-  
-  // LOG THE EXACT DATA LEAVING THE BROWSER
   console.log(`[DEBUG] PATCHING ID: ${id}`);
-  console.log(`[DEBUG] FIELDS:`, JSON.stringify(fields));
-  
-  const resp = await fetch(`${API}/${id}`, {
+  const resp = await fetch(`${API_ROOT}/${TASK_TABLE}/${id}`, {
     method: 'PATCH', 
     headers: HEADERS, 
-    body: JSON.stringify({ fields }) // Airtable expects { "fields": { ... } }
+    body: JSON.stringify({ fields })
   });
-  
-  if (!resp.ok) { 
-    const b = await resp.text(); 
-    console.error(`[DEBUG] Server responded with error: ${b}`);
-    throw new Error(`Save failed ${resp.status}: ${b}`); 
-  }
+  if (!resp.ok) { const b = await resp.text(); throw new Error(`Save failed ${resp.status}: ${b}`); }
   return resp.json();
 }
 
@@ -842,29 +869,21 @@ function buildCard(record) {
   card.addEventListener('dragend', async () => {
     card.classList.remove('dragging');
     document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
-    
     const capturedId = dragId;
     const newStatus = window._dragTargetStatus;
     dragId = null;
     isDragging = false;
     window._dragTargetStatus = null;
 
-    // GUARD: Check if already processing another call
-    if (window.isProcessing) {
-        console.warn(`[TRACE] Blocked overlapping call from dragend for ID: ${capturedId}`);
-        return;
-    }
+    if (window.isProcessing) return;
 
     if (!capturedId || !capturedId.startsWith('rec') || !newStatus) return;
     const rec = records.find(r => r.id === capturedId);
     if (!rec || rec.status === newStatus) return;
 
-    console.log(`[TRACE] dragend initiating status change for ID: ${capturedId} to ${newStatus}`);
-    
     const prevStatus = rec.status;
     rec.status = newStatus;
-    
-    window.isProcessing = true; // Lock
+    window.isProcessing = true;
     try {
       await patchRecord(capturedId, { [FIELD.status]: newStatus });
       renderBoard();
@@ -873,7 +892,7 @@ function buildCard(record) {
       renderBoard();
       alert('Failed to save status: ' + err.message);
     } finally {
-      window.isProcessing = false; // Release
+      window.isProcessing = false;
     }
   });
 
@@ -887,7 +906,6 @@ function setupDrop(zone) {
     e.dataTransfer.dropEffect = 'move';
     document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
     zone.classList.add('drag-over');
-    // Store the target status on the global so dragend can read it
     window._dragTargetStatus = zone.dataset.status;
   });
   zone.addEventListener('dragleave', e => {
@@ -910,12 +928,10 @@ function openModal(record) {
   document.getElementById('f-notes-acg').value   = record.notesACG;
   document.getElementById('save-status').textContent = '';
   document.getElementById('save-status').className = 'save-status';
-  // Replace the save button with a clone to strip ALL existing listeners
   const oldBtn = document.getElementById('save-btn');
   const newBtn = oldBtn.cloneNode(true);
   newBtn.disabled = false;
   oldBtn.parentNode.replaceChild(newBtn, oldBtn);
-  // Attach exactly one listener to the fresh button
   newBtn.addEventListener('click', saveModal);
   document.getElementById('modal-backdrop').classList.add('open');
 }
@@ -930,13 +946,8 @@ document.getElementById('modal-backdrop').addEventListener('click', e => {
 });
 
 async function saveModal() {
-  if (!editingId || window.isProcessing) {
-      console.warn(`[TRACE] saveModal blocked (ID: ${editingId}, isProcessing: ${window.isProcessing})`);
-      return;
-  }
-  
-  console.log(`[TRACE] saveModal initiating for ID: ${editingId}`);
-  window.isProcessing = true; // Lock
+  if (!editingId || window.isProcessing) return;
+  window.isProcessing = true;
 
   const btn = document.getElementById('save-btn');
   const statusEl = document.getElementById('save-status');
@@ -944,9 +955,6 @@ async function saveModal() {
   statusEl.textContent = 'Saving...';
   statusEl.className = 'save-status';
 
-  const pri = document.getElementById('f-priority').value;
-  const cat = document.getElementById('f-category').value;
-  const src = document.getElementById('f-source').value;
   const fields = {
     [FIELD.task]:       document.getElementById('f-task').value,
     [FIELD.status]:     document.getElementById('f-status').value,
@@ -954,6 +962,9 @@ async function saveModal() {
     [FIELD.notesSteve]: document.getElementById('f-notes-steve').value,
     [FIELD.notesACG]:   document.getElementById('f-notes-acg').value,
   };
+  const pri = document.getElementById('f-priority').value;
+  const cat = document.getElementById('f-category').value;
+  const src = document.getElementById('f-source').value;
   if (pri) fields[FIELD.priority] = pri;
   if (cat) fields[FIELD.category] = cat;
   if (src) fields[FIELD.source]   = src;
@@ -979,7 +990,7 @@ async function saveModal() {
     statusEl.className = 'save-status err';
     btn.disabled = false;
   } finally {
-    window.isProcessing = false; // Release
+    window.isProcessing = false;
   }
 }
 
