@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACG Discovery — Action Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:       #f0ece3;
+  --cream-2:     #e8e3d8;
+  --cream-3:     #ddd8cc;
+  --white:       #ffffff;
+  --green:       #1a5c3a;
+  --green-2:     #14472d;
+  --green-3:     #0e3320;
+  --green-light: #e8f2ec;
+  --green-mid:   #c2dccb;
+  --ink:         #111110;
+  --ink-2:       #2a2a27;
+  --muted:       #6b6b60;
+  --muted-2:     #9a9a8e;
+  --muted-3:     #c4c4b8;
+  --border:      #ddddd0;
+  --border-2:    #ccccc0;
+
+  /* status */
+  --todo-fg:   #2563eb; --todo-bg:   #eff6ff;
+  --prog-fg:   #1a5c3a; --prog-bg:   #e8f2ec;
+  --done-fg:   #6b7280; --done-bg:   #f3f4f6;
+
+  /* priority */
+  --p0-fg: #dc2626; --p0-bg: #fef2f2;
+  --p1-fg: #d97706; --p1-bg: #fffbeb;
+  --p2-fg: #1a5c3a; --p2-bg: #e8f2ec;
+  --p3-fg: #2563eb; --p3-bg: #eff6ff;
+
+  --font-sans:  'Inter', -apple-system, sans-serif;
+  --font-serif: 'Lora', Georgia, serif;
+  --r:    10px;
+  --r-sm: 6px;
+  --r-xs: 4px;
+}
+
+html { background: var(--cream); }
+body {
+  font-family: var(--font-sans);
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── LOGIN ── */
+#login-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--cream);
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 2.5rem;
+}
+.login-brand-name {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.login-brand-name em {
+  font-style: italic;
+  color: var(--green);
+}
+
+.login-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  width: 100%;
+  max-width: 340px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+}
+.login-card-header {
+  padding: 1.5rem 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--green);
+}
+.login-card-header h1 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin-bottom: 3px;
+  line-height: 1.25;
+}
+.login-card-header h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--green-mid);
+}
+.login-card-header p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 400;
+}
+
+.user-btn {
+  width: 100%;
+  padding: 11px 16px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 400;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.1s;
+  text-align: left;
+}
+.user-btn:last-child { border-bottom: none; }
+.user-btn:hover { background: var(--cream); }
+.user-btn:hover .user-arrow { opacity: 1; transform: translateX(0); color: var(--green); }
+.user-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+.user-name { flex: 1; }
+.user-arrow {
+  color: var(--muted-3);
+  font-size: 14px;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.12s, transform 0.12s, color 0.12s;
+}
+
+/* ── TOPBAR ── */
+#board-screen { display: none; min-height: 100vh; background: var(--cream); }
+
+#topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  height: 52px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 1px 0 var(--border);
+}
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.topbar-brand {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.topbar-brand em { font-style: italic; color: var(--green); }
+.topbar-divider { width: 1px; height: 18px; background: var(--border-2); }
+.topbar-context { display: flex; align-items: center; gap: 5px; }
+.topbar-base { font-size: 13px; color: var(--muted); font-weight: 400; }
+.topbar-slash { font-size: 13px; color: var(--muted-3); }
+.topbar-view { font-size: 13px; color: var(--ink); font-weight: 500; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.topbar-count {
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-weight: 500;
+}
+
+/* ── BOARD ── */
+#board-body {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+
+.column {
+  background: var(--white);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.col-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px 9px;
+  border-bottom: 1px solid var(--border);
+  background: var(--cream);
+}
+.col-status-bar {
+  width: 3px; height: 14px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.col-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+.col-count {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--muted-2);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-weight: 500;
+}
+
+.drop-zone {
+  padding: 8px;
+  min-height: 52px;
+}
+.drop-zone.drag-over {
+  background: var(--green-light);
+  outline: 1.5px dashed var(--green-mid);
+  border-radius: var(--r-sm);
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  margin-bottom: 7px;
+  cursor: grab;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+  overflow: hidden;
+  position: relative;
+}
+.card:last-child { margin-bottom: 0; }
+.card:hover {
+  border-color: var(--border-2);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+.card:active { cursor: grabbing; transform: translateY(0); }
+.card.dragging { opacity: 0.2; transform: scale(0.97); }
+
+.card-accent {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.card-inner { padding: 10px 12px 10px 15px; }
+
+.card-title {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.45;
+  margin-bottom: 7px;
+  letter-spacing: -0.005em;
+}
+.card-meta {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.card-context {
+  font-size: 11px;
+  color: var(--muted-2);
+  line-height: 1.45;
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── PILLS ── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.pill-p0 { background: var(--p0-bg); color: var(--p0-fg); }
+.pill-p1 { background: var(--p1-bg); color: var(--p1-fg); }
+.pill-p2 { background: var(--p2-bg); color: var(--p2-fg); }
+.pill-p3 { background: var(--p3-bg); color: var(--p3-fg); }
+.pill-cat {
+  background: var(--cream);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-weight: 500;
+}
+
+/* ── LOADING ── */
+#loading-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: var(--cream);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+}
+#loading-overlay.active { display: flex; }
+.spinner {
+  width: 24px; height: 24px;
+  border: 2px solid var(--border);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 12px; color: var(--muted); letter-spacing: 0.02em; }
+
+/* ── MODAL ── */
+.modal-backdrop {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(26,26,20,0.45);
+  backdrop-filter: blur(3px);
+  z-index: 200;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 52px 16px 32px;
+  overflow-y: auto;
+}
+.modal-backdrop.open { display: flex; }
+
+.modal {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  width: 100%;
+  max-width: 580px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+  overflow: hidden;
+}
+
+.modal-titlebar {
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  background: var(--green);
+}
+.modal-title-group { flex: 1; min-width: 0; }
+.modal-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 3px;
+}
+.modal-record-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  word-break: break-word;
+}
+.modal-close {
+  width: 26px; height: 26px;
+  border-radius: var(--r-xs);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.1s;
+  font-family: var(--font-sans);
+  margin-top: 2px;
+}
+.modal-close:hover { background: rgba(255,255,255,0.2); color: var(--white); }
+
+.mfield {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--border);
+  min-height: 40px;
+}
+.mfield:last-child { border-bottom: none; }
+.mfield-label {
+  width: 160px;
+  flex-shrink: 0;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted-2);
+  background: var(--cream);
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 12px;
+}
+.mfield-value {
+  flex: 1;
+  padding: 8px 14px;
+  display: flex;
+  align-items: flex-start;
+  transition: background 0.1s;
+}
+.mfield-value:focus-within { background: #f5faf7; }
+.mfield-value input,
+.mfield-value textarea,
+.mfield-value select {
+  width: 100%;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  outline: none;
+  resize: none;
+  line-height: 1.5;
+  padding: 0;
+  margin-top: 2px;
+}
+.mfield-value textarea { min-height: 56px; }
+.mfield-value select { cursor: pointer; appearance: none; -webkit-appearance: none; }
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--cream);
+}
+.save-status { font-size: 11px; color: var(--muted-2); margin-right: auto; font-weight: 500; }
+.save-status.ok  { color: var(--green); }
+.save-status.err { color: var(--p0-fg); }
+
+.btn {
+  font-size: 12px;
+  padding: 7px 16px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  transition: all 0.1s;
+  letter-spacing: 0.01em;
+}
+.btn-ghost {
+  background: var(--white);
+  border: 1px solid var(--border-2);
+  color: var(--muted);
+}
+.btn-ghost:hover { background: var(--cream-2); color: var(--ink); }
+.btn-primary {
+  background: var(--green);
+  border: 1px solid var(--green-2);
+  color: var(--white);
+}
+.btn-primary:hover { background: var(--green-2); }
+.btn-primary:disabled {
+  background: var(--muted-3);
+  border-color: var(--muted-3);
+  color: var(--white);
+  cursor: not-allowed;
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-brand">
+    <span class="login-brand-name">Process<em>Flows</em></span>
+  </div>
+  <div class="login-card">
+    <div class="login-card-header">
+      <h1>ACG <em>Discovery</em></h1>
+      <p>Select your name to view your follow-up items</p>
+    </div>
+    <div id="user-grid"></div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loading-text">Loading your items...</div>
+</div>
+
+<!-- BOARD -->
+<div id="board-screen">
+  <div id="topbar">
+    <div class="topbar-left">
+      <span class="topbar-brand">Process<em>Flows</em></span>
+      <div class="topbar-divider"></div>
+      <div class="topbar-context">
+        <span class="topbar-base">ACG Discovery</span>
+        <span class="topbar-slash">/</span>
+        <span class="topbar-view" id="board-title"></span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-count" id="item-count"></span>
+    </div>
+  </div>
+  <div id="board-body"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal">
+    <div class="modal-titlebar">
+      <div class="modal-title-group">
+        <div class="modal-eyebrow">Action Item</div>
+        <div class="modal-record-title" id="modal-record-title"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="mfield">
+        <div class="mfield-label">Task</div>
+        <div class="mfield-value"><textarea id="f-task" rows="2"></textarea></div>
+      </div>
+      <div class="mfield">
+        <div class="mfield-label">Status</div>
+        <div class="mfield-value">
+          <select id="f-status">
+            <option>To Do</option><option>In Progress</option><option>Done</option>
+          </select>
+        </div>
+      </div>
+      <div class="mfield">
+        <div class="mfield-label">Priority</div>
+        <div class="mfield-value">
+          <select id="f-priority">
+            <option value="">—</option>
+            <option>P0</option><option>P1</option><option>P2</option><option>P3</option>
+          </select>
+        </div>
+      </div>
+      <div class="mfield">
+        <div class="mfield-label">Category</div>
+        <div class="mfield-value">
+          <select id="f-category">
+            <option value="">—</option>
+            <option>Compliance/Legal</option><option>Interview Scheduling</option>
+            <option>Internal Coordination</option><option>Data/Integration</option>
+            <option>Build Scoping</option><option>Stakeholder Followup</option>
+            <option>People/Org</option><option>Knowledge Base Seeding</option>
+            <option>Vendor Eval</option>
+          </select>
+        </div>
+      </div>
+      <div class="mfield">
+        <div class="mfield-label">Source Interview</div>
+        <div class="mfield-value">
+          <select id="f-source">
+            <option value="">—</option>
+            <option>Craig</option><option>Craig + Ryan</option><option>Ryan</option>
+            <option>Anthony</option><option>Ethan</option><option>Ethan + Brian</option>
+            <option>Ethan + multiple</option><option>Henry</option><option>Henry + Dan</option>
+            <option>Gordon + Brian</option><option>Gordon</option><option>Gordon + Anthony + Dan</option>
+            <option>Adam</option><option>Dan</option><option>Dan + Ethan</option>
+            <option>Brian</option><option>Brian + Henry</option><option>Chris</option>
+            <option>Chris + Henry</option><option>Ben</option><option>Ben + Anthony</option>
+            <option>John C.</option>
+          </select>
+        </div>
+      </div>
+      <div class="mfield">
+        <div class="mfield-label">Context</div>
+        <div class="mfield-value"><textarea id="f-context" rows="4"></textarea></div>
+      </div>
+      <div class="mfield">
+        <div class="mfield-label">Steve — Notes</div>
+        <div class="mfield-value"><textarea id="f-notes-steve" rows="2"></textarea></div>
+      </div>
+      <div class="mfield">
+        <div class="mfield-label">ACG — Notes</div>
+        <div class="mfield-value"><textarea id="f-notes-acg" rows="2"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span class="save-status" id="save-status"></span>
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="save-btn">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE_ID  = 'appxCnPGUTukxQNwc';
+const TABLE_ID = 'tblibVnpKLGtgN07m';
+const API      = `https://steep-limit-b79a.stephen-b11.workers.dev/airtable/v0/${BASE_ID}/${TABLE_ID}`;
+const HEADERS  = { 'Content-Type': 'application/json' };
+
+const FIELD = {
+  task:       'Task',
+  category:   'Category',
+  context:    'Context',
+  status:     'Status',
+  priority:   'Priority',
+  source:     'Source Interview',
+  owner:      'Owner',
+  notesSteve: 'Steve - Notes/Action',
+  notesACG:   'ACG - Notes/Action'
+};
+
+const STATUSES   = ['To Do', 'In Progress', 'Done'];
+const STATUS_BAR = { 'To Do': '#2563eb', 'In Progress': '#1a5c3a', 'Done': '#9ca3af' };
+const PRIORITY_ACCENT = { P0: '#dc2626', P1: '#d97706', P2: '#1a5c3a', P3: '#2563eb', '': '#ddddd0' };
+const USERS = ['Craig','Ryan','Anthony','Ethan','Henry','Gordon','Adam','Dan','Brian','Chris','Ben','John C.'];
+
+let currentUser = null;
+let records = [];
+let editingId = null;
+let dragId = null;
+let isDragging = false;
+let isSaving = false;
+
+function init() {
+  const params = new URLSearchParams(window.location.search);
+  const urlUser = params.get('user');
+  if (urlUser) {
+    const matched = USERS.find(u => u.toLowerCase() === urlUser.toLowerCase());
+    if (matched) {
+      document.getElementById('login-screen').style.display = 'none';
+      selectUser(matched);
+      return;
+    }
+  }
+  const grid = document.getElementById('user-grid');
+  USERS.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'user-btn';
+    const ini = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    btn.innerHTML = `
+      <div class="user-avatar">${ini}</div>
+      <span class="user-name">${name}</span>
+      <span class="user-arrow">→</span>
+    `;
+    btn.onclick = () => selectUser(name);
+    grid.appendChild(btn);
+  });
+}
+
+function showLogin() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('board-screen').style.display = 'none';
+  currentUser = null;
+}
+
+async function selectUser(name) {
+  currentUser = name;
+  document.getElementById('login-screen').style.display = 'none';
+  showLoading('Loading your items...');
+  try {
+    await loadRecords();
+    hideLoading();
+    renderBoard();
+  } catch(e) {
+    hideLoading();
+    alert('Failed to load records: ' + e.message);
+    showLogin();
+  }
+}
+
+function showLoading(msg) {
+  document.getElementById('loading-text').textContent = msg;
+  document.getElementById('loading-overlay').classList.add('active');
+}
+function hideLoading() {
+  document.getElementById('loading-overlay').classList.remove('active');
+}
+
+async function loadRecords() {
+  records = [];
+  let offset = null;
+  const filterFormula = `FIND("${currentUser}", {Source Interview})`;
+  do {
+    const params = new URLSearchParams();
+    params.set('filterByFormula', filterFormula);
+    params.set('pageSize', '100');
+    if (offset) params.set('offset', offset);
+    const resp = await fetch(`${API}?${params}`, { headers: HEADERS });
+    if (!resp.ok) { const b = await resp.text(); throw new Error(`Airtable error ${resp.status}: ${b}`); }
+    const data = await resp.json();
+    data.records.forEach(r => records.push(parseRecord(r)));
+    offset = data.offset;
+  } while (offset);
+}
+
+function parseRecord(r) {
+  const f = r.fields || {};
+  return {
+    id:         r.id,
+    task:       f['Task']                 || '',
+    category:   f['Category']             || '',
+    context:    f['Context']              || '',
+    status:     f['Status']               || 'To Do',
+    priority:   f['Priority']             || '',
+    source:     f['Source Interview']     || '',
+    owner:      f['Owner']                || '',
+    notesSteve: f['Steve - Notes/Action'] || '',
+    notesACG:   f['ACG - Notes/Action']   || ''
+  };
+}
+
+async function patchRecord(id, fields) {
+  if (!id || !id.startsWith('rec')) throw new Error('Invalid record ID: ' + id);
+  const resp = await fetch(`${API}/${id}`, {
+    method: 'PATCH', headers: HEADERS, body: JSON.stringify({ fields })
+  });
+  if (!resp.ok) { const b = await resp.text(); throw new Error(`Save failed ${resp.status}: ${b}`); }
+  return resp.json();
+}
+
+function renderBoard() {
+  document.getElementById('board-screen').style.display = 'block';
+  document.getElementById('board-title').textContent = currentUser;
+  document.getElementById('item-count').textContent = records.length + ' items';
+  const body = document.getElementById('board-body');
+  body.innerHTML = '';
+  STATUSES.forEach(status => body.appendChild(buildColumn(status)));
+}
+
+function buildColumn(status) {
+  const cards = records.filter(r => r.status === status);
+  const col = document.createElement('div');
+  col.className = 'column';
+  col.dataset.status = status;
+
+  const hdr = document.createElement('div');
+  hdr.className = 'col-header';
+  hdr.innerHTML = `
+    <div class="col-status-bar" style="background:${STATUS_BAR[status]}"></div>
+    <span class="col-name">${status}</span>
+    <span class="col-count">${cards.length}</span>
+  `;
+  col.appendChild(hdr);
+
+  const zone = document.createElement('div');
+  zone.className = 'drop-zone';
+  zone.dataset.status = status;
+  cards.forEach(r => zone.appendChild(buildCard(r)));
+  setupDrop(zone);
+  col.appendChild(zone);
+  return col;
+}
+
+function buildCard(record) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.id = record.id;
+  card.draggable = true;
+
+  const accentColor = PRIORITY_ACCENT[record.priority] || PRIORITY_ACCENT[''];
+  const priPill = record.priority
+    ? `<span class="pill pill-${record.priority.toLowerCase()}">${record.priority}</span>` : '';
+  const catPill = record.category
+    ? `<span class="pill pill-cat">${escHtml(record.category)}</span>` : '';
+  const metaHtml = (priPill || catPill) ? `<div class="card-meta">${priPill}${catPill}</div>` : '';
+  const ctx = record.context
+    ? (record.context.length > 100 ? record.context.slice(0,100) + '…' : record.context)
+    : '';
+  const ctxHtml = ctx ? `<div class="card-context">${escHtml(ctx)}</div>` : '';
+
+  card.innerHTML = `
+    <div class="card-accent" style="background:${accentColor}"></div>
+    <div class="card-inner">
+      <div class="card-title">${escHtml(record.task || '(untitled)')}</div>
+      ${metaHtml}${ctxHtml}
+    </div>
+  `;
+
+  card.addEventListener('dragstart', e => {
+    dragId = record.id;
+    isDragging = true;
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => card.classList.add('dragging'), 0);
+  });
+  card.addEventListener('dragend', () => {
+    card.classList.remove('dragging');
+    document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
+    dragId = null;
+    setTimeout(() => { isDragging = false; }, 50);
+  });
+  card.addEventListener('click', e => { e.stopPropagation(); openModal(record); });
+  return card;
+}
+
+function setupDrop(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', e => { if (!zone.contains(e.relatedTarget)) zone.classList.remove('drag-over'); });
+  zone.addEventListener('drop', async e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    if (!isDragging) return;
+    const capturedId = dragId;
+    dragId = null;
+    isDragging = false;
+    if (!capturedId || !capturedId.startsWith('rec')) return;
+    const newStatus = zone.dataset.status;
+    const rec = records.find(r => r.id === capturedId);
+    if (!rec || rec.status === newStatus) return;
+    const prevStatus = rec.status;
+    rec.status = newStatus;
+    try {
+      await patchRecord(capturedId, { [FIELD.status]: newStatus });
+      renderBoard();
+    } catch(err) {
+      rec.status = prevStatus;
+      renderBoard();
+      alert('Failed to save: ' + err.message);
+    }
+  });
+}
+
+function openModal(record) {
+  editingId = record.id;
+  isSaving = false;
+  document.getElementById('modal-record-title').textContent = record.task || '(untitled)';
+  document.getElementById('f-task').value        = record.task;
+  document.getElementById('f-status').value      = record.status;
+  document.getElementById('f-priority').value    = record.priority || '';
+  document.getElementById('f-category').value    = record.category || '';
+  document.getElementById('f-source').value      = record.source || '';
+  document.getElementById('f-context').value     = record.context;
+  document.getElementById('f-notes-steve').value = record.notesSteve;
+  document.getElementById('f-notes-acg').value   = record.notesACG;
+  document.getElementById('save-status').textContent = '';
+  document.getElementById('save-status').className = 'save-status';
+  // Replace the save button with a clone to strip ALL existing listeners
+  const oldBtn = document.getElementById('save-btn');
+  const newBtn = oldBtn.cloneNode(true);
+  newBtn.disabled = false;
+  oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+  // Attach exactly one listener to the fresh button
+  newBtn.addEventListener('click', saveModal);
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-backdrop').classList.remove('open');
+  editingId = null;
+  isSaving = false;
+}
+
+document.getElementById('modal-backdrop').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-backdrop')) closeModal();
+});
+
+async function saveModal() {
+  if (!editingId || isSaving) return;
+  isSaving = true;
+  const btn = document.getElementById('save-btn');
+  const statusEl = document.getElementById('save-status');
+  btn.disabled = true;
+  statusEl.textContent = 'Saving...';
+  statusEl.className = 'save-status';
+
+  const pri = document.getElementById('f-priority').value;
+  const cat = document.getElementById('f-category').value;
+  const src = document.getElementById('f-source').value;
+  const fields = {
+    [FIELD.task]:       document.getElementById('f-task').value,
+    [FIELD.status]:     document.getElementById('f-status').value,
+    [FIELD.context]:    document.getElementById('f-context').value,
+    [FIELD.notesSteve]: document.getElementById('f-notes-steve').value,
+    [FIELD.notesACG]:   document.getElementById('f-notes-acg').value,
+  };
+  if (pri) fields[FIELD.priority] = pri;
+  if (cat) fields[FIELD.category] = cat;
+  if (src) fields[FIELD.source]   = src;
+
+  try {
+    await patchRecord(editingId, fields);
+    const rec = records.find(r => r.id === editingId);
+    if (rec) {
+      rec.task       = fields[FIELD.task];
+      rec.status     = fields[FIELD.status];
+      rec.context    = fields[FIELD.context];
+      rec.notesSteve = fields[FIELD.notesSteve];
+      rec.notesACG   = fields[FIELD.notesACG];
+      if (pri) rec.priority = pri;
+      if (cat) rec.category = cat;
+      if (src) rec.source   = src;
+    }
+    statusEl.textContent = 'Saved';
+    statusEl.className = 'save-status ok';
+    isSaving = false;
+    setTimeout(() => { closeModal(); renderBoard(); }, 500);
+  } catch(e) {
+    statusEl.textContent = 'Error: ' + e.message;
+    statusEl.className = 'save-status err';
+    isSaving = false;
+    btn.disabled = false;
+  }
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+
+
+init();
+</script>
+</body>
+</html>
