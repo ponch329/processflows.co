@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ACG Discovery - Action Board</title>
-<link rel="icon" type="image/x-icon" href="logo.png">
+<link rel="icon" href="logo.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
   --cream:       #f8f6f2;
   --cream-dark:  #f0ede8;
   --white:       #ffffff;
-  --green:       #1a5c3a;
+  --green:       #1a5c3a; 
   --green-hover: #14472d;
   --green-tint:  #f0f5f2;
   --ink:         #1c1c1b;
@@ -39,22 +39,37 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ── BRANDING HELPER ── */
+.brand-name {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.brand-name em {
+  font-family: var(--font-sans);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--green);
+}
+
 .container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
 
 /* ── AUTH ── */
 .auth-layout { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .auth-card { background: var(--white); border-radius: 12px; width: 100%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.04), 0 0 0 1px var(--border); overflow: hidden; }
-.auth-header { padding: 32px 24px; text-align: center; border-bottom: 1px solid var(--border); background: var(--green); color: white; }
-.auth-header h1 { font-family: var(--font-serif); font-size: 24px; margin-bottom: 4px; }
-.auth-header p { font-size: 13px; opacity: 0.8; }
-.user-list { padding: 8px; }
+.auth-header { padding: 32px 24px; text-align: center; border-bottom: 1px solid var(--border); background: var(--white); }
+.auth-header h1 { font-family: var(--font-serif); font-size: 24px; margin-bottom: 8px; font-weight: 600; }
+.auth-header h1 em { font-style: italic; color: var(--green); font-weight: 400; }
+.auth-header p { font-size: 13px; color: var(--muted); }
+.user-grid { padding: 8px; }
 .user-btn { width: 100%; padding: 14px 20px; border: none; background: transparent; text-align: left; font-family: var(--font-sans); font-size: 15px; cursor: pointer; border-radius: 6px; display: flex; justify-content: space-between; transition: all 0.2s; }
 .user-btn:hover { background: var(--green-tint); color: var(--green); }
 
 /* ── KANBAN ── */
-#topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 0; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+#topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 0; position: sticky; top: 0; z-index: 50; }
 .topbar-inner { display: flex; justify-content: space-between; align-items: center; }
-.brand { font-family: var(--font-serif); font-size: 20px; font-weight: 600; color: var(--green); }
+.topbar-logo { font-size: 18px; text-decoration: none; }
 
 .board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 32px 0; align-items: stretch; }
 .column-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; padding: 0 4px; }
@@ -69,24 +84,22 @@ body {
 .pill { font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 
 /* ── MODAL ── */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(28, 28, 27, 0.5); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(28, 28, 27, 0.5); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
-.modal-content { background: var(--white); width: 100%; max-width: 640px; border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); margin: auto; }
+.modal-content { background: var(--white); width: 100%; max-width: 640px; border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
 .modal-header { padding: 20px 24px; background: var(--green); color: white; display: flex; justify-content: space-between; align-items: center; }
 .modal-body { padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 .form-group.full { grid-column: span 2; }
-.label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; }
+.label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
 .input-field { padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-family: var(--font-sans); font-size: 13.5px; outline: none; background: #fafafa; }
 .input-field:focus { border-color: var(--green); background: white; }
-.modal-footer { padding: 16px 24px; background: #f9f9f8; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; }
 
 .btn { padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-family: var(--font-sans); font-size: 13px; }
 .btn-primary { background: var(--green); color: white; }
 .btn-secondary { background: var(--cream-dark); color: var(--ink); }
 
-#loading { display: none; position: fixed; inset: 0; background: var(--cream); z-index: 200; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 20px; color: var(--green); }
-#loading.active { display: flex; }
+#loading { display: none; position: fixed; inset: 0; background: var(--cream); z-index: 200; flex-direction: column; align-items: center; justify-content: center; }
 </style>
 </head>
 <body>
@@ -94,9 +107,10 @@ body {
 <div id="loading">Synchronizing...</div>
 
 <section id="login-screen" class="auth-layout">
+  <div style="margin-bottom: 2rem;"><span class="brand-name" style="font-size: 24px;">Process<em>Flows</em></span></div>
   <div class="auth-card">
-    <div class="auth-header"><h1>ACG Discovery</h1><p>Select your name to continue</p></div>
-    <div id="user-grid" class="user-list"></div>
+    <div class="auth-header"><h1>ACG <em>Discovery</em></h1><p>Select your name to begin</p></div>
+    <div id="user-grid" class="user-grid"></div>
   </div>
 </section>
 
@@ -114,8 +128,13 @@ body {
 <section id="board-screen" style="display:none;">
   <header id="topbar">
     <div class="container topbar-inner">
-      <div class="brand">ACG Discovery / <span id="board-title" style="font-weight: 400; color: var(--muted);"></span></div>
-      <div id="item-count" style="font-size: 11px; font-weight: 700; color: var(--muted); opacity: 0.7;"></div>
+      <div class="topbar-logo">
+        <span class="brand-name">Process<em>Flows</em></span>
+        <span style="color: var(--border); margin: 0 10px;">|</span>
+        <span style="font-family: var(--font-serif); font-size: 16px; color: var(--ink);">ACG <em style="color: var(--green); font-style: italic;">Discovery</em></span>
+        <span style="color: var(--muted); font-size: 16px; margin-left: 5px;">/ <span id="board-title" style="font-weight: 400;"></span></span>
+      </div>
+      <div id="item-count" style="font-size: 11px; font-weight: 700; color: var(--muted);"></div>
     </div>
   </header>
   <div class="container">
@@ -125,20 +144,20 @@ body {
 
 <div class="modal-overlay" id="modal-backdrop">
   <div class="modal-content">
-    <div class="modal-header"><h2>Edit Action Item</h2><button onclick="closeModal()" style="background:transparent; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button></div>
+    <div class="modal-header"><h2>Action Item</h2><button onclick="closeModal()" style="background:transparent; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button></div>
     <div class="modal-body">
       <div class="form-group full"><div class="label">Task</div><textarea id="f-task" class="input-field" rows="2"></textarea></div>
       <div class="form-group"><div class="label">Status</div><select id="f-status" class="input-field"><option>To Do</option><option>In Progress</option><option>Done</option></select></div>
       <div class="form-group"><div class="label">Priority</div><select id="f-priority" class="input-field"><option value="">None</option><option>P0</option><option>P1</option><option>P2</option><option>P3</option></select></div>
       <div class="form-group"><div class="label">Category</div><select id="f-category" class="input-field">
-        <option value="">—</option><option>Compliance/Legal</option><option>Interview Scheduling</option><option>Internal Coordination</option><option>Data/Integration</option><option>Build Scoping</option><option>Stakeholder Followup</option><option>People/Org</option><option>Knowledge Base Seeding</option><option>Vendor Eval</option>
+        <option value="">-</option><option>Compliance/Legal</option><option>Interview Scheduling</option><option>Internal Coordination</option><option>Data/Integration</option><option>Build Scoping</option><option>Stakeholder Followup</option><option>People/Org</option><option>Knowledge Base Seeding</option><option>Vendor Eval</option>
       </select></div>
       <div class="form-group"><div class="label">Source Interview</div><select id="f-source" class="input-field">
         <option>Craig</option><option>Craig + Ryan</option><option>Ryan</option><option>Anthony</option><option>Ethan</option><option>Ethan + Brian</option><option>Ethan + multiple</option><option>Henry</option><option>Henry + Dan</option><option>Gordon + Brian</option><option>Gordon</option><option>Gordon + Anthony + Dan</option><option>Adam</option><option>Dan</option><option>Dan + Ethan</option><option>Brian</option><option>Brian + Henry</option><option>Chris</option><option>Chris + Henry</option><option>Ben</option><option>Ben + Anthony</option><option>John C.</option>
       </select></div>
       <div class="form-group full"><div class="label">Context & Notes</div><textarea id="f-context" class="input-field" rows="3"></textarea></div>
-      <div class="form-group"><div class="label">Steve — Notes</div><textarea id="f-notes-steve" class="input-field" rows="2"></textarea></div>
-      <div class="form-group"><div class="label">ACG — Notes</div><textarea id="f-notes-acg" class="input-field" rows="2"></textarea></div>
+      <div class="form-group"><div class="label">Steve - Notes</div><textarea id="f-notes-steve" class="input-field" rows="2"></textarea></div>
+      <div class="form-group"><div class="label">ACG - Notes</div><textarea id="f-notes-acg" class="input-field" rows="2"></textarea></div>
     </div>
     <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="save-btn">Update Item</button></div>
   </div>
@@ -193,7 +212,7 @@ async function loadBoard() {
 function renderBoard() {
     document.getElementById('board-title').textContent = currentUser;
     const body = document.getElementById('board-body'); body.innerHTML = '';
-    document.getElementById('item-count').textContent = `${records.length} TOTAL ITEMS`;
+    document.getElementById('item-count').textContent = `${records.length} ITEMS`;
     STATUSES.forEach(status => {
         const colRecords = records.filter(r => (r.Status || 'To Do') === status);
         const col = document.createElement('div'); col.className = 'column';
