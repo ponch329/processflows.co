@@ -1,0 +1,2283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACG AI Infrastructure — Discovery Findings & Implementation Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a6b45;
+    --green-light: #2a8a5a;
+    --green-pale: #e8f2ec;
+    --warm-white: #f5f3ee;
+    --ink: #0f0f0f;
+    --muted: #777068;
+    --border: #e2ddd5;
+    --white: #ffffff;
+    --accent: #c8a96e;
+    --accent-pale: #f5ead8;
+    --red-pale: #fdf0ee;
+    --red: #c0392b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm-white);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(245,243,238,0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 56px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-mark { width: 52px; height: 26px; }
+  .logo-mark svg { width: 100%; height: 100%; }
+  .logo-text { font-weight: 600; font-size: 13px; color: var(--green); letter-spacing: 0.02em; }
+
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    font-size: 11px; font-weight: 500; color: var(--muted);
+    text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); }
+
+  /* HERO */
+  .hero {
+    min-height: 92vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 100px 80px 80px;
+    background: var(--green);
+    position: relative; overflow: hidden;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    top: 60px; right: -20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 280px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); margin-bottom: 28px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 5.5vw, 80px);
+    font-weight: 700; color: var(--white);
+    line-height: 1.06; max-width: 820px; margin-bottom: 28px;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--accent); }
+
+  .hero-sub {
+    font-size: 16px; font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    max-width: 480px; margin-bottom: 60px; line-height: 1.75;
+  }
+
+  .hero-meta {
+    display: flex; gap: 48px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .hero-meta-item label {
+    display: block; font-size: 9px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); margin-bottom: 5px;
+  }
+
+  .hero-meta-item span { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.88); }
+
+  /* PART DIVIDERS */
+  .part-divider {
+    background: var(--ink);
+    padding: 48px 80px;
+    display: flex; align-items: center; gap: 32px;
+  }
+
+  .part-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px; font-weight: 700;
+    color: rgba(255,255,255,0.08); line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .part-info {}
+  .part-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); margin-bottom: 8px;
+  }
+
+  .part-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; font-weight: 600; color: var(--white); line-height: 1.2;
+  }
+
+  .part-desc {
+    font-size: 14px; color: rgba(255,255,255,0.5);
+    margin-top: 8px; max-width: 560px; line-height: 1.7;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 88px 80px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section.alt { background: var(--white); }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--green); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .section-label::after {
+    content: ''; width: 32px; height: 1px;
+    background: var(--green); opacity: 0.35;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3.5vw, 46px); font-weight: 600;
+    color: var(--ink); line-height: 1.15; margin-bottom: 16px;
+  }
+
+  .section-intro {
+    font-size: 16px; color: var(--muted);
+    max-width: 580px; margin-bottom: 52px; line-height: 1.8;
+  }
+
+  /* PERSON FINDING CARDS */
+  .finding {
+    margin-bottom: 72px;
+    padding-bottom: 72px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .finding:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .finding-header {
+    display: flex; align-items: flex-start;
+    gap: 20px; margin-bottom: 20px;
+  }
+
+  .person-badge {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--green); flex-shrink: 0;
+  }
+
+  .person-badge span {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 700; color: var(--white);
+  }
+
+  .person-badge.ops { background: var(--ink); }
+  .person-badge.trading { background: var(--accent); }
+  .person-badge.data { background: #2c5f8a; }
+
+  .person-info {}
+  .person-name {
+    font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 3px;
+  }
+
+  .person-role {
+    font-size: 12px; color: var(--muted);
+    font-family: 'DM Mono', monospace; letter-spacing: 0.04em;
+  }
+
+  .finding-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .finding-grid-header {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin-bottom: 4px;
+  }
+
+  .finding-col-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 0; border-bottom: 2px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .finding-col-label.pain-label { color: var(--red); border-color: var(--red); }
+  .finding-col-label.insight-label { color: var(--green); border-color: var(--green); }
+    border: 1px solid var(--border);
+    border-radius: 3px; padding: 24px;
+  }
+
+  .finding-item.pain {
+    border-left: 3px solid var(--red);
+    background: var(--red-pale);
+  }
+
+  .finding-item.insight {
+    border-left: 3px solid var(--green);
+    background: var(--green-pale);
+  }
+
+  .finding-item-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .finding-item.pain .finding-item-label { color: var(--red); }
+  .finding-item.insight .finding-item-label { color: var(--green); }
+
+  .finding-item p {
+    font-size: 13px; color: var(--ink); line-height: 1.7;
+  }
+
+  .quote {
+    font-style: italic;
+    background: var(--warm-white);
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .quote p { font-size: 14px; color: var(--ink); line-height: 1.7; }
+  .quote cite { font-size: 11px; color: var(--muted); font-style: normal; margin-top: 6px; display: block; }
+
+  /* THEME SUMMARY */
+  .theme-row {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 0; border: 1px solid var(--border);
+    border-radius: 3px; overflow: hidden; margin-bottom: 12px;
+  }
+
+  .theme-label-col {
+    background: var(--green); padding: 24px 20px;
+    display: flex; align-items: center;
+  }
+
+  .theme-label-col span {
+    font-size: 14px; font-weight: 600; color: var(--white); line-height: 1.4;
+  }
+
+  .theme-content-col {
+    background: var(--white); padding: 24px 28px;
+    font-size: 13px; color: var(--muted); line-height: 1.7;
+  }
+
+  .theme-content-col strong { color: var(--ink); font-weight: 600; }
+
+  /* TOOL SPEC CARDS */
+  .tool-spec {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 48px;
+    overflow: hidden;
+  }
+
+  .tool-spec:last-child { margin-bottom: 0; }
+
+  .tool-spec-header {
+    background: var(--green);
+    padding: 32px 40px;
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 32px;
+  }
+
+  .tool-spec-header.amber { background: #7a5c1e; }
+  .tool-spec-header.navy { background: #1e3a5f; }
+  .tool-spec-header.charcoal { background: #2d2d2d; }
+
+  .tool-spec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 600; color: var(--white);
+    margin-bottom: 8px; line-height: 1.2;
+  }
+
+  .tool-spec-subtitle {
+    font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.6;
+    max-width: 480px;
+  }
+
+  .tool-priority {
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  .priority-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 6px 12px; border-radius: 2px;
+    background: rgba(255,255,255,0.15); color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .tool-users-badge {
+    font-size: 12px; color: rgba(255,255,255,0.5);
+    display: block; text-align: right;
+  }
+
+  .tool-spec-body {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .spec-panel {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .spec-panel:nth-child(even) { border-right: none; }
+  .spec-panel:nth-last-child(-n+2) { border-bottom: none; }
+
+  .spec-panel-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--green); margin-bottom: 14px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  }
+
+  .spec-list {
+    list-style: none;
+  }
+
+  .spec-list li {
+    font-size: 13px; color: var(--muted);
+    padding: 7px 0; border-bottom: 1px solid var(--border);
+    line-height: 1.6; display: flex; gap: 10px;
+  }
+
+  .spec-list li:last-child { border-bottom: none; }
+
+  .spec-list li::before {
+    content: '→'; color: var(--green);
+    flex-shrink: 0; font-size: 12px; margin-top: 1px;
+  }
+
+  .spec-list li strong { color: var(--ink); font-weight: 600; }
+
+  .spec-note {
+    font-size: 12px; color: var(--muted);
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    padding: 12px 16px; border-radius: 3px;
+    margin-top: 12px; line-height: 1.6;
+  }
+
+  .spec-note strong { color: var(--ink); }
+
+  .acceptance-grid {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  .acceptance-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; color: var(--muted); line-height: 1.6;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+  }
+
+  .acceptance-item:last-child { border-bottom: none; }
+
+  .acceptance-item::before {
+    content: '✓'; width: 18px; height: 18px;
+    border-radius: 50%; background: var(--green-pale);
+    color: var(--green); font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+
+  .dep-item {
+    font-size: 13px; color: var(--muted); line-height: 1.6;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+
+  .dep-item:last-child { border-bottom: none; }
+
+  .dep-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 2px; flex-shrink: 0; margin-top: 2px;
+  }
+
+  .dep-acg { background: var(--accent-pale); color: #7a5c1e; }
+  .dep-stephen { background: var(--green-pale); color: var(--green); }
+  .dep-stackai { background: #e8eef5; color: #1e3a5f; }
+
+  /* KB SECTION */
+  .kb-setup-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px; margin-top: 48px;
+  }
+
+  .kb-card {
+    border: 1px solid var(--border);
+    border-radius: 3px; overflow: hidden;
+  }
+
+  .kb-card-header {
+    padding: 20px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .kb-card-header.t1 { background: var(--green); }
+  .kb-card-header.t2 { background: var(--accent); }
+  .kb-card-header.t3 { background: var(--muted); }
+
+  .kb-card-header h4 {
+    font-size: 14px; font-weight: 600; color: var(--white);
+  }
+
+  .kb-card-header span {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; color: rgba(255,255,255,0.6);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+
+  .kb-card-body { background: var(--white); padding: 20px 24px; }
+
+  .kb-item {
+    font-size: 13px; color: var(--muted); line-height: 1.6;
+    padding: 9px 0; border-bottom: 1px solid var(--border);
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+
+  .kb-item:last-child { border-bottom: none; }
+  .kb-item::before { content: '—'; color: var(--border); flex-shrink: 0; }
+  .kb-item strong { color: var(--ink); }
+
+  /* BYOC EXPLAIN */
+  .byoc-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 32px; margin-top: 48px;
+  }
+
+  .byoc-step {
+    display: flex; gap: 20px; align-items: flex-start;
+    padding: 24px; background: var(--warm-white);
+    border: 1px solid var(--border); border-radius: 3px;
+  }
+
+  .byoc-step-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--green); color: var(--white);
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .byoc-step-title {
+    font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 6px;
+  }
+
+  .byoc-step-desc {
+    font-size: 13px; color: var(--muted); line-height: 1.65;
+  }
+
+  .byoc-owner {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 2px;
+    background: var(--green-pale); color: var(--green);
+    margin-top: 8px;
+  }
+
+  /* TIMELINE */
+  .timeline { margin-top: 48px; }
+
+  .tl-week {
+    display: grid; grid-template-columns: 90px 1fr;
+    gap: 0; margin-bottom: 4px;
+  }
+
+  .tl-week-label {
+    background: var(--green);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.06em;
+    padding: 16px 14px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; line-height: 1.4;
+  }
+
+  .tl-week-label.kb { background: #2c5f8a; }
+  .tl-week-label.both {
+    background: linear-gradient(135deg, var(--green) 50%, #2c5f8a 50%);
+  }
+
+  .tl-items {
+    display: flex; flex-direction: column; gap: 4px;
+    padding-left: 4px;
+  }
+
+  .tl-item {
+    padding: 14px 20px;
+    font-size: 13px; line-height: 1.6;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+
+  .tl-item.agent { background: var(--green-pale); }
+  .tl-item.kb-item-row { background: #e8eef5; }
+  .tl-item.both-item { background: var(--accent-pale); }
+
+  .tl-track {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 2px; flex-shrink: 0; margin-top: 2px;
+  }
+
+  .track-agent { background: var(--green); color: var(--white); }
+  .track-kb { background: #2c5f8a; color: var(--white); }
+
+  .tl-item strong { color: var(--ink); font-weight: 600; }
+  .tl-item p { color: var(--muted); }
+
+  /* INTEGRATIONS */
+  .int-table { width: 100%; border-collapse: collapse; margin-top: 32px; }
+  .int-table th {
+    text-align: left; padding: 12px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); border-bottom: 2px solid var(--border);
+    background: var(--warm-white);
+  }
+
+  .int-table td {
+    padding: 14px 16px; font-size: 13px; color: var(--muted);
+    border-bottom: 1px solid var(--border); vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .int-table td strong { color: var(--ink); font-weight: 600; }
+  .int-table tr:last-child td { border-bottom: none; }
+
+  .status-dot {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px;
+  }
+
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--green); }
+  .dot-amber { background: var(--accent); }
+  .dot-grey { background: #bbb; }
+
+  /* COMMERCIAL */
+  .commercial-wrap {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px;
+  }
+
+  .c-card {
+    padding: 48px; border-radius: 3px;
+  }
+
+  .c-card.rec { background: var(--green); }
+  .c-card.alt { background: var(--warm-white); border: 1px solid var(--border); }
+
+  .c-rec-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    background: rgba(255,255,255,0.18); color: var(--white);
+    padding: 4px 10px; border-radius: 2px;
+    display: inline-block; margin-bottom: 20px;
+  }
+
+  .c-rate {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px; font-weight: 700; line-height: 1; margin-bottom: 6px;
+  }
+
+  .c-card.rec .c-rate { color: var(--white); }
+  .c-card.alt .c-rate { color: var(--ink); }
+
+  .c-period { font-size: 13px; margin-bottom: 20px; }
+  .c-card.rec .c-period { color: rgba(255,255,255,0.55); }
+  .c-card.alt .c-period { color: var(--muted); }
+
+  .c-title { font-size: 20px; font-weight: 600; margin-bottom: 14px; }
+  .c-card.rec .c-title { color: var(--white); }
+  .c-card.alt .c-title { color: var(--ink); }
+
+  .c-desc { font-size: 14px; line-height: 1.7; }
+  .c-card.rec .c-desc { color: rgba(255,255,255,0.72); }
+  .c-card.alt .c-desc { color: var(--muted); }
+
+  /* ACTIONS */
+  .actions-wrap {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 48px;
+  }
+
+  .action-col-title {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--green); margin-bottom: 20px;
+    padding-bottom: 10px; border-bottom: 2px solid var(--green);
+  }
+
+  .action-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+    font-size: 13px; color: var(--muted); line-height: 1.65;
+  }
+
+  .action-item:last-child { border-bottom: none; }
+  .action-item strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 2px; }
+
+  .action-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--green-pale); color: var(--green);
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--ink); color: var(--white);
+    padding: 44px 52px; border-radius: 3px; margin: 44px 0;
+  }
+
+  .callout p {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px; font-weight: 400; font-style: italic;
+    line-height: 1.65; color: rgba(255,255,255,0.82);
+  }
+
+  .callout p em { color: var(--accent); font-style: normal; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink); padding: 56px 80px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .footer-copy {
+    font-size: 11px; color: rgba(255,255,255,0.28);
+    text-align: right; line-height: 1.9;
+  }
+
+  /* SCOPE TABLE */
+  .scope-table { width: 100%; border-collapse: collapse; margin-top: 32px; }
+  .scope-table th {
+    text-align: left; padding: 10px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); border-bottom: 2px solid var(--border);
+    background: var(--warm-white);
+  }
+
+  .scope-table td {
+    padding: 12px 16px; font-size: 13px; color: var(--muted);
+    border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.6;
+  }
+
+  .scope-table td strong { color: var(--ink); }
+  .scope-table tr:last-child td { border-bottom: none; }
+  .scope-table td:first-child { font-weight: 600; color: var(--ink); width: 220px; }
+
+  .phase-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 2px;
+    background: var(--warm-white); color: var(--muted); border: 1px solid var(--border);
+  }
+
+  /* FOLLOW-UP FLAGS */
+  .flag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 2px;
+    background: #fff3cd; color: #7a5c1e;
+    border: 1px solid #e8d48a;
+    margin-left: 6px; vertical-align: middle;
+    flex-shrink: 0;
+  }
+
+  .flag::before { content: '⚑'; font-size: 9px; }
+
+  /* FOLLOW-UP SECTION */
+  .followup-list { list-style: none; margin-top: 32px; counter-reset: followup-counter; }
+
+  .followup-item {
+    counter-increment: followup-counter;
+    display: grid; grid-template-columns: 28px 140px 1fr;
+    gap: 16px; align-items: start;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+    font-size: 13px; line-height: 1.6;
+  }
+
+  .followup-item:last-child { border-bottom: none; }
+
+  .followup-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #fff3cd; color: #7a5c1e;
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .followup-area {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted); padding-top: 4px;
+  }
+
+  .followup-desc { color: var(--muted); }
+  .followup-desc strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 2px; }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 20px; }
+    nav .nav-links { display: none; }
+    section { padding: 56px 24px; }
+    .hero { padding: 90px 24px 56px; }
+    .part-divider { padding: 40px 24px; }
+    .finding-grid,
+    .tool-spec-body,
+    .byoc-grid,
+    .kb-setup-grid,
+    .commercial-wrap,
+    .actions-wrap { grid-template-columns: 1fr; }
+    .spec-panel { border-right: none !important; }
+    footer { flex-direction: column; gap: 20px; }
+    .footer-copy { text-align: center; }
+    .hero-bg-text { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="logo-mark">
+      <svg viewBox="0 0 56 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Left circle (empty, muted) -->
+        <circle cx="10" cy="14" r="7.5" stroke="#b8b0a4" stroke-width="2.8" fill="none"/>
+        <!-- Connecting line -->
+        <line x1="17.5" y1="14" x2="28.5" y2="14" stroke="#b8b0a4" stroke-width="2.2"/>
+        <!-- Right circle (filled center, green) -->
+        <circle cx="36" cy="14" r="7.5" stroke="#1a6b45" stroke-width="2.8" fill="none"/>
+        <circle cx="36" cy="14" r="3.2" fill="#1a6b45"/>
+        <!-- Arrow line -->
+        <line x1="43.5" y1="14" x2="50" y2="14" stroke="#1a6b45" stroke-width="2.8" stroke-linecap="round"/>
+        <!-- Arrow head -->
+        <polyline points="47,10 52,14 47,18" stroke="#1a6b45" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="logo-text">ProcessFlows</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#findings">Discovery</a></li>
+    <li><a href="#platform">Platform</a></li>
+    <li><a href="#knowledge-base">Knowledge Base</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#bloomberg">Bloomberg</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#next-steps">Next Steps</a></li>
+    <li><a href="#followup">Follow-up</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">ACG</div>
+  <div class="hero-eyebrow">Confidential — Aventail Capital Group — May 2026</div>
+  <h1>Discovery Findings &<br><em>Implementation Plan</em></h1>
+  <p class="hero-sub">Findings from 12+ interviews across investment, trading, operations, and finance — and the build plan that follows.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><label>Prepared by</label><span>Stephen Scott, ProcessFlows</span></div>
+    <div class="hero-meta-item"><label>Client</label><span>Aventail Capital Group</span></div>
+    <div class="hero-meta-item"><label>AUM</label><span>~$2.8B</span></div>
+    <div class="hero-meta-item"><label>Phase</label><span>Discovery Complete → Implementation</span></div>
+  </div>
+</section>
+
+<!-- PART 1 DIVIDER -->
+<div class="part-divider" id="findings">
+  <div class="part-num">I</div>
+  <div class="part-info">
+    <div class="part-label">Part One</div>
+    <div class="part-title">Discovery Findings</div>
+    <p class="part-desc">Friction points and observations from 12+ interviews across investment, trading, operations, data, and finance.</p>
+  </div>
+</div>
+
+<!-- CROSS-CUTTING THEMES -->
+<section class="alt">
+  <div class="section-label">01 — Summary</div>
+  <h2>Four Recurring Themes</h2>
+  <p class="section-intro">Four themes that came up across every conversation, in every function.</p>
+
+  <div class="theme-row">
+    <div class="theme-label-col"><span>Information overload at the open</span></div>
+    <div class="theme-content-col">Every analyst starts the morning processing the same high-volume email flood before the 8:40 call. Dan put it plainly: "90% of it is like a press release that doesn't matter." The analysts are doing manually what should be automated. The 8:40 call depends on 10 people filtering overnight noise by hand.</div>
+  </div>
+
+  <div class="theme-row">
+    <div class="theme-label-col"><span>Manual monitoring where alerts should exist</span></div>
+    <div class="theme-content-col">Ryan watches 50+ pairs from a hardcoded Excel spreadsheet . No alert fires when a pair drifts. Sameer monitors dozens of broker chats all day with no summarization layer. Henry manually opens regulatory filings one by one after market close to determine relevance.</div>
+  </div>
+
+  <div class="theme-row">
+    <div class="theme-label-col"><span>Institutional memory is not queryable</span></div>
+    <div class="theme-content-col">Gordon takes notes in individual Word documents. Brian uses OneNote but falls back to Word. Ethan has a disciplined archive but it's not searchable at scale. Gordon's ask was simple: "Where's Exxon production vs. consensus for Q4 '26?" Currently unanswerable without digging manually. Henry is building a RAG transcript database from scratch because the gap is obvious.</div>
+  </div>
+
+  <div class="theme-row">
+    <div class="theme-label-col"><span>The data exists, the pipeline doesn't</span></div>
+    <div class="theme-content-col">Henry runs 20–30+ automated pipelines daily. Brian's production data beats Enverus by 2–3 days. Sameer downloads the Eclipse PNL report ~50 times a day. Jamie call summaries are generated consistently. SS&C Eclipse, Daloopa, Lightkeeper, Enverus. All live. None of it connects to anything else.</div>
+  </div>
+</section>
+
+<!-- INVESTMENT TEAM FINDINGS -->
+<section id="findings-detail">
+  <div class="section-label">02 — Investment Team</div>
+  <h2>Interview Findings: Investment Team</h2>
+  <p class="section-intro">By person, by function. What they said, what it means.</p>
+
+  <!-- SAMEER & SEAN -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge"><span>S+S</span></div>
+      <div class="person-info">
+        <div class="person-name">Sameer & Sean</div>
+        <div class="person-role">Portfolio Managers / Principals — Investment Oversight</div>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Sameer monitors dozens of broker chat channels all day. Most messages are routine bids and offers, but 10 to 25% of the time something triggers a trading decision. He cannot turn them off. He wants an hourly or end-of-day summary of net bids and offers by ticker across all chats, so he can stop monitoring them directly.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>They do not want AI replacing analyst synthesis. They are concerned about homogenizing how analysts think. Sameer's enthusiasm is specifically for PM-level signal triage: filtering his own inbox, summarizing broker chats, and alerting on stock divergence. The design principle is clear: automate Sameer's information intake, not the analysts' judgment process.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Sameer downloads the SS&C Eclipse PNL report roughly 50 times a day and manually copies longs and shorts into a separate risk file to track intraday position changes. He described this as an old way of doing things: functional, but a clear automation candidate.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Sean is the internal champion for a structured idea repository. Onboard with capturing analyst pitches formally, tracking how ideas evolve over time, and surfacing what the team discussed on a name before adding or reducing a position. Equity Data Science is a tool he uses for this purpose, though he has not fully committed to it. The knowledge base addresses this directly once it has sufficient density.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Sean uses Jamie regularly for meeting recordings and finds it valuable, but the output can be generic and does not always capture what matters most from his PM perspective: key decisions made, positions discussed, and follow-up items. He wants structured extraction, not a transcript summary.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Both Sameer and Sean want their own customized versions of the morning email triage and briefing. The infrastructure is shared but the configuration needs to be per-person: Sameer's version prioritizes counterparty and internal signals, while Sean's version should surface analyst idea flow and position-relevant research.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Indecisive about wanting the general morning call recorded. Open to recording dedicated idea-pitch sessions with individual analysts, but the morning call is currently a space where the team can speak freely without concern about being recorded. This is an important constraint for the Call and Meeting Intelligence tool.</p>
+      </div>
+    </div>
+    <div class="quote">
+      <p>"I'm already mostly not reading the emails. My real fear is missing a genuinely important internal email buried in the noise."</p>
+      <cite>Sameer, Portfolio Manager</cite>
+    </div>
+  </div>
+
+  <!-- RYAN -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge trading"><span>R</span></div>
+      <div class="person-info">
+        <div class="person-name">Ryan</div>
+        <div class="person-role">Trader</div>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point — #1 Priority</div>
+        <p>Pair monitoring is entirely manual. Ryan works from a hardcoded Excel spreadsheet Sameer built years ago, refreshing a live column and scanning P&L differences across 50+ pairs by eye. If ETR vs. NI drifts 50 bips in two hours, nothing tells him.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Ryan already uses ChatGPT for news lookups and end-of-week factor summaries using bank basket screenshots. He's a self-starter. He's open to more granular data, but only if it doesn't require manual effort on his end.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Weekly trade review means exporting the blotter, building a pivot table, and reading through 1,000+ rows to understand what the desk did. His words: "It would be a lot easier in sentences."</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Ryan's highest-value tools are the ones that don't require him to change his workflow. Alerts that fire when something matters, a blotter summary that replaces the pivot table, a brief that shows up before the open. The design principle for all Ryan-facing tools: zero manual input on his end.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Morning news is fragmented across Bloomberg, broker chat summaries, ChatGPT, and a keyword email alert system he built and then abandoned because it got too noisy. He's back to just Bloomberg. The tech sector calendar has no single home, a problem because tech events affect power and utilities names directly.</p>
+      </div>
+    </div>
+    <div class="quote">
+      <p>"If any pair goes 50 bips against us, tell us… you set those thresholds."</p>
+      <cite>Ryan: what he needs from the pair drift alerting tool</cite>
+    </div>
+  </div>
+
+  <!-- ETHAN + DAN -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge"><span>E+D</span></div>
+      <div class="person-info">
+        <div class="person-name">Ethan & Dan</div>
+        <div class="person-role">Industrials Analysts</div>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Context loss between sessions is the top frustration for both Ethan and Dan. Every new Claude session starts from zero. Dan: "You find one mistake and then you're like, well, now I don't know if any of this is right." Neither analyst can hand off a task and walk away yet, the error rate requires constant checking.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight — Internal Champion</div>
+        <p>Ethan is the firm's most advanced Claude user. His Daloopa + Claude for Excel workflow is the most developed AI process at ACG. He has a prompt library, a disciplined OneNote archive, and knows exactly what he needs next. He's the natural internal champion for adoption and the first pilot for Excel-integrated tooling.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Morning email volume is the same problem as every other analyst: processing overnight research before the 8:40 call. Dan is adding 2–3 new industrials companies per week; depth vs. speed is a constant tension with a growing coverage universe.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Ethan and Dan submit a weekly "mock book" to Sameer and Sean, a structured Excel showing proposed long/short pairs with daily P&L tracking. Dan also flagged Equity Data Science (one week old at time of interview) as a potential tool for tracking idea evolution across analysts.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GORDON + BRIAN -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge"><span>G+B</span></div>
+      <div class="person-info">
+        <div class="person-name">Gordon & Brian</div>
+        <div class="person-role">E&P Analysts (Gordon: remote, Denver; Brian: New York office)</div>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Gordon takes notes in individual Word documents and can't search them at scale. His clearest ask: "Where's Exxon production vs. consensus for Q4 '26?" Currently unanswerable without digging manually. He uses an AI note-taker for call summaries but finds it misses E&P-specific data points. He correctly identified that prompt tuning is the fix.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Gordon's call summary problem is a prompting problem, not a platform problem. A properly configured E&P template covering production guidance, capex, well counts, balance sheet, and macro tone solves it immediately. This is the fastest demonstrable value for the investment team and the right place to start the analyst onboarding.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>The team built a production data pipeline that beats Enverus by 2 to 3 days, but the analysis step is still manual. When the delta email arrives, Brian cross-references it against guidance and model expectations with no automated comparison. He also screenshots Enverus productivity curve data company by company because the portal resists automated scraping.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Brian is one of the more technically sophisticated analysts on the team. He's a pragmatic evaluator: enthusiastic where AI clearly helps, appropriately skeptical where human judgment matters. His highest-value near-term use cases are production data analysis augmentation, court docket monitoring, and non-Bloomberg news aggregation.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Large regulatory documents are a time pressure problem: 600-page Pennsylvania EPA rulings that need to be assessed in under 30 minutes during market hours. Gordon and Brian both subscribe to Visible Alpha; integration into their models is manual and unfinished.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADAM -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge"><span>A</span></div>
+      <div class="person-info">
+        <div class="person-name">Adam</div>
+        <div class="person-role">Energy Analyst (Renewables, O&G, Credit side with Craig)</div>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Morning news aggregation is a daily grind: Bloomberg, Reuters, WSJ, local news, industry publications, and 15 separate Twitter/X alert setups. Adam: "That's a big pain, just aggregating and filtering through that." When five analyst notes hit on the same name in the morning, he reads all five instead of getting a synthesized view.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Adam covers the most information-dense corner of the firm: energy, macro, renewables, regulatory, and credit crossover. He is already AI-aware and his workflow maps almost perfectly onto the Morning Intelligence agent. He is the right internal champion to co-build the energy signal layer with, not just deploy to.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>IRA and renewable tax credit tracking is manual and repeated. Nuanced threshold and eligibility rules spread across the tax code that he looks up regularly. He also wants to mine historical transcripts to reconstruct customer-mix-by-location for midstream names, where companies disclosed counterparties more explicitly in filings from 10 years ago.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHRIS -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge"><span>C</span></div>
+      <div class="person-info">
+        <div class="person-name">Chris</div>
+        <div class="person-role">Utilities Analyst (Regulated Utilities Coverage)</div>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Chris monitors 50 state utility commission dockets. Each active docket sends multiple emails per day with zip files of documents inside. He estimates 99% don't need to be opened, but figuring out which 1% matters requires opening them, because filing names and types aren't self-explanatory without months of docket history: "What am I looking at here? Do I even need to read this thing?"</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Chris takes extremely detailed chronological notes in Excel, the most structured note-taker in the discovery process. It's a strong KB source. He's not yet an AI user but is self-aware about it and open. The docket triage tool would be the use case that converts him.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPS + DATA FINDINGS -->
+<section class="alt">
+  <div class="section-label">03 — Operations & Data</div>
+  <h2>Interview Findings: Operations, Data & Finance</h2>
+
+  <!-- HENRY -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge data"><span>H</span></div>
+      <div class="person-info">
+        <div class="person-name">Henry</div>
+        <div class="person-role">Data Engineer</div>
+      </div>
+    </div>
+    <div class="callout" style="margin: 0 0 28px 0;">
+      <p>Henry runs 20–30+ automated pipelines daily, built a production data feed that beats Enverus by 2–3 days, and is independently building a RAG transcript database.</p>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point — Biggest Daily Bottleneck</div>
+        <p>Henry scrapes 10 states' air permit databases and 15 PUC dockets daily, then manually opens every filing to determine relevance. He tried Ollama (a local LLM) to flag notable items, but it lacked investment context. His words: "the most annoying thing." It consumes significant time after market close every day.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Infrastructure Asset</div>
+        <p>His pipeline stack is the data foundation for this engagement: production data (2–3 days ahead of Enverus), air permit scraping (10 states), PUC docket monitoring (15 states), jet tracking (~70–80 jets daily), EIA power plant data, RTO power pricing, power outage data matched to industrial assets, data center news. All Python-based, running silently.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>He is building a call transcript RAG database from scratch using LangChain. Back end is progressing; front end and deployment are the bottleneck. This is the same system the StackAI deployment delivers. Coordination is critical before he goes further down an incompatible path.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Jet tracking requires manual presence daily because the website detects scrapers. A paid API exists at $50K/year; the firm has not bought it. Requests arrive with no structure. A simple standardized intake format would reduce friction on every data request he receives.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- KRISTI -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge ops"><span>K</span></div>
+      <div class="person-info">
+        <div class="person-name">Kristi</div>
+        <div class="person-role">Executive Assistant to Sameer</div>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Kristi manually flags priority emails in yellow for Sameer each morning, a time-consuming triage step done entirely by hand. The criteria are judgment-based: internal emails, specific counterparties, and names on the watchlist take priority over routine broker research.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Kristi's triage process is actually well-defined once examined. She applies consistent logic around sender type, counterparty names, and topic relevance. That makes it a strong candidate for an AI classifier, and her existing judgment can serve as the training signal for what the model should surface.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANTHONY -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge ops"><span>A</span></div>
+      <div class="person-info">
+        <div class="person-name">Anthony</div>
+        <div class="person-role">Operations / Investor Relations</div>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Investor reporting is manually intensive: LP correspondence, DDQ responses, and custom investor one-pagers each require significant time to prepare. MFN and side letter conflict analysis is particularly tedious, requiring cross-referencing multiple legal documents to identify inconsistencies.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Anthony is already building automations independently: Lightkeeper custom reports, DDQ workflows, and investor one-pager generation. He is not waiting for this engagement to move. His highest-value use cases are MFN/side letter conflict analysis, investor email automation, and Lightkeeper output quality review. He should be treated as a co-builder, not just an end user.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEN -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge ops"><span>B</span></div>
+      <div class="person-info">
+        <div class="person-name">Ben</div>
+        <div class="person-role">Operations / Fund Accounting (Boston)</div>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Monthly portfolio reconciliation between SS&C Eclipse and Opus Fund Services is manual. Opus uses different ticker formatting, so 15 to 20 new tickers need to be mapped every month across 6 to 7 portfolios. Ben's ask was direct: "Could I upload our report and the administrator's report and have a comparison spit back out?" It is a well-defined, repeatable automation.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>Ben's workflows are well-defined, monthly, repetitive, and high-stakes: investor statements, regulatory filings, fund reconciliations. He has not yet adopted AI tools but has thought carefully about where they would help and can describe his use cases with precision. The reconciliation automation is the right place to start.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Form PF preparation is described as onerous. Ben believes AI could read the required financial statements and auto-populate the form. He also manages bespoke investor reporting across multiple funds, each with unique format requirements and separate deadlines.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOHN C. -->
+  <div class="finding">
+    <div class="finding-header">
+      <div class="person-badge ops"><span>JC</span></div>
+      <div class="person-info">
+        <div class="person-name">John C.</div>
+        <div class="person-role">Controller / Chief Compliance Officer</div>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Prime broker report downloads are manual and have weekend gaps. John logs into three prime broker websites daily to download short rebate data and international position PNL. SS&C Eclipse pipelines don't run on weekends, so weekend interest and PNL data for international positions must be entered manually on Mondays. A prior vendor quoted $10K to automate this. He walked away. The need remains.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>John wears more hats than anyone else at the firm: Controller, Compliance Officer, and de facto technology lead. He has been shopping AI vendors, coordinating the Claude rollout, and evaluating platforms independently. He knows the landscape well and his questions are specific. The right conversation with John is about infrastructure ownership and audit visibility, not AI features.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>DDQ completion requires manually assembling data from SS&C Eclipse, Lightkeeper, and other sources, mapping investor profiles, and populating Diligence Vault. The platform has an import feature that has not yet been explored. Investor type classification (fund of funds, family office, institution) comes from Opus without labels and must be mapped manually before it can feed regulatory reports.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>John evaluated and walked away from BlueFLAME at $40K/year and UIPath before that. His objection was consistent: these tools are wrappers, not firm-owned infrastructure. StackAI BYOC is the direct answer. ACG owns the VPC, StackAI has no data read access, and all actions are logged in ACG's own CloudTrail. This framing is what gets John's sign-off, not a feature comparison.</p>
+      </div>
+      <div class="finding-item pain">
+        <div class="finding-item-label">Pain Point</div>
+        <p>Expert network call compliance is a settled but unresolved tension. John consulted lawyers on recording expert network calls for MNPI monitoring and pulled back. The legal and discovery risk of having records was deemed worse than not having them. This is a closed decision: do not propose recording solutions for expert network calls.</p>
+      </div>
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>He has instructed the team not to upload investor data or PII to any AI platform. He currently redacts party names before uploading documents. He noted that StackAI's DPA deletes data from the LLM knowledge base weekly, which he flagged as a meaningful advantage. He understands the distinction between Pro plans and Enterprise DPAs and needs confirmation that the current plan terms are compliant.</p>
+      </div>
+
+      <div class="finding-item insight">
+        <div class="finding-item-label">Key Insight</div>
+        <p>John came back from a Lightkeeper conference energized. He confirmed the Claude MCP connector is live in Lightkeeper's Illumina product and is excited about it. He has contacts at Lightkeeper and will help make the introduction. His vision: Claude plus Lightkeeper equals natural language access to the full reporting database for ad hoc fund performance queries and reports that don't currently exist. Whether StackAI can integrate this is a critical architectural question.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PART 2 DIVIDER -->
+<div class="part-divider" id="platform">
+  <div class="part-num">II</div>
+  <div class="part-info">
+    <div class="part-label">Part Two</div>
+    <div class="part-title">Implementation Plan</div>
+    <p class="part-desc">Build specs for each Phase 1 tool: data sources, triggers, outputs, dependencies, and acceptance criteria.</p>
+  </div>
+</div>
+
+<!-- PLATFORM -->
+<section class="alt">
+  <div class="section-label">04 — Platform</div>
+  <h2>StackAI: Why and How</h2>
+  <p class="section-intro">The contract is signed. Here's the deployment architecture and why it addresses the security requirements John raised.</p>
+
+  <div class="byoc-grid">
+    <div class="byoc-step">
+      <div class="byoc-step-num">1</div>
+      <div>
+        <div class="byoc-step-title">ACG provisions a cloud organization and IAM role</div>
+        <div class="byoc-step-desc">ACG sets up an AWS organization inside existing infrastructure. An IAM role is created that trusts only StackAI's account ID — cross-account access is tightly controlled. ACG can revoke this role at any time with instant termination.</div>
+      </div>
+    </div>
+    <div class="byoc-step">
+      <div class="byoc-step-num">2</div>
+      <div>
+        <div class="byoc-step-title">StackAI deploys inside ACG's VPC via IaC and helm charts</div>
+        <div class="byoc-step-desc">StackAI provides the infrastructure-as-code (IaC) and helm charts. All models, inference, and data processing run inside ACG's VPC. No data traverses the public internet. No credentials are stored on StackAI's side. IAM role only.</div>
+      </div>
+    </div>
+    <div class="byoc-step">
+      <div class="byoc-step-num">3</div>
+      <div>
+        <div class="byoc-step-title">All StackAI actions logged in ACG's own CloudTrail</div>
+        <div class="byoc-step-desc">Every action StackAI takes is logged in ACG's CloudTrail, not StackAI's. ACG has full audit visibility. The IAM role is scoped to deploy, update, and monitor only. StackAI has no data read access at any point.</div>
+      </div>
+    </div>
+    <div class="byoc-step">
+      <div class="byoc-step-num">4</div>
+      <div>
+        <div class="byoc-step-title">Agent builds begin in parallel, starting day one</div>
+        <div class="byoc-step-desc">Web-fed and MCP-connected agents (Trading Alerts, Morning Brief) start building immediately, no VPC dependency. KB-dependent agents are built during weeks 1–4 and activate when the knowledge base is ready.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-note" style="margin-top:32px;">
+    <strong>On Claude for Excel:</strong> StackAI handles agents, workflows, and the knowledge base. Claude Team subscriptions cover the Excel integration. Model work done directly in spreadsheets. Ethan is already using this. Two tools, complementary roles, no overlap. Both run inside controlled environments.
+  </div>
+</section>
+
+<!-- KNOWLEDGE BASE -->
+<section id="knowledge-base">
+  <div class="section-label">05 — Knowledge Base</div>
+  <h2>Knowledge Base Setup & Ingestion Plan</h2>
+  <p class="section-intro">The knowledge base is what KB-dependent agents query. It needs to be built in sequence, not everything goes in at once, and sensitivity tiers matter.</p>
+
+  <table class="int-table" style="margin-top:48px;">
+    <thead>
+      <tr>
+        <th>Source</th>
+        <th>Format</th>
+        <th>Sensitivity</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Jamie call summaries</strong></td>
+        <td>Structured text / export</td>
+        <td>Internal — low sensitivity</td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Ready to ingest</span></td>
+      </tr>
+      <tr>
+        <td><strong>Analyst memos and research (S-Drive)</strong></td>
+        <td>Word / PDF</td>
+        <td>Internal — low sensitivity</td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> Folder access needed <span class="flag">Follow-up</span></span></td>
+      </tr>
+      <tr>
+        <td><strong>Trade blotter exports</strong></td>
+        <td>CSV / Excel from SS&C Eclipse</td>
+        <td>Internal — data sharing sign-off required</td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> Sign-off needed <span class="flag">Follow-up</span></span></td>
+      </tr>
+      <tr>
+        <td><strong>Production data email outputs</strong></td>
+        <td>Structured email / Python output</td>
+        <td>Internal — low sensitivity</td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Ready to ingest</span></td>
+      </tr>
+      <tr>
+        <td><strong>Historical S-Drive archive</strong></td>
+        <td>Word / PDF / Excel</td>
+        <td>Internal — review for sensitive content</td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> Access and structure review needed <span class="flag">Follow-up</span></span></td>
+      </tr>
+      <tr>
+        <td><strong>Analyst notes archive</strong></td>
+        <td>OneNote / Word / Excel — varies by analyst</td>
+        <td>Internal — low sensitivity</td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> Export path to confirm per analyst <span class="flag">Follow-up</span></span></td>
+      </tr>
+      <tr>
+        <td><strong>Bloomberg data exports</strong></td>
+        <td>CSV / Excel manual export</td>
+        <td>Internal — subject to Bloomberg terms</td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> Identify exportable datasets <span class="flag">Follow-up</span></span></td>
+      </tr>
+      <tr>
+        <td><strong>LP correspondence and DDQ materials</strong></td>
+        <td>Word / PDF / email</td>
+        <td>Highly sensitive — legal review required</td>
+        <td><span class="status-dot"><span class="dot dot-grey"></span> Governance sign-off required <span class="flag">Follow-up</span></span></td>
+      </tr>
+      <tr>
+        <td><strong>Compliance documents</strong></td>
+        <td>Various</td>
+        <td>Highly sensitive — compliance boundary TBD</td>
+        <td><span class="status-dot"><span class="dot dot-grey"></span> Governance sign-off required <span class="flag">Follow-up</span></span></td>
+      </tr>
+      <tr>
+        <td><strong>Materials with MNPI exposure</strong></td>
+        <td>Various. See note below</td>
+        <td>Restricted — boundary to be defined</td>
+        <td><span class="status-dot"><span class="dot dot-grey"></span> Governance sign-off required <span class="flag">Follow-up</span></span></td>
+      </tr>
+      <tr>
+        <td><strong>Third-party research and expert network transcripts</strong></td>
+        <td>PDF / text</td>
+        <td>Sensitive — legal review required</td>
+        <td><span class="status-dot"><span class="dot dot-grey"></span> Legal review required <span class="flag">Follow-up</span></span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="spec-note" style="margin-top:20px;">
+    <strong>MNPI note:</strong> Materials that may require restricted handling include analyst notes written before or during earnings calls; production estimates from IR contacts; credit facility documents for active or prospective positions; management communications on forward guidance or M&A; production data and regulatory filings that get ahead of public disclosure.
+  </div>
+
+</section>
+
+<!-- TOOL SPECS -->
+<section class="alt" id="tools">
+  <div class="section-label">06 — Tool Specifications</div>
+  <h2>Build Specifications: Phase 1 Tools</h2>
+  <p class="section-intro">What each tool does, what it needs, and how we know it's working.</p>
+
+  <!-- TOOL 1: STOCK SIGNAL ALERT -->
+  <div class="tool-spec">
+    <div class="tool-spec-header amber">
+      <div>
+        <div class="tool-spec-title">Stock Signal Alert</div>
+        <div class="tool-spec-subtitle">Monitors ~100 stocks grouped into correlated sets. Every 15 minutes during market hours, calculates each stock's performance relative to its group and alerts Sameer and Sean when any name diverges meaningfully. All thresholds configurable without a rebuild.</div>
+      </div>
+      <div class="tool-priority">
+        <span class="priority-badge">P0 — Highest Priority</span>
+        <span class="tool-users-badge">Sameer · Sean</span>
+      </div>
+    </div>
+    <div class="tool-spec-body">
+      <div class="spec-panel">
+        <div class="spec-panel-title">Data Sources &amp; Inputs</div>
+        <ul class="spec-list">
+          <li>Bloomberg price data — preferred path; integration being confirmed with StackAI <span class="flag">Follow-up</span></li>
+          <li>Polygon.io or Finnhub — confirmed fallback if Bloomberg path requires additional setup</li>
+          <li>Sameer/Sean-provided grouped company list — 100 stocks in correlated sets <span class="flag">Follow-up</span></li>
+          <li>Configurable divergence thresholds per timeframe: intraday, daily, weekly, monthly</li>
+        </ul>
+        <div class="spec-note"><strong>Not in v1:</strong> Fundamental signal layering, news integration, trade recommendations, factor models, tick-by-tick monitoring. v1 is price-based only. Clean signal logic validated before adding complexity.</div>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Trigger &amp; Output</div>
+        <ul class="spec-list">
+          <li><strong>Trigger:</strong> Scheduled — runs every 15 minutes during market hours</li>
+          <li><strong>Logic:</strong> Calculates average return of each group, compares each stock to group average, flags divergence above threshold</li>
+          <li><strong>Output:</strong> Email to Sameer and Sean — stock name, group, magnitude, timeframe</li>
+          <li><strong>Quiet hours:</strong> No alerts outside market hours unless configured otherwise</li>
+          <li><strong>Configurability:</strong> All thresholds adjustable without a rebuild</li>
+        </ul>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Dependencies</div>
+        <div class="acceptance-grid">
+          <div class="dep-item"><span class="dep-badge dep-acg">ACG</span>Grouped 100-stock list with correlated set definitions <span class="flag">Follow-up</span></div>
+          <div class="dep-item"><span class="dep-badge dep-stephen">Stephen</span>Bloomberg integration path confirmed with StackAI/Karissa <span class="flag">Follow-up</span></div>
+          <div class="dep-item"><span class="dep-badge dep-stephen">Stephen</span>Threshold calibration session scheduled after v1 goes live</div>
+          <div class="dep-item"><span class="dep-badge dep-stackai">StackAI</span>Scheduled trigger and price data connector configured</div>
+        </div>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Acceptance Criteria</div>
+        <div class="acceptance-grid">
+          <div class="acceptance-item">Runs every 15 minutes during market hours without manual intervention</div>
+          <div class="acceptance-item">Alert correctly identifies the diverging stock, its group, and magnitude</div>
+          <div class="acceptance-item">Thresholds adjustable without a rebuild</div>
+          <div class="acceptance-item">Calibration session held within 5 business days of go-live</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOL 2: PAIR DRIFT -->
+  <div class="tool-spec">
+    <div class="tool-spec-header">
+      <div>
+        <div class="tool-spec-title">Pair Drift Alert</div>
+        <div class="tool-spec-subtitle">Bloomberg price data in, alert out. Ryan provides the pairs and sets the thresholds. When any pair crosses the spread, the alert fires — replacing manual Excel monitoring entirely.</div>
+      </div>
+      <div class="tool-priority">
+        <span class="priority-badge">P1 — Build First</span>
+        <span class="tool-users-badge">Ryan</span>
+      </div>
+    </div>
+    <div class="tool-spec-body">
+      <div class="spec-panel">
+        <div class="spec-panel-title">Data Sources &amp; Inputs</div>
+        <ul class="spec-list">
+          <li>Bloomberg price feed — intraday spread data for Ryan's pairs list</li>
+          <li>Ryan-provided pairs list — pair names + opening spread benchmark</li>
+          <li>Configurable threshold per pair (default: 50 bips from opening spread)</li>
+        </ul>
+        <div class="spec-note"><strong>Note:</strong> Position sizing is not required for v1. Real-time vs. delayed feed to be confirmed. <span class="flag">Follow-up</span></div>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Trigger &amp; Output</div>
+        <ul class="spec-list">
+          <li><strong>Trigger:</strong> Event-based — fires when any pair crosses configured threshold</li>
+          <li><strong>Output:</strong> Email to Ryan — pair name, current spread, opening spread, magnitude, timeframe</li>
+          <li><strong>Delivery:</strong> Email (immediate on trigger)</li>
+          <li><strong>Configurability:</strong> Thresholds adjustable per pair; no rebuild required</li>
+        </ul>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Dependencies</div>
+        <div class="acceptance-grid">
+          <div class="dep-item"><span class="dep-badge dep-acg">ACG</span>Ryan provides pairs list with opening spread benchmarks <span class="flag">Follow-up</span></div>
+          <div class="dep-item"><span class="dep-badge dep-acg">ACG</span>Sameer sign-off on sharing pairs data within StackAI environment <span class="flag">Follow-up</span></div>
+          <div class="dep-item"><span class="dep-badge dep-stephen">Stephen</span>Bloomberg data feed path confirmed (direct API vs. export) <span class="flag">Follow-up</span></div>
+          <div class="dep-item"><span class="dep-badge dep-stackai">StackAI</span>Price data connector configured (Polygon or Finnhub as fallback)</div>
+        </div>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Acceptance Criteria</div>
+        <div class="acceptance-grid">
+          <div class="acceptance-item">Alert fires within 5 minutes of a pair crossing the configured threshold</div>
+          <div class="acceptance-item">Alert email contains pair name, spread magnitude, and timeframe — readable in under 10 seconds</div>
+          <div class="acceptance-item">Thresholds adjustable without a rebuild</div>
+          <div class="acceptance-item">Zero false positives in first 48 hours (calibration session held)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOL 3: MORNING INTELLIGENCE + EMAIL TRIAGE -->
+  <div class="tool-spec">
+    <div class="tool-spec-header navy">
+      <div>
+        <div class="tool-spec-title">Morning Intelligence &amp; Inbox Triage</div>
+        <div class="tool-spec-subtitle">Two agents, one pipeline. A pre-market brief from external sources — news, data, calendars. And a personal inbox triage that distills 100–150 overnight emails into what actually needs attention. Both delivered before the 8:40 call. Both configurable per analyst.</div>
+      </div>
+      <div class="tool-priority">
+        <span class="priority-badge">P1 — Web-fed / Inbox-fed</span>
+        <span class="tool-users-badge">Full Investment Team</span>
+      </div>
+    </div>
+    <div class="tool-spec-body">
+      <div class="spec-panel">
+        <div class="spec-panel-title">Data Sources &amp; Inputs</div>
+        <ul class="spec-list">
+          <li>Web search — global overnight news, macro headlines, sector news (energy/utilities/industrials)</li>
+          <li>Pre-market price data — movers in covered names</li>
+          <li>Earnings and economic calendar — upcoming events for covered names</li>
+          <li>Each analyst's email inbox — via Outlook/Gmail connector or configured sender forwarding <span class="flag">Follow-up</span></li>
+          <li>Weekly Summary: KB query of recent call summaries (KB-dependent)</li>
+        </ul>
+        <div class="spec-note"><strong>Email access decision needed:</strong> Full inbox connector gives the richest context and historical search capability. Forwarding rules from specific senders are a lower-friction starting point but limit historical context. Will raise this with the team in the meeting.</div>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Pre-Market Brief — Output Structure</div>
+        <ul class="spec-list">
+          <li><strong>Section 1:</strong> Global overnight — macro events, central bank moves, geopolitical</li>
+          <li><strong>Section 2:</strong> Sector — energy / utilities / industrials</li>
+          <li><strong>Section 3:</strong> Pre-market movers in covered names — magnitude and reason</li>
+        </ul>
+        <div class="spec-note"><strong>Macro first always.</strong> Configured per analyst — each person's covered names list drives Section 3. Ryan's version adds tech calendar. Sector analysts get their universe prioritized.</div>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Inbox Triage — Output Structure</div>
+        <ul class="spec-list">
+          <li><strong>Must read:</strong> Internal emails, counterparty messages, watchlist names</li>
+          <li><strong>Worth scanning:</strong> Relevant broker research and sector news</li>
+          <li><strong>Skip:</strong> Everything else — flagged but not surfaced</li>
+        </ul>
+        <div class="spec-note"><strong>Configurable per analyst:</strong> Sameer's version prioritizes internal and counterparty messages. E&amp;P analysts get production-related research surfaced. Chris's version flags regulatory filings. Each analyst defines their own priority senders and topics in a one-time setup.</div>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Schedule &amp; Acceptance Criteria</div>
+        <ul class="spec-list">
+          <li><strong>Pre-Market Brief:</strong> Delivered by 8:00am ET daily</li>
+          <li><strong>Inbox Triage Summary:</strong> Delivered by 8:30am ET daily</li>
+          <li><strong>8:40 Call Prep:</strong> Combined digest by 8:35am ET</li>
+          <li><strong>Weekly "What Mattered":</strong> Friday 5:00pm ET — KB-dependent</li>
+        </ul>
+        <div class="acceptance-grid" style="margin-top:12px;">
+          <div class="acceptance-item">Pre-market brief delivered by 8:00am — never late</div>
+          <div class="acceptance-item">Analysts report meaningful reduction in email processing time within two weeks</div>
+          <div class="acceptance-item">Per-analyst configuration updated without a rebuild when preferences change</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOL 4: CALL & MEETING INTELLIGENCE -->
+  <div class="tool-spec">
+    <div class="tool-spec-header charcoal">
+      <div>
+        <div class="tool-spec-title">Call &amp; Meeting Intelligence</div>
+        <div class="tool-spec-subtitle">One pipeline, custom-prompted per analyst. Transcripts go in — structured extractions come out. Each analyst defines what they need pulled. Not limited to two templates: any analyst can have their own extraction configuration for any call type.</div>
+      </div>
+      <div class="tool-priority">
+        <span class="priority-badge">P1 — KB-Dependent</span>
+        <span class="tool-users-badge">All Analysts · Sean</span>
+      </div>
+    </div>
+    <div class="tool-spec-body">
+      <div class="spec-panel">
+        <div class="spec-panel-title">Data Sources &amp; Inputs</div>
+        <ul class="spec-list">
+          <li>Jamie call summaries — KB Tier 1 ingestion source; also available as direct upload</li>
+          <li>Earnings call transcripts — manual upload or via API (Visible Alpha, Bloomberg where available)</li>
+          <li>Expert network call transcripts — where legally permitted</li>
+          <li>KB context — for cross-call comparison and historical queries</li>
+        </ul>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">How Custom Prompting Works</div>
+        <ul class="spec-list">
+          <li>Each analyst defines a personal extraction template, the fields they care about for their coverage universe</li>
+          <li>Templates are stored and reused automatically — one setup, applied to every call</li>
+          <li>Multiple templates per analyst supported — e.g. earnings vs. management meetings vs. expert network calls</li>
+          <li>Templates updated at any time without a rebuild</li>
+        </ul>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Example Analyst Configurations</div>
+        <ul class="spec-list">
+          <li><strong>E&amp;P analysts:</strong> Production guidance, capex, well counts, balance sheet, macro tone</li>
+          <li><strong>Utilities analyst:</strong> Rate case status, regulatory language, timeline, commissioner sentiment</li>
+          <li><strong>Renewables/Energy analyst:</strong> IRA credit references, capex guidance, offtake structure</li>
+          <li><strong>Meeting recordings (Sean):</strong> Key decisions, action items, positions discussed, follow-up flags, sentiment by speaker</li>
+          <li><strong>Any analyst:</strong> Custom fields configured in a 30-minute setup session</li>
+        </ul>
+        <div class="spec-note"><strong>Security note:</strong> All processing runs inside ACG's VPC. No recording or transcript data leaves the environment.</div>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Acceptance Criteria</div>
+        <div class="acceptance-grid">
+          <div class="acceptance-item">Each analyst's template correctly extracts their defined fields from a test transcript</div>
+          <div class="acceptance-item">Each analyst confirms the output matches what they would have written by hand</div>
+          <div class="acceptance-item">Summaries ingested to KB automatically — queryable by company, date, and topic</div>
+          <div class="acceptance-item">Meeting recording summary delivered within 15 minutes of call end</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOL 5: BLOTTER SUMMARY -->
+  <div class="tool-spec">
+    <div class="tool-spec-header">
+      <div>
+        <div class="tool-spec-title">Weekly Trade Blotter Summary</div>
+        <div class="tool-spec-subtitle">CSV/Excel export in — natural language narrative out. "You increased Exxon exposure Monday–Wednesday, then flipped short Thursday." Replaces Ryan's manual pivot table review.</div>
+      </div>
+      <div class="tool-priority">
+        <span class="priority-badge">P1 — KB-Dependent</span>
+        <span class="tool-users-badge">Investment Team · Ryan · Sameer</span>
+      </div>
+    </div>
+    <div class="tool-spec-body">
+      <div class="spec-panel">
+        <div class="spec-panel-title">Data Sources &amp; Inputs</div>
+        <ul class="spec-list">
+          <li>Weekly blotter export from SS&amp;C Eclipse — CSV or Excel format</li>
+          <li>KB context — prior week summaries for comparison language</li>
+          <li>Position sizing optional — narrative works with or without it</li>
+        </ul>
+        <div class="spec-note"><strong>Dependency:</strong> Sameer sign-off required on sharing blotter data within the StackAI environment (inside ACG's VPC — data never leaves).</div>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Output Structure</div>
+        <ul class="spec-list">
+          <li><strong>Weekly narrative:</strong> Plain-English summary of net positioning changes by name and sector</li>
+          <li><strong>Notable moves:</strong> Largest additions, largest reductions, direction flips</li>
+          <li><strong>Sector summary:</strong> Net long/short changes by sector</li>
+          <li><strong>Delivery:</strong> Email to Sameer, Sean, and Ryan — Friday end of day</li>
+        </ul>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Dependencies</div>
+        <div class="acceptance-grid">
+          <div class="dep-item"><span class="dep-badge dep-acg">ACG</span>Sameer sign-off on blotter data sharing <span class="flag">Follow-up</span></div>
+          <div class="dep-item"><span class="dep-badge dep-acg">ACG</span>Consistent weekly blotter export established — confirm who controls it <span class="flag">Follow-up</span></div>
+          <div class="dep-item"><span class="dep-badge dep-stephen">Stephen</span>Column mapping from Eclipse export to narrative template</div>
+        </div>
+      </div>
+      <div class="spec-panel">
+        <div class="spec-panel-title">Acceptance Criteria</div>
+        <div class="acceptance-grid">
+          <div class="acceptance-item">Narrative accurately reflects net positioning changes confirmed against source blotter</div>
+          <div class="acceptance-item">Ryan confirms the summary replaces the pivot table. He reads it without opening the blotter</div>
+          <div class="acceptance-item">Runs without manual intervention after the weekly export is dropped in a designated folder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCOPE OUT -->
+<section>
+  <div class="section-label">07 — Scope</div>
+  <h2>On the Roadmap</h2>
+  <p class="section-intro">Real use cases from real interviews. Not forgotten — queued after Phase 1 is validated.</p>
+
+  <table class="scope-table">
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Requested By</th>
+        <th>Why Deferred</th>
+        <th>Phase</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Bloomberg Chat API Summary</td>
+        <td>Sameer</td>
+        <td>Integration path being confirmed with StackAI — expect update from Karissa shortly. High priority for Phase 2 once confirmed. <span class="flag">Follow-up</span></td>
+        <td><span class="phase-badge">Phase 2</span></td>
+      </tr>
+      <tr>
+        <td>Factor models on Stock Signal Alert</td>
+        <td>—</td>
+        <td>v1 is price-based only, the signal logic gets validated first. Factor overlays (fundamental data, news sentiment, positioning) are added in Phase 2 once we know the base alerts are working correctly.</td>
+        <td><span class="phase-badge">Phase 2</span></td>
+      </tr>
+      <tr>
+        <td>Credit / Deal Document Review</td>
+        <td>Craig, Adam</td>
+        <td>Key term extraction from credit facility agreements. Well-defined use case, deferred to Phase 2 after investment team tools are live.</td>
+        <td><span class="phase-badge">Phase 2</span></td>
+      </tr>
+      <tr>
+        <td>Form PF Auto-population</td>
+        <td>Ben</td>
+        <td>Feasible — AI reads financial statements and populates the SEC form. Requires identifying exact input documents first. Phase 2 back office module.</td>
+        <td><span class="phase-badge">Phase 2</span></td>
+      </tr>
+      <tr>
+        <td>IRA / Renewable Tax Credit Knowledge Module</td>
+        <td>Adam</td>
+        <td>Bounded dataset, high daily utility. Deferred until KB is established and Phase 1 tools are validated. Phase 2 knowledge expansion.</td>
+        <td><span class="phase-badge">Phase 2</span></td>
+      </tr>
+      <tr>
+        <td>Docket Triage Classifier</td>
+        <td>Chris</td>
+        <td>Henry already scrapes the dockets. The AI layer that classifies by relevance and flags notable items is ready to build — blocked only by Phase 1 sequencing.</td>
+        <td><span class="phase-badge">Phase 2</span></td>
+      </tr>
+      <tr>
+        <td>SS&C Eclipse / Opus Reconciliation Tool</td>
+        <td>Ben</td>
+        <td>Clear, well-defined automation. Ben's exact ask. Deferred to Phase 2 back office module.</td>
+        <td><span class="phase-badge">Phase 2</span></td>
+      </tr>
+      <tr>
+        <td>Air Permit / PUC Filing Relevance Filter</td>
+        <td>Data team</td>
+        <td>Air permits and PUC dockets are scraped daily across 10+ states. The LLM relevance layer failed with Ollama because it lacked investment context. StackAI + KB solves this. Phase 2.</td>
+        <td><span class="phase-badge">Phase 2</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- INTEGRATIONS -->
+<section class="alt">
+  <div class="section-label">08 — Integrations</div>
+  <h2>Data Sources & Connections</h2>
+  <p class="section-intro">ACG's existing tools and data sources mapped against connection paths into StackAI. Green = ready or confirmed. Amber = connectable, setup required. Grey = pending confirmation or governance.</p>
+
+  <table class="int-table">
+    <thead>
+      <tr>
+        <th>Source</th>
+        <th>Connection Status</th>
+        <th>Connection Path</th>
+        <th>Used For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>EDGAR</strong></td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Ready</span></td>
+        <td>Native public API</td>
+        <td>SEC filings, regulatory documents</td>
+      </tr>
+      <tr>
+        <td><strong>Jamie</strong></td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Ready</span></td>
+        <td>Export / API — summaries already being generated</td>
+        <td>KB ingestion; Call Intelligence agent</td>
+      </tr>
+      <tr>
+        <td><strong>Claude for Excel</strong></td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Active</span></td>
+        <td>Claude Team subscription — runs separately from StackAI</td>
+        <td>Analyst model work in spreadsheets</td>
+      </tr>
+      <tr>
+        <td><strong>Claude Code</strong></td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Active</span></td>
+        <td>Anthropic API / Claude Code CLI</td>
+        <td>Development acceleration; pipeline automation</td>
+      </tr>
+      <tr>
+        <td><strong>QuickBooks</strong></td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Ready</span></td>
+        <td>Native StackAI connector</td>
+        <td>Finance / ops automation</td>
+      </tr>
+      <tr>
+        <td><strong>Enverus</strong></td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Ready</span></td>
+        <td>API — already pulling data</td>
+        <td>Production data; E&P agent context</td>
+      </tr>
+      <tr>
+        <td><strong>Daloopa</strong></td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Ready</span></td>
+        <td>API — model update data</td>
+        <td>Analyst model updates</td>
+      </tr>
+      <tr>
+        <td><strong>Lightkeeper</strong></td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Confirmed</span></td>
+        <td>MCP connector — confirmed connectable</td>
+        <td>Operations / reporting workflows</td>
+      </tr>
+      <tr>
+        <td><strong>Hyperion</strong></td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Ready</span></td>
+        <td>API / export — satellite well-completion data</td>
+        <td>E&P production data; analyst pipeline feeds</td>
+      </tr>
+      <tr>
+        <td><strong>SharePoint</strong></td>
+        <td><span class="status-dot"><span class="dot dot-green"></span> Ready</span></td>
+        <td>Native StackAI connector (OAuth2)</td>
+        <td>Document storage; KB ingestion source</td>
+      </tr>
+      <tr>
+        <td><strong>SS&C Eze Eclipse</strong></td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> Setup required</span></td>
+        <td>API or structured CSV export — OMS/blotter data <span class="flag">Follow-up</span></td>
+        <td>Blotter Summary agent; reconciliation (Phase 2)</td>
+      </tr>
+      <tr>
+        <td><strong>Equity Data Science</strong></td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> Setup required</span></td>
+        <td>API — confirm access tier with subscription <span class="flag">Follow-up</span></td>
+        <td>Analyst idea tracking; portfolio context</td>
+      </tr>
+      <tr>
+        <td><strong>Visible Alpha</strong></td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> Setup required</span></td>
+        <td>API — confirm subscription level <span class="flag">Follow-up</span></td>
+        <td>Consensus data for E&P model context</td>
+      </tr>
+      <tr>
+        <td><strong>Diligence Vault</strong></td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> Setup required</span></td>
+        <td>API — confirm availability <span class="flag">Follow-up</span></td>
+        <td>DDQ automation (Phase 2)</td>
+      </tr>
+      <tr>
+        <td><strong>Opus (Fund Services)</strong></td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> To confirm</span></td>
+        <td>Structured report export — confirm format <span class="flag">Follow-up</span></td>
+        <td>Monthly reconciliation against Eclipse (Phase 2)</td>
+      </tr>
+      <tr>
+        <td><strong>Bloomberg</strong></td>
+        <td><span class="status-dot"><span class="dot dot-amber"></span> In progress</span></td>
+        <td>Multiple paths available — see Bloomberg Integration section below <span class="flag">Follow-up</span></td>
+        <td>Price feeds; pair/signal data; broker chat API</td>
+      </tr>
+      <tr>
+        <td><strong>Expert network research</strong></td>
+        <td><span class="status-dot"><span class="dot dot-grey"></span> Pending legal</span></td>
+        <td>Written research pending legal review <span class="flag">Follow-up</span></td>
+        <td>KB ingestion pending sign-off</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- BLOOMBERG INTEGRATION -->
+<section id="bloomberg">
+  <div class="section-label">08b — Bloomberg Integration</div>
+  <h2>Bloomberg: Integration Paths</h2>
+  <p class="section-intro">Bloomberg is central to ACG's data infrastructure. Three integration paths exist — each with different requirements, cost, and timeline. The right path depends on ACG's current subscription level.</p>
+
+  <div class="byoc-grid" style="margin-top:48px;">
+    <div class="byoc-step">
+      <div class="byoc-step-num">1</div>
+      <div>
+        <div class="byoc-step-title">Community blpapi-mcp (Terminal-based)</div>
+        <div class="byoc-step-desc">An open-source MCP server that wraps Bloomberg's blpapi and exposes real-time Terminal data to AI agents. The server runs locally on a machine with a licensed Terminal session active. No separate API key needed, the Terminal session provides authentication. Supports equity, fixed income, credit, screening, earnings calendar, and macro events.</div>
+        <div style="margin-top:12px;">
+          <div class="spec-note">
+            <strong>Requirements:</strong> Bloomberg Terminal running and logged in (localhost:8194). Bloomberg C++ SDK and Python SDK installed. Terminal license only — no Data License required.<br><br>
+            <strong>Legal note:</strong> The open-source project (github.com/djsamseng/blpapi-mcp) explicitly states it is not affiliated with Bloomberg Finance L.P. and that Bloomberg data use requires a valid Terminal subscription. The code itself is open source; the data access is governed by ACG's existing Terminal license agreement. Confirm with Bloomberg and John whether automated data pull via blpapi is permitted under the current license terms. <span class="flag">Follow-up</span><br><br>
+            <strong>Best for:</strong> Fastest path to Bloomberg data integration. Good for price feeds, pair monitoring, and intraday data. Henry is the right person to deploy and run this.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="byoc-step">
+      <div class="byoc-step-num">2</div>
+      <div>
+        <div class="byoc-step-title">Bloomberg Server API (SAPI)</div>
+        <div class="byoc-step-desc">Bloomberg's official server-side API, the same real-time market data, historical data, and calculation tools available on the Terminal, accessible programmatically. SAPI integrates Bloomberg data with third-party applications including proprietary builds. Leverages existing Terminal exchange entitlements, so no separate data licensing agreement is required. Available in Python, C++, Java, and .NET.</div>
+        <div style="margin-top:12px;">
+          <div class="spec-note">
+            <strong>Requirements:</strong> Existing Terminal license. Bloomberg SAPI add-on (separate from the base Terminal subscription — Bloomberg offers four service tiers). SAPI Plus/Premium options let Bloomberg manage the infrastructure entirely.<br><br>
+            <strong>Questions for ACG:</strong> Does the current Bloomberg contract include SAPI access, or is it Terminal-only? If Terminal-only, what tier of SAPI would cover the use cases needed (price feeds, historical data, chat API)? <span class="flag">Follow-up</span><br><br>
+            <strong>Best for:</strong> Production-grade integration. This is the right path for the Stock Signal Alert, Pair Drift, and eventually the Bloomberg Chat API summary.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="byoc-step">
+      <div class="byoc-step-num">3</div>
+      <div>
+        <div class="byoc-step-title">Bloomberg Data License (B-PIPE)</div>
+        <div class="byoc-step-desc">Bloomberg's enterprise data feed — 50M+ securities, 56,000 fields, REST API or SFTP, available natively in major cloud providers. Separate from the Terminal subscription. Designed for feeding accounting, portfolio management, and compliance systems at scale.</div>
+        <div style="margin-top:12px;">
+          <div class="spec-note">
+            <strong>Requirements:</strong> Separate Bloomberg Data License contract. Significant additional cost — typically $50K–$150K+/year depending on scope and data fields.<br><br>
+            <strong>Best for:</strong> Large-scale data ingestion at enterprise level. Likely overkill for ACG's Phase 1–2 needs. Worth flagging as a long-term path if the SAPI tiers don't cover everything needed.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="byoc-step">
+      <div class="byoc-step-num">4</div>
+      <div>
+        <div class="byoc-step-title">Manual Export Workflow</div>
+        <div class="byoc-step-desc">Analysts export Bloomberg data (CSV/Excel) on a schedule. StackAI ingests the exports into the knowledge base or feeds them directly into agents. Zero licensing risk. No new contract required. Deployable immediately.</div>
+        <div style="margin-top:12px;">
+          <div class="spec-note">
+            <strong>Best for:</strong> Historical data ingestion, reference data, and any dataset that doesn't require real-time refresh. A practical fallback for anything not covered by blpapi-mcp or SAPI in Phase 1.<br><br>
+            <strong>Bloomberg Chat API:</strong> The broker chat summary use case (Sameer's request) may require a specific Bloomberg Messaging API access tier. Confirming with Karissa. <span class="flag">Follow-up</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:48px;">
+    <p>The immediate question for ACG: <em>is the current Bloomberg contract Terminal-only, or does it include SAPI access?</em> </p>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline" class="alt">
+  <div class="section-label">09 — Timeline</div>
+  <h2>Implementation Timeline</h2>
+  <p class="section-intro">Two tracks running in parallel. First working tool delivered inside Week 2. Timeline starts from IAM setup and receipt of the grouped company list.</p>
+
+  <style>
+    .h-timeline {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0;
+      margin-top: 48px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .h-col {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+    }
+
+    .h-col:last-child { border-right: none; }
+
+    .h-week {
+      background: var(--green);
+      color: var(--white);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-align: center;
+      padding: 12px 8px;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .h-events {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 8px;
+      flex: 1;
+      background: var(--white);
+    }
+
+    .h-event {
+      padding: 8px 10px;
+      border-radius: 3px;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .h-event.agent { background: var(--green-pale); border-left: 2px solid var(--green); }
+    .h-event.kb { background: #e8eef5; border-left: 2px solid #2c5f8a; }
+    .h-event.phase2 { background: var(--accent-pale); border-left: 2px solid var(--accent); }
+
+    .h-event strong { display: block; font-size: 11px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+    .h-event p { font-size: 10px; color: var(--muted); }
+
+    .h-track-legend {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    .h-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .h-legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 900px) {
+      .h-timeline {
+        grid-template-columns: 1fr;
+      }
+      .h-col { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+
+  <div class="h-track-legend">
+    <div class="h-legend-item"><div class="h-legend-dot" style="background:var(--green)"></div> Agent Build</div>
+    <div class="h-legend-item"><div class="h-legend-dot" style="background:#2c5f8a"></div> Knowledge Base</div>
+    <div class="h-legend-item"><div class="h-legend-dot" style="background:var(--accent)"></div> Next Phase</div>
+  </div>
+
+  <div class="h-timeline">
+    <div class="h-col">
+      <div class="h-week">Week 1</div>
+      <div class="h-events">
+        <div class="h-event kb"><strong>BYOC setup begins</strong><p>Cloud org and IAM role initiated. StackAI onboarding call with Karissa.</p></div>
+        <div class="h-event agent"><strong>Pair Drift build begins</strong><p>Pairs list received. Data feed confirmed.</p></div>
+        <div class="h-event agent"><strong>Signal Alert build begins</strong><p>100-stock list received. Price API configured.</p></div>
+      </div>
+    </div>
+    <div class="h-col">
+      <div class="h-week">Week 2–3</div>
+      <div class="h-events">
+        <div class="h-event agent"><strong>Pair Drift goes live</strong><p>Ryan receives first spread alerts. Calibration session held.</p></div>
+        <div class="h-event agent"><strong>Morning Intelligence build begins</strong><p>Brief structure confirmed. Inbox connector path decided.</p></div>
+        <div class="h-event kb"><strong>BYOC provisioned</strong><p>StackAI deployed inside ACG VPC. CloudTrail logging confirmed.</p></div>
+      </div>
+    </div>
+    <div class="h-col">
+      <div class="h-week">Week 3–4</div>
+      <div class="h-events">
+        <div class="h-event agent"><strong>Signal Alert goes live</strong><p>15-min divergence alerts running. Calibration session held.</p></div>
+        <div class="h-event kb"><strong>KB ingestion begins</strong><p>Jamie summaries first. S-Drive folder access confirmed.</p></div>
+        <div class="h-event agent"><strong>Call Summary templates built</strong><p>Analyst extraction configs defined. Ready to activate on KB.</p></div>
+      </div>
+    </div>
+    <div class="h-col">
+      <div class="h-week">Week 4–5</div>
+      <div class="h-events">
+        <div class="h-event agent"><strong>Morning Intelligence live</strong><p>Pre-market brief by 8am. Inbox triage by 8:30am. 8:40 prep by 8:35am.</p></div>
+        <div class="h-event agent"><strong>Call Summaries activate</strong><p>KB live. Analyst templates tested and confirmed.</p></div>
+      </div>
+    </div>
+    <div class="h-col">
+      <div class="h-week">Week 5–6</div>
+      <div class="h-events">
+        <div class="h-event agent"><strong>Blotter Summary live</strong><p>Export process confirmed. First narrative reviewed.</p></div>
+        <div class="h-event agent"><strong>Weekly "What Mattered" live</strong><p>KB dense enough for meaningful weekly digest.</p></div>
+      </div>
+    </div>
+    <div class="h-col">
+      <div class="h-week">Week 6–8</div>
+      <div class="h-events">
+        <div class="h-event agent"><strong>Tuning across all tools</strong><p>Thresholds refined. Brief formats adjusted. Templates iterated.</p></div>
+        <div class="h-event kb"><strong>KB expansion scoped</strong><p>Historical S-Drive archive. Analyst notes export paths confirmed.</p></div>
+      </div>
+    </div>
+    <div class="h-col">
+      <div class="h-week">Week 8+</div>
+      <div class="h-events">
+        <div class="h-event phase2"><strong>Next phase begins</strong><p>Craig, Ben, Chris use cases. Bloomberg Chat API. Tier 2 integrations. Docket triage.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <p style="margin-top:20px;font-size:12px;color:var(--muted);font-style:italic;">Timeline starts from IAM setup completion and receipt of the grouped company list.</p>
+</section>
+
+<!-- COMMERCIAL -->
+<section class="alt">
+  <div class="section-label">10 — Engagement</div>
+  <h2>Working Together</h2>
+  <p class="section-intro">The tools we build get more valuable over time, the knowledge base grows with every call, the alerts get sharper with every calibration session, and the analyst configurations evolve as coverage changes. The engagement is designed to reflect that.</p>
+
+  <div class="commercial-wrap">
+    <div class="c-card rec">
+      <span class="c-rec-badge">Recommended</span>
+      <div class="c-rate">$25k</div>
+      <div class="c-period">per month</div>
+      <div class="c-title">Monthly Retainer</div>
+      <div class="c-desc">Covers build, tuning, ongoing support, and strategic advisory. As tools go live, the work shifts from building to calibrating, expanding, and advising — continuous by nature.</div>
+    </div>
+    <div class="c-card alt">
+      <div class="c-rate">$250</div>
+      <div class="c-period">per hour</div>
+      <div class="c-title">Hourly</div>
+      <div class="c-desc">Available if flexibility is preferred. Less efficient when the work is continuous and the boundaries between building, tuning, and advising are fluid.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:48px;padding:40px;background:var(--warm-white);border:1px solid var(--border);border-radius:4px;">
+    <h3 style="font-size:18px;font-weight:600;color:var(--ink);margin-bottom:16px;">What this looks like ongoing</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px;">Build</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">New tools from the roadmap scoped and delivered in sequence. Each one builds on the knowledge base and infrastructure already in place.</p>
+      </div>
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px;">Tune</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">Thresholds calibrated, templates refined, covered names updated, KB expanded. The system improves with every feedback session.</p>
+      </div>
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px;">Advise</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">New use cases identified as the team's workflows evolve. Strategic input on what to build next, what to connect, and where the data infrastructure should go.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT STEPS -->
+<section id="next-steps">
+  <div class="section-label">11 — Next Steps</div>
+  <h2>What We Need to Proceed</h2>
+  <p class="section-intro">Clear actions, clear owners.</p>
+
+  <div class="actions-wrap">
+    <div>
+      <div class="action-col-title">From ACG</div>
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div><strong>StackAI agreement — complete</strong>Contract signed. BYOC deployment can proceed.</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div><strong>Cloud org and IAM role initiated</strong>Week one priority. Atticus looped in if needed. Starts the KB clock.</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div><strong>Grouped company list</strong>100 stocks in correlated sets. Day-one dependency for the Stock Signal Alert.</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div><strong>Pairs list</strong>Pair names and opening spread benchmarks. No position sizing needed. Unblocks Pair Drift Alert immediately.</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div><strong>S-Drive access</strong>Folder access provisioned. One 30-minute session to map structure. Unblocks KB ingestion.</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">6</div>
+        <div><strong>Bloomberg subscription level confirmed</strong>Terminal-only or SAPI access? This determines the data integration path for the Signal Alert and Pair Drift tools.</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">7</div>
+        <div><strong>Sensitivity tier sign-off</strong>What goes into the KB, what stays out. LP docs, compliance materials, MNPI-adjacent content.</div>
+      </div>
+    </div>
+    <div>
+      <div class="action-col-title">From Stephen</div>
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div><strong>StackAI onboarding call with Karissa</strong>Week one. BYOC deployment timeline confirmed. Tier 2 connector list sent for review.</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div><strong>Pair Drift Alert build begins</strong>Week one. Bloomberg/Polygon data feed path confirmed before build starts.</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div><strong>Morning brief structure confirmed</strong>Covered names list, delivery time, and format agreed with investment team before build begins.</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div><strong>E&P call summary template spec — Gordon</strong>Requires a dedicated working session with the E&P analysts to define extraction fields, validate against a real transcript, and confirm the output meets their standard before rollout.</div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div><strong>Phase 2 scope document — week seven</strong>Drafted during the tuning period. Craig, Ben, Chris, and ops use cases scoped and sequenced.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p>Every call summary, blotter export, and alert that fires makes the system <em>more useful than it was the day before</em>.</p>
+  </div>
+</section>
+
+<!-- FOLLOW-UP ITEMS -->
+<section id="followup" style="background:var(--white);">
+  <div class="section-label">12 — Open Items</div>
+  <h2>Follow-Up Required</h2>
+  <p class="section-intro">Everything flagged throughout this document, consolidated in one place.</p>
+
+  <ul class="followup-list">
+    <li class="followup-item">
+      <div class="followup-num">1</div>
+      <div class="followup-area">Knowledge Base</div>
+      <div class="followup-desc"><strong>S-Drive access and owner</strong>Folder access to be provisioned. Need to identify who owns the S-Drive and schedule a 30-minute structure session before Tier 1 ingestion can begin.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">2</div>
+      <div class="followup-area">Knowledge Base</div>
+      <div class="followup-desc"><strong>Blotter export owner and data sharing sign-off</strong>Confirm who controls the weekly Eclipse blotter export and get Sameer's sign-off on sharing that data within the StackAI environment.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">3</div>
+      <div class="followup-area">Knowledge Base</div>
+      <div class="followup-desc"><strong>Analyst notes — format and export path</strong>OneNote, Word, and Excel archives vary by analyst. Need to confirm export format and structure for each before Tier 2 ingestion is scoped.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">4</div>
+      <div class="followup-area">Knowledge Base</div>
+      <div class="followup-desc"><strong>Bloomberg data exports — what's available</strong>Identify which Bloomberg datasets can be exported and in what format where direct API access isn't available.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">5</div>
+      <div class="followup-area">Knowledge Base</div>
+      <div class="followup-desc"><strong>Sensitivity tier sign-off — compliance and MNPI</strong>John and COO to define what goes into the KB and what stays out. Covers compliance documents, LP materials, and MNPI-adjacent content.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">6</div>
+      <div class="followup-area">Knowledge Base</div>
+      <div class="followup-desc"><strong>Third-party research and expert network transcripts</strong>Legal review required before ingestion. Confirm with John what's permissible.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">7</div>
+      <div class="followup-area">Pair Drift Alert</div>
+      <div class="followup-desc"><strong>Pairs list from Ryan</strong>Pair names and opening spread benchmarks needed before build can begin. No position sizing required.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">8</div>
+      <div class="followup-area">Pair Drift Alert</div>
+      <div class="followup-desc"><strong>Bloomberg data feed path</strong>Confirm whether Bloomberg price data is available via direct API or export. Polygon or Finnhub as fallback if not.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">9</div>
+      <div class="followup-area">Pair Drift Alert</div>
+      <div class="followup-desc"><strong>Sameer/Sean sign-off on sharing pairs data</strong>Pairs list is proprietary. Sign-off needed before it's loaded into the StackAI environment.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">10</div>
+      <div class="followup-area">Stock Signal Alert</div>
+      <div class="followup-desc"><strong>Grouped company list — 100 stocks</strong>Sameer and Sean to provide the full list organized into correlated sets. Day-one dependency for this build.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">11</div>
+      <div class="followup-area">Stock Signal Alert</div>
+      <div class="followup-desc"><strong>Price data source confirmed</strong>Polygon.io or Finnhub API — confirm which, obtain API key before build begins.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">12</div>
+      <div class="followup-area">Morning Intelligence</div>
+      <div class="followup-desc"><strong>Covered names list and brief format</strong>Investment team to confirm the covered names list, preferred delivery times, and section format before the pipeline is built.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">13</div>
+      <div class="followup-area">Bloomberg</div>
+      <div class="followup-desc"><strong>Current Bloomberg subscription level</strong>Confirm whether ACG has Terminal-only access or SAPI access. This determines the integration path for the Stock Signal Alert, Pair Drift, and Bloomberg Chat API.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">14</div>
+      <div class="followup-area">Bloomberg</div>
+      <div class="followup-desc"><strong>blpapi-mcp license compliance</strong>Confirm with Bloomberg and John whether automated data pull via blpapi is permitted under the current Terminal license terms before deploying.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">15</div>
+      <div class="followup-area">Bloomberg</div>
+      <div class="followup-desc"><strong>Bloomberg Chat API path</strong>Confirm with Karissa whether the broker chat summary integration is feasible and what access tier is required.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">16</div>
+      <div class="followup-area">Morning Intelligence</div>
+      <div class="followup-desc"><strong>Email inbox access decision</strong>Full inbox connector vs. forwarding rules from specific senders. Full connector gives richer context and historical search; forwarding is lower friction but limits context. Team decision needed before build begins.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">14</div>
+      <div class="followup-area">Integrations</div>
+      <div class="followup-desc"><strong>Equity Data Science — API access tier</strong>Confirm ACG's subscription level and whether API access is included.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">15</div>
+      <div class="followup-area">Integrations</div>
+      <div class="followup-desc"><strong>Visible Alpha — subscription level</strong>Confirm API access is available at ACG's current tier.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">16</div>
+      <div class="followup-area">Integrations</div>
+      <div class="followup-desc"><strong>Diligence Vault — API availability</strong>Confirm whether the platform exposes an API for programmatic access.</div>
+    </li>
+    <li class="followup-item">
+      <div class="followup-num">17</div>
+      <div class="followup-area">Integrations</div>
+      <div class="followup-desc"><strong>Opus Fund Services — export format</strong>Confirm the structure of Opus reports to scope the Eclipse reconciliation build for Phase 2.</div>
+    </li>
+  </ul>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="nav-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 56 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="10" cy="14" r="7.5" stroke="rgba(255,255,255,0.35)" stroke-width="2.8" fill="none"/>
+        <line x1="17.5" y1="14" x2="28.5" y2="14" stroke="rgba(255,255,255,0.25)" stroke-width="2.2"/>
+        <circle cx="36" cy="14" r="7.5" stroke="rgba(255,255,255,0.4)" stroke-width="2.8" fill="none"/>
+        <circle cx="36" cy="14" r="3.2" fill="rgba(255,255,255,0.4)"/>
+        <line x1="43.5" y1="14" x2="50" y2="14" stroke="rgba(255,255,255,0.4)" stroke-width="2.8" stroke-linecap="round"/>
+        <polyline points="47,10 52,14 47,18" stroke="rgba(255,255,255,0.4)" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="logo-text" style="color:rgba(255,255,255,0.4);">ProcessFlows</span>
+  </div>
+  <div class="footer-copy">
+    Prepared by Stephen Scott · ProcessFlows<br>
+    Aventail Capital Group · May 2026<br>
+    Confidential — For Discussion Purposes Only
+  </div>
+</footer>
+
+</body>
+</html>
