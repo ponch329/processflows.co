@@ -1170,7 +1170,7 @@
       <div class="byoc-step-num">1</div>
       <div>
         <div class="byoc-step-title">ACG provisions a cloud organization and IAM role</div>
-        <div class="byoc-step-desc">Henry sets up an AWS organization inside ACG's existing infrastructure. An IAM role is created that trusts only StackAI's account ID — cross-account access is tightly controlled. ACG can revoke this role at any time with instant termination.</div>
+        <div class="byoc-step-desc">ACG sets up an AWS organization inside existing infrastructure. An IAM role is created that trusts only StackAI's account ID — cross-account access is tightly controlled. ACG can revoke this role at any time with instant termination.</div>
       </div>
     </div>
     <div class="byoc-step">
@@ -1290,9 +1290,7 @@
     <strong>MNPI note:</strong> Materials that may require restricted handling include analyst notes written before or during earnings calls; production estimates from IR contacts; credit facility documents for active or prospective positions; management communications on forward guidance or M&A; production data and regulatory filings that get ahead of public disclosure.
   </div>
 
-  <div class="callout">
-    <p>Before ingestion begins: one <em>30-minute session</em> to map the S-Drive folder structure and agree on sensitivity tiers. That single session unblocks everything in the immediate ingestion queue.</p>
-  </div>
+
 </section>
 
 <!-- TOOL SPECS -->
@@ -1447,7 +1445,7 @@
           <li><strong>Worth scanning:</strong> Relevant broker research and sector news</li>
           <li><strong>Skip:</strong> Everything else — flagged but not surfaced</li>
         </ul>
-        <div class="spec-note"><strong>Configurable per analyst:</strong> Sameer's version prioritizes internal and counterparty messages. E&amp;P analysts get production-related research surfaced. Christo's version flags regulatory filings. Each analyst defines their own priority senders and topics in a one-time setup.</div>
+        <div class="spec-note"><strong>Configurable per analyst:</strong> Sameer's version prioritizes internal and counterparty messages. E&amp;P analysts get production-related research surfaced. Chris's version flags regulatory filings. Each analyst defines their own priority senders and topics in a one-time setup.</div>
       </div>
       <div class="spec-panel">
         <div class="spec-panel-title">Schedule &amp; Acceptance Criteria</div>
@@ -1631,8 +1629,8 @@
       </tr>
       <tr>
         <td>Air Permit / PUC Filing Relevance Filter</td>
-        <td>Henry</td>
-        <td>Henry scrapes 10 states' air permits and 15 PUC dockets daily. The LLM relevance layer failed with Ollama because it lacked investment context. StackAI + KB solves this. Phase 2.</td>
+        <td>Data team</td>
+        <td>Air permits and PUC dockets are scraped daily across 10+ states. The LLM relevance layer failed with Ollama because it lacked investment context. StackAI + KB solves this. Phase 2.</td>
         <td><span class="phase-badge">Phase 2</span></td>
       </tr>
     </tbody>
@@ -2066,7 +2064,7 @@
       </div>
       <div class="action-item">
         <div class="action-num">2</div>
-        <div><strong>Pair Drift Alert build begins</strong>Week one. Bloomberg/Polygon data feed path confirmed with Henry before build starts.</div>
+        <div><strong>Pair Drift Alert build begins</strong>Week one. Bloomberg/Polygon data feed path confirmed before build starts.</div>
       </div>
       <div class="action-item">
         <div class="action-num">3</div>
@@ -2078,11 +2076,11 @@
       </div>
       <div class="action-item">
         <div class="action-num">5</div>
-        <div><strong>KB ingestion plan in writing — before week three</strong>Tier 1 document list, folder paths, naming conventions, ingestion schedule. Henry reviews before execution.</div>
+        <div><strong>KB ingestion plan in writing — before week three</strong>Tier 1 document list, folder paths, naming conventions, ingestion schedule. Reviewed internally before execution.</div>
       </div>
       <div class="action-item">
         <div class="action-num">6</div>
-        <div><strong>Phase 2 scope document — week seven</strong>Drafted during the tuning period. Craig, Ben, Henry, and Chris use cases scoped and sequenced.</div>
+        <div><strong>Phase 2 scope document — week seven</strong>Drafted during the tuning period. Craig, Ben, Chris, and ops use cases scoped and sequenced.</div>
       </div>
     </div>
   </div>
@@ -2142,7 +2140,7 @@
     <li class="followup-item">
       <div class="followup-num">9</div>
       <div class="followup-area">Pair Drift Alert</div>
-      <div class="followup-desc"><strong>Sameer sign-off on sharing pairs data</strong>Pairs list is proprietary. Sign-off needed before it's loaded into the StackAI environment.</div>
+      <div class="followup-desc"><strong>Sameer/Sean sign-off on sharing pairs data</strong>Pairs list is proprietary. Sign-off needed before it's loaded into the StackAI environment.</div>
     </li>
     <li class="followup-item">
       <div class="followup-num">10</div>
@@ -2196,11 +2194,6 @@
     </li>
     <li class="followup-item">
       <div class="followup-num">17</div>
-      <div class="followup-area">Integrations</div>
-      <div class="followup-desc"><strong>Fiscal AI — connector path</strong>Pending confirmation on API or MCP connector availability.</div>
-    </li>
-    <li class="followup-item">
-      <div class="followup-num">18</div>
       <div class="followup-area">Integrations</div>
       <div class="followup-desc"><strong>Opus Fund Services — export format</strong>Confirm the structure of Opus reports to scope the Eclipse reconciliation build for Phase 2.</div>
     </li>
