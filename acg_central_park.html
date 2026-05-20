@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aventail Capital Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Barlow', sans-serif; background: #000; color: #fff; min-height: 100vh; }
+
+  /* ─────────────────────────────────────────
+     LOGO SWAP INSTRUCTIONS
+     Replace the src below with your logo file.
+     The image will be displayed at 52px tall;
+     width scales automatically.
+     Supported formats: PNG, SVG, WebP, JPG
+     Example: src="aventail-logo.png"
+  ───────────────────────────────────────── */
+  .logo-img {
+    height: 52px;
+    width: auto;
+    display: block;
+  }
+
+  /* NAV */
+  .nav {
+    position: relative; z-index: 2;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 52px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.12);
+  }
+  .nav-logo { display: flex; align-items: center; }
+  .nav-badge {
+    font-family: 'Oswald', sans-serif;
+    font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    border: 0.5px solid rgba(255,255,255,0.22);
+    padding: 7px 14px;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative; min-height: 560px;
+    /* ─────────────────────────────────────────
+       HERO IMAGE SWAP
+       Replace the URL below with your own image.
+       Recommended: high-res Central Park photo,
+       at least 1600px wide.
+       Example: url('central-park.jpg')
+    ───────────────────────────────────────── */
+    background: url('https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1600&q=85') center 60% / cover no-repeat;
+    background-color: #111;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.82) 100%);
+  }
+
+  /* CONTENT SECTIONS */
+  .body-grid {
+    background: #0d0d0b;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid rgba(200,160,80,0.15);
+  }
+  .cell {
+    padding: 48px 44px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+  .cell:last-child { border-right: none; }
+  .cell-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 8px; letter-spacing: 0.38em; text-transform: uppercase;
+    color: rgba(200,160,80,0.55); margin-bottom: 16px;
+  }
+  .cell-text {
+    font-size: 13px; font-weight: 300; line-height: 1.95;
+    color: rgba(255,255,255,0.5);
+  }
+  .cell-text a {
+    color: #c8a050; text-decoration: none;
+    border-bottom: 0.5px solid rgba(200,160,80,0.3);
+  }
+
+  /* FOOTER */
+  .footer {
+    background: #070705;
+    padding: 24px 52px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 40px;
+    border-top: 0.5px solid rgba(255,255,255,0.05);
+  }
+  .disclaimer {
+    font-size: 9px; font-weight: 300;
+    color: rgba(255,255,255,0.18); line-height: 1.9;
+    max-width: 620px;
+  }
+  .copyright {
+    font-size: 9px; letter-spacing: 0.12em;
+    color: rgba(200,160,80,0.28); white-space: nowrap; margin-top: 2px;
+    font-family: 'Oswald', sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-overlay"></div>
+  <nav class="nav">
+    <div class="nav-logo">
+      <!-- ═══════════════════════════════════════════
+           LOGO: Replace src with your logo file path
+           ═══════════════════════════════════════════ -->
+      <img
+        class="logo-img"
+        src="aventail-logo.png"
+        alt="Aventail Capital Group"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+      <!-- Fallback text logo shown if image fails to load -->
+      <div style="display:none; flex-direction:column; gap:4px;">
+        <div style="font-family:'Oswald',sans-serif; font-size:22px; font-weight:500; letter-spacing:0.28em; color:#fff; line-height:1;">AVENTAIL</div>
+        <div style="font-family:'Oswald',sans-serif; font-size:8px; font-weight:300; letter-spacing:0.5em; color:rgba(255,255,255,0.4);">CAPITAL GROUP</div>
+      </div>
+    </div>
+    <div class="nav-badge">SEC-Registered Investment Adviser</div>
+  </nav>
+</div>
+
+<div class="body-grid">
+  <div class="cell">
+    <div class="cell-label">About</div>
+    <div class="cell-text">Aventail Capital Group, LP is a NYC based investment management firm specialized in energy, utilities, power, industrials and related sectors. The firm was founded in 2018 and is registered with the U.S. Securities and Exchange Commission as an investment adviser.</div>
+  </div>
+  <div class="cell">
+    <div class="cell-label">Regulatory Information</div>
+    <div class="cell-text">Form ADV and other regulatory filings for Aventail Capital Group, LP (CRD No. 306333) are publicly available through the SEC's Investment Adviser Public Disclosure database at <a href="https://adviserinfo.sec.gov" target="_blank">adviserinfo.sec.gov</a>.</div>
+  </div>
+  <div class="cell">
+    <div class="cell-label">Contact</div>
+    <div class="cell-text">
+      Aventail Capital Group, LP<br>
+      1370 Avenue of the Americas, 27th Floor<br>
+      New York, NY 10019<br><br>
+      info@aventailcap.com
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="disclaimer">The information on this website is provided for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any security or investment product. No information on this site should be construed as investment, legal, tax, or accounting advice. Aventail Capital Group, LP provides investment advisory services only to qualified clients pursuant to written advisory agreements. Past performance is not indicative of future results.</div>
+  <div class="copyright">© 2026 Aventail Capital Group, LP. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
