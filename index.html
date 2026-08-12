@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ProcessFlows - Business Automation & Agentic AI</title>
-<link rel="icon" type="image/x-icon" href="logo.png">
+<title>ProcessFlows — Business Automation & AI Implementation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -31,8 +30,12 @@ body { background: var(--bg); color: var(--ink); font-family: var(--body); font-
 
 /* NAV */
 nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: rgba(245,243,238,0.93); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 5vw; height: 64px; }
-.logo { font-family: var(--heading); font-weight: 700; font-size: 1.2rem; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
-.logo em { font-style: italic; color: var(--accent); }
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark { display: block; flex-shrink: 0; }
+.logo-wordmark { display: flex; flex-direction: column; line-height: 1; gap: 1px; }
+.logo-process { font-family: var(--heading); font-weight: 800; font-size: 1.0rem; letter-spacing: -0.03em; color: var(--ink); line-height: 1; }
+.logo-flows { font-family: var(--heading); font-weight: 300; font-style: italic; font-size: 1.0rem; letter-spacing: -0.03em; color: var(--accent); line-height: 1; }
+
 .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
 .nav-links a { font-size: 0.875rem; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
 .nav-links a:hover { color: var(--ink); }
@@ -189,8 +192,11 @@ textarea { resize: vertical; min-height: 100px; }
 
 /* FOOTER */
 footer { background: var(--ink); color: rgba(255,255,255,0.45); padding: 2.5rem 5vw; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
-.footer-logo { font-family: var(--heading); font-weight: 700; font-size: 1.05rem; color: #fff; }
-.footer-logo em { font-style: italic; color: var(--accent-mid); }
+.footer-logo { display: flex; align-items: center; gap: 10px; }
+.footer-mark { display: block; flex-shrink: 0; }
+.footer-wordmark { font-family: var(--heading); font-weight: 800; font-size: 1.0rem; letter-spacing: -0.03em; color: #fff; }
+.footer-wordmark em { font-style: italic; font-weight: 300; color: var(--accent-mid); }
+
 .footer-links { display: flex; gap: 1.75rem; list-style: none; }
 .footer-links a { font-size: 0.825rem; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
 .footer-links a:hover { color: #fff; }
@@ -228,7 +234,17 @@ footer span { font-size: 0.8rem; }
 <body>
 
 <nav>
-  <a href="#hero" class="logo">Process<em>Flows</em></a>
+  <a href="#hero" class="logo" aria-label="ProcessFlows — Home">
+    <svg class="logo-mark" width="52" height="22" viewBox="0 0 88 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="10" cy="18" r="8.5" stroke="#c8c0b4" stroke-width="2"/>
+      <line x1="19" y1="18" x2="35" y2="18" stroke="#c8c0b4" stroke-width="1.5"/>
+      <circle cx="44" cy="18" r="8.5" stroke="#1a6b45" stroke-width="2"/>
+      <circle cx="44" cy="18" r="3.5" fill="#1a6b45"/>
+      <line x1="53" y1="18" x2="66" y2="18" stroke="#1a6b45" stroke-width="1.5"/>
+      <path d="M63 12 L73 18 L63 24" stroke="#1a6b45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="logo-wordmark"><span class="logo-process">Process</span><em class="logo-flows">Flows</em></span>
+  </a>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#usecases">Use Cases</a></li>
@@ -240,12 +256,12 @@ footer span { font-size: 0.8rem; }
 
 <section id="hero" style="background:var(--bg)">
   <div class="hero-left">
-    <div class="hero-eyebrow">Business Automation & Agentic AI</div>
+    <div class="hero-eyebrow">Business Automation & AI Implementation</div>
     <h1>Fewer instructions.<br><em>Faster results.</em></h1>
-    <p class="hero-desc">ProcessFlows helps companies eliminate operational drag through intelligent process automation and agentic AI — building systems that think, decide, and act so your team doesn't have to.</p>
+    <p class="hero-desc">ProcessFlows helps companies eliminate operational drag — automating the repetitive work that consumes your team's time and implementing practical AI systems that fit how you already operate.</p>
     <div class="hero-actions">
-      <a href="#contact" class="btn-primary">Book a Free Assessment <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      <a href="#services" class="btn-outline">Explore Services</a>
+      <a href="#services" class="btn-primary">Explore Services <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
     </div>
   </div>
   <div class="hero-right">
@@ -268,7 +284,7 @@ footer span { font-size: 0.8rem; }
   <span class="trust-label">Capabilities</span>
   <div class="trust-marquee">
     <div class="trust-track">
-      <span class="trust-item">Business Process Automation</span><span class="trust-item">Agentic AI Deployment</span><span class="trust-item">RAG Knowledge Bases</span><span class="trust-item">Workflow Orchestration</span><span class="trust-item">AI Agent Development</span><span class="trust-item">LLM Integration</span><span class="trust-item">Systems Integration</span><span class="trust-item">MLOps & Governance</span><span class="trust-item">Business Process Automation</span><span class="trust-item">Agentic AI Deployment</span><span class="trust-item">RAG Knowledge Bases</span><span class="trust-item">Workflow Orchestration</span><span class="trust-item">AI Agent Development</span><span class="trust-item">LLM Integration</span><span class="trust-item">Systems Integration</span><span class="trust-item">MLOps & Governance</span>
+      <span class="trust-item">Process Automation</span><span class="trust-item">AI Implementation</span><span class="trust-item">Company Knowledge Bases</span><span class="trust-item">Workflow Design</span><span class="trust-item">Content Repurposing Systems</span><span class="trust-item">Tool Integration</span><span class="trust-item">Team Training</span><span class="trust-item">Ongoing Support</span><span class="trust-item">Process Automation</span><span class="trust-item">AI Implementation</span><span class="trust-item">Company Knowledge Bases</span><span class="trust-item">Workflow Design</span><span class="trust-item">Content Repurposing Systems</span><span class="trust-item">Tool Integration</span><span class="trust-item">Team Training</span><span class="trust-item">Ongoing Support</span>
     </div>
   </div>
 </div>
@@ -277,18 +293,18 @@ footer span { font-size: 0.8rem; }
   <div class="section-wrap">
     <div class="explainer-grid reveal">
       <div class="explainer-left">
-        <div class="eyebrow">Agentic AI: Explained</div>
-        <h2>What is <em>Agentic AI?</em></h2>
-        <p>Traditional AI is reactive — it answers questions when asked. <strong>Agentic AI is proactive:</strong> AI agents set goals, gather context, make decisions, and take action — without waiting for step-by-step instructions.</p>
-        <p>If agentic AI is the brain, <strong>agentic automation</strong> is the body — turning smart decisions into real-world actions across your business systems.</p>
-        <p>ProcessFlows builds and deploys these agents inside your company, grounded in your own data, integrated with your existing tools, and governed with proper oversight frameworks.</p>
-        <div class="callout-box"><p>Think of it this way: RPA bots follow a script. AI agents understand a goal — and figure out the best way to achieve it.</p></div>
+        <div class="eyebrow">AI, Applied Properly</div>
+        <h2>What can AI actually <em>do for your business?</em></h2>
+        <p>Most people know AI as a chatbot you type questions into. That's just the surface. <strong>Implemented correctly, AI can carry real work:</strong> processing documents, drafting reports, producing content, and answering your team's questions from your own company knowledge.</p>
+        <p>The distance between "we should use AI" and "AI is saving us fifteen hours a week" is implementation — knowing which tools matter, how to connect them to your business, and how to build systems your team will actually use.</p>
+        <p>That's what ProcessFlows delivers. We implement AI systems inside your business — connected to your existing tools, grounded in your own information, and supported until they're part of how you operate.</p>
+        <div class="callout-box"><p>Think of it this way: old automation followed a rigid script and broke when anything changed. Modern AI understands the goal — and handles the variations that used to need a human.</p></div>
       </div>
       <div class="agent-powers">
-        <div class="power-card"><div class="power-icon"><svg width="18" height="18" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div><h4>Autonomy</h4><p>Agents make decisions and take action without being explicitly programmed for every scenario.</p></div>
-        <div class="power-card"><div class="power-icon"><svg width="18" height="18" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><h4>Context-Awareness</h4><p>They analyze real-time data and adjust strategies based on changing conditions and new inputs.</p></div>
-        <div class="power-card"><div class="power-icon"><svg width="18" height="18" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><h4>Collaborative Intelligence</h4><p>Agents work together — or alongside humans — sharing knowledge and orchestrating complex tasks.</p></div>
-        <div class="power-card"><div class="power-icon"><svg width="18" height="18" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h4>Continuous Learning</h4><p>Through real-world feedback, agents improve their performance over time — getting smarter with every run.</p></div>
+        <div class="power-card"><div class="power-icon"><svg width="18" height="18" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div><h4>End-to-End Task Handling</h4><p>Not just one step — a well-built system carries a task from start to finish, like turning a recorded call into notes, action items, and a follow-up email.</p></div>
+        <div class="power-card"><div class="power-icon"><svg width="18" height="18" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><h4>Grounded in Your Business</h4><p>We connect AI to your documents, policies, and past work — so answers come from your information, not generic internet guesses.</p></div>
+        <div class="power-card"><div class="power-icon"><svg width="18" height="18" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><h4>Built Around Your Tools</h4><p>Email, spreadsheets, your CRM, your project software — AI integrates with what you already use. No rip-and-replace.</p></div>
+        <div class="power-card"><div class="power-icon"><svg width="18" height="18" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h4>Improves Over Time</h4><p>We monitor what's working, fix what isn't, and refine the system as your business changes — so the value compounds.</p></div>
       </div>
     </div>
   </div>
@@ -297,17 +313,17 @@ footer span { font-size: 0.8rem; }
 <section id="how-agents">
   <div class="section-wrap">
     <div class="eyebrow reveal">How It Works</div>
-    <h2 class="reveal">How AI Agents Operate</h2>
-    <p class="section-sub reveal">Each agent follows a five-stage cycle that mirrors how a skilled human operator thinks — but runs in milliseconds, at scale, without breaks.</p>
+    <h2 class="reveal">How an Automated Workflow Runs</h2>
+    <p class="section-sub reveal">Every system we build follows the same fundamental cycle — work comes in, gets handled intelligently, and improves with feedback.</p>
     <div class="steps-two-col reveal">
       <div class="steps-list">
-        <div class="step-row"><div class="step-badge">1</div><div class="step-body"><h4>Define Goals</h4><p>The agent begins with a clear objective — reducing response times, routing tasks correctly, processing documents — set by your team or upstream systems.</p></div></div>
-        <div class="step-row"><div class="step-badge">2</div><div class="step-body"><h4>Perceive the Environment</h4><p>It gathers and interprets information from connected systems, documents, conversations, and user interactions in real time.</p></div></div>
-        <div class="step-row"><div class="step-badge">3</div><div class="step-body"><h4>Make Decisions</h4><p>The agent evaluates its options, reasons across scenarios, and determines the optimal next action — using your company's data as its source of truth.</p></div></div>
+        <div class="step-row"><div class="step-badge">1</div><div class="step-body"><h4>Work Arrives</h4><p>An email lands, a document is uploaded, a form is submitted. The system detects it automatically — no one has to kick things off manually.</p></div></div>
+        <div class="step-row"><div class="step-badge">2</div><div class="step-body"><h4>AI Does the Heavy Lifting</h4><p>Information is extracted, categorized, and processed. Drafts are written, data is entered, and the routine judgment calls are made — in seconds, not hours.</p></div></div>
+        <div class="step-row"><div class="step-badge">3</div><div class="step-body"><h4>Your Standards Apply</h4><p>Output follows your rules, your formats, and your voice — built from your actual documents and past work, not generic templates.</p></div></div>
       </div>
       <div class="steps-list">
-        <div class="step-row"><div class="step-badge">4</div><div class="step-body"><h4>Take Action</h4><p>It executes tasks, triggers cross-system workflows, or coordinates with other agents — tracking results and adjusting behavior as needed.</p></div></div>
-        <div class="step-row"><div class="step-badge">5</div><div class="step-body"><h4>Learn & Improve</h4><p>Each completed process teaches the agent something new. Performance is monitored, drift is caught early, and the system becomes more effective over time.</p></div></div>
+        <div class="step-row"><div class="step-badge">4</div><div class="step-body"><h4>You Stay in Control</h4><p>Anything important lands in a review queue first. You approve, adjust, or reject — then the system completes the job across your tools.</p></div></div>
+        <div class="step-row"><div class="step-badge">5</div><div class="step-body"><h4>The System Improves</h4><p>Every correction teaches it your preferences. We monitor performance and tune the setup — so month three outperforms week one.</p></div></div>
       </div>
     </div>
   </div>
@@ -317,7 +333,7 @@ footer span { font-size: 0.8rem; }
   <div class="section-wrap">
     <div class="services-header reveal">
       <div><div class="eyebrow">Our Services</div><h2>Two services.<br>One outcome: <em>a business that scales.</em></h2></div>
-      <div><p class="section-sub" style="margin-bottom:0">Whether you need to eliminate manual bottlenecks or build intelligent AI infrastructure, we have a focused engagement designed to deliver measurable ROI — fast.</p></div>
+      <div><p class="section-sub" style="margin-bottom:0">Whether you need to eliminate manual bottlenecks or implement AI properly for the first time, we have a focused engagement designed to deliver measurable results — fast.</p></div>
     </div>
     <div class="services-cards">
       <div class="svc-card reveal">
@@ -338,22 +354,22 @@ footer span { font-size: 0.8rem; }
       <div class="svc-card reveal">
         <div class="svc-num">02</div>
         <div class="svc-icon"><svg width="20" height="20" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
-        <div class="svc-tag">Agentic AI</div>
-        <h3>Agentic AI Implementation</h3>
-        <p>We build the intelligent AI infrastructure your business needs — RAG-powered knowledge bases that surface accurate answers instantly, and custom AI agents that execute multi-step workflows with minimal human oversight.</p>
+        <div class="svc-tag">AI Implementation</div>
+        <h3>AI Implementation</h3>
+        <p>We set up AI tools that actually stick — a company knowledge base your team can ask questions in plain English, and custom workflows that handle multi-step jobs like content production, reporting, and client communications.</p>
         <ul class="svc-features">
-          <li>Company knowledge base architecture & RAG deployment</li>
-          <li>Custom AI agent development (LLM-powered workflows)</li>
-          <li>Context-aware virtual assistants for support & ops</li>
-          <li>AI tool customization & team-specific fine-tuning</li>
-          <li>AI governance, PII guardrails & compliance frameworks</li>
+          <li>Company knowledge bases — ask questions, get answers from your own docs</li>
+          <li>Custom AI workflows for content, reporting, and communications</li>
+          <li>AI assistants for customer support and internal operations</li>
+          <li>Setup and customization of the AI tools your team already pays for</li>
+          <li>Privacy guardrails so your data stays yours</li>
         </ul>
         <a href="#contact" class="svc-link">Explore AI implementation →</a>
       </div>
       <div class="svc-divider reveal">
         <h3>Not sure where to start?</h3>
-        <p>Our free 45-minute assessment maps your highest-leverage automation opportunities — no commitment needed.</p>
-        <a href="#contact" class="btn-white">Book Your Assessment →</a>
+        <p>Tell us what's slowing your team down and we'll outline what's possible — no commitment needed.</p>
+        <a href="#contact" class="btn-white">Get in Touch →</a>
       </div>
     </div>
   </div>
@@ -362,21 +378,32 @@ footer span { font-size: 0.8rem; }
 <section id="usecases">
   <div class="section-wrap">
     <div class="eyebrow reveal">Use Cases</div>
-    <h2 class="reveal">Where we deploy <em>agentic AI</em></h2>
-    <p class="section-sub reveal">AI agents deliver outsized value wherever decisions are frequent, data is rich, and speed matters. Here are the departments we transform most.</p>
+    <h2 class="reveal">Where this works <em>in the real world</em></h2>
+    <p class="section-sub reveal">AI pays for itself fastest where the same work happens repeatedly. Here's where we see it deliver most — across departments and for content-driven businesses.</p>
     <div class="tabs-header reveal">
-      <button class="tab-btn active" data-tab="finance">Finance & Accounting</button>
+      <button class="tab-btn active" data-tab="content">Podcasts & Content</button>
+      <button class="tab-btn" data-tab="finance">Finance & Accounting</button>
       <button class="tab-btn" data-tab="hr">Human Resources</button>
       <button class="tab-btn" data-tab="ops">Operations</button>
       <button class="tab-btn" data-tab="cx">Customer Experience</button>
       <button class="tab-btn" data-tab="it">IT & Tech</button>
     </div>
-    <div class="tab-panel active" id="tab-finance">
+    <div class="tab-panel active" id="tab-content">
+      <div class="usecase-grid">
+        <div class="uc-item"><h4>Episode-to-Everything Pipeline</h4><p>One recorded episode becomes show notes, a transcript, a newsletter draft, five social clips, and quote graphics copy — automatically, in your voice.</p></div>
+        <div class="uc-item"><h4>Clip Selection &amp; Repurposing</h4><p>AI reviews each episode and flags the most shareable moments — the stories, hot takes, and laughs that perform — with suggested captions for each platform.</p></div>
+        <div class="uc-item"><h4>Social Scheduling Workflows</h4><p>Approved content flows straight into your scheduler with platform-specific formatting — hooks for TikTok/Reels, threads for X, carousels for LinkedIn or Instagram.</p></div>
+        <div class="uc-item"><h4>Guest Research &amp; Prep</h4><p>Before each interview, get an automatic prep brief: guest background, recent work, past interviews, and suggested questions your audience hasn't heard them answer.</p></div>
+        <div class="uc-item"><h4>Audience Q&amp;A Mining</h4><p>Comments, DMs, and reviews get collected and summarized weekly — surfacing the questions and topics your audience actually wants covered next.</p></div>
+        <div class="uc-item"><h4>Sponsor &amp; Outreach Support</h4><p>Automated media kit updates with current download numbers, plus draft outreach emails to potential sponsors and guests — ready for your review.</p></div>
+      </div>
+    </div>
+    <div class="tab-panel" id="tab-finance">
       <div class="usecase-grid">
         <div class="uc-item"><h4>Invoice Processing</h4><p>Agents extract, validate, and route invoices across approval chains — eliminating manual entry and reducing processing time by up to 80%.</p></div>
         <div class="uc-item"><h4>Account Reconciliation</h4><p>Automated matching and exception flagging across accounts, ensuring accuracy without hours of manual cross-checking.</p></div>
         <div class="uc-item"><h4>Fraud Detection</h4><p>Real-time anomaly detection across transaction data, alerting finance teams to suspicious activity before it escalates.</p></div>
-        <div class="uc-item"><h4>Financial Reporting</h4><p>LLM-powered agents analyze trends and auto-generate executive summaries, turning raw data into decision-ready insights.</p></div>
+        <div class="uc-item"><h4>Financial Reporting</h4><p>AI pulls your numbers together and drafts the executive summary — turning raw data into decision-ready insights without analyst hours.</p></div>
         <div class="uc-item"><h4>Budgeting & Forecasting</h4><p>AI models that pull from live data sources to produce rolling forecasts and scenario models — updated continuously, not quarterly.</p></div>
         <div class="uc-item"><h4>Compliance Monitoring</h4><p>Agents continuously monitor transactions and workflows against regulatory requirements, flagging gaps in real time.</p></div>
       </div>
@@ -385,7 +412,7 @@ footer span { font-size: 0.8rem; }
       <div class="usecase-grid">
         <div class="uc-item"><h4>Recruitment & Screening</h4><p>Agents screen applications, rank candidates against criteria, and schedule interviews — reducing time-to-hire significantly.</p></div>
         <div class="uc-item"><h4>Employee Onboarding</h4><p>AI-guided onboarding flows provision accounts, assign training, and answer new hire questions through an intelligent knowledge base.</p></div>
-        <div class="uc-item"><h4>Policy Q&A</h4><p>A RAG-powered HR assistant answers employee questions instantly from your policy documents — reducing HR ticket volume dramatically.</p></div>
+        <div class="uc-item"><h4>Policy Q&A</h4><p>An assistant that answers employee questions instantly from your own policy documents — cutting HR ticket volume dramatically.</p></div>
         <div class="uc-item"><h4>Performance Reviews</h4><p>Agents compile performance data, surface patterns, and draft preliminary review summaries for manager review.</p></div>
         <div class="uc-item"><h4>Workforce Planning</h4><p>Predictive models analyze capacity, attrition risk, and skill gaps to support proactive hiring and retention decisions.</p></div>
         <div class="uc-item"><h4>Compliance Tracking</h4><p>Automated monitoring of training completions, certifications, and regulatory requirements across the workforce.</p></div>
@@ -404,7 +431,7 @@ footer span { font-size: 0.8rem; }
     <div class="tab-panel" id="tab-cx">
       <div class="usecase-grid">
         <div class="uc-item"><h4>Intelligent Support Agents</h4><p>Context-aware AI assistants handle nuanced multi-turn conversations, resolving inquiries without human escalation.</p></div>
-        <div class="uc-item"><h4>Knowledge Base Search</h4><p>RAG-powered enterprise search lets support teams find accurate, cited answers instantly — grounded in your docs.</p></div>
+        <div class="uc-item"><h4>Knowledge Base Search</h4><p>Support teams find accurate answers instantly — pulled from your own documentation, with sources cited so they can trust it.</p></div>
         <div class="uc-item"><h4>Sentiment Analysis</h4><p>Real-time analysis of customer communications to surface satisfaction trends and flag at-risk accounts proactively.</p></div>
         <div class="uc-item"><h4>Personalized Recommendations</h4><p>AI agents that use real-time CRM data to deliver tailored product and service suggestions during every customer interaction.</p></div>
         <div class="uc-item"><h4>Issue Resolution</h4><p>Automated troubleshooting flows that resolve common issues without routing to human agents — cutting handle time dramatically.</p></div>
@@ -415,7 +442,7 @@ footer span { font-size: 0.8rem; }
       <div class="usecase-grid">
         <div class="uc-item"><h4>Incident Resolution</h4><p>Agents detect, diagnose, and resolve common IT incidents automatically — reducing mean time to resolution and analyst burden.</p></div>
         <div class="uc-item"><h4>Threat Detection</h4><p>Continuous monitoring of system behavior with AI-powered anomaly detection that flags security threats in real time.</p></div>
-        <div class="uc-item"><h4>Code Modernization</h4><p>GenAI frameworks assist engineering teams in documenting legacy systems, identifying vulnerabilities, and refactoring code.</p></div>
+        <div class="uc-item"><h4>Code Documentation</h4><p>AI helps engineering teams document legacy systems, spot vulnerabilities, and clean up old code faster.</p></div>
         <div class="uc-item"><h4>Infrastructure Maintenance</h4><p>Automated monitoring and maintenance tasks that keep systems healthy without requiring constant manual intervention.</p></div>
         <div class="uc-item"><h4>Dev Productivity</h4><p>AI-assisted development workflows that help your engineers work faster — from code generation to automated testing.</p></div>
         <div class="uc-item"><h4>IT Knowledge Base</h4><p>A searchable, AI-powered internal knowledge base giving your IT team instant access to runbooks, policies, and past incidents.</p></div>
@@ -433,7 +460,7 @@ footer span { font-size: 0.8rem; }
       <div class="proc-step"><div class="proc-dot">01</div><h4>Discovery & Audit</h4><p>We map your workflows, interview stakeholders, and identify your highest-leverage automation opportunities before writing a line of code.</p></div>
       <div class="proc-step"><div class="proc-dot">02</div><h4>Solution Architecture</h4><p>We design your tailored solution — right tools, right integrations, right sequencing — with ROI modeling built into every use case.</p></div>
       <div class="proc-step"><div class="proc-dot">03</div><h4>Build & Deploy</h4><p>We build and deploy with parallel testing. Most engagements deliver a functional proof of value within 4–8 weeks.</p></div>
-      <div class="proc-step"><div class="proc-dot">04</div><h4>Train & Optimize</h4><p>We train your team, document everything, and maintain an ongoing cycle to monitor performance and improve over time.</p></div>
+      <div class="proc-step"><div class="proc-dot">04</div><h4>Train & Optimize</h4><p>We train your team, document everything in plain English, and check in regularly to keep things running well as your business changes.</p></div>
     </div>
   </div>
 </section>
@@ -444,16 +471,15 @@ footer span { font-size: 0.8rem; }
       <div class="faq-aside reveal">
         <div class="eyebrow">FAQ</div>
         <h3>Common questions about AI automation</h3>
-        <p>If you don't see your question here, book a free assessment — we'll walk you through exactly what's possible for your business.</p>
-        <a href="#contact" class="btn-primary" style="margin-top:0.5rem">Book a Free Call →</a>
+        <p>If you don't see your question here, reach out — we'll walk you through exactly what's possible for your business.</p>
       </div>
       <div class="faq-list reveal">
-        <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)">What's the difference between agentic AI and traditional AI?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Traditional AI models are reactive — they make predictions or generate content when prompted. Agentic AI is proactive: AI agents set goals, make decisions, take multi-step actions, and learn from outcomes. Think of traditional AI as a knowledgeable assistant that answers questions, and agentic AI as a digital worker that independently executes tasks to achieve a specific business outcome.</p></div></div>
-        <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)">How does an AI agent differ from an RPA bot?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>RPA bots follow fixed scripts or rules — they're excellent for high-volume, deterministic tasks but break when processes change. AI agents operate with autonomy and context-awareness, adjusting behavior based on new information or changing objectives. They handle variability, ambiguity, and multi-step reasoning that traditional RPA cannot. The two often work best in tandem.</p></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)">What kind of AI systems do you implement?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Two kinds. First, knowledge systems: tools your team can ask questions in plain English and get accurate answers drawn from your own company documents. Second, workflow systems: multi-step automations that handle a complete job — processing invoices from inbox to approval, or producing a full set of content from a single source. Both run on leading AI platforms; the difference is they're configured for your business, your data, and your way of working.</p></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)">How is this different from automation we've tried before?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Traditional automation followed rigid scripts — if an invoice arrived in a slightly different format or a form field moved, the process broke. Modern AI understands the intent of a task, so it handles the variations that used to require a person. We still deploy simple automation where it's the right fit; the expertise is in knowing which tool suits which job.</p></div></div>
         <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)">How do you keep our proprietary data secure?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Security is at the core of every engagement. We implement PII masking, isolated deployment environments, and local model hosting options where required. Your proprietary data is never used to train public models — all AI grounding occurs within your own secure environment. We build human-in-the-loop protocols for high-stakes decisions and ensure compliance with relevant regulatory requirements.</p></div></div>
-        <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)">Why is a clean data foundation critical for AI success?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Large language models are prone to hallucinations when not grounded in high-quality, structured data. Our RAG (retrieval-augmented generation) architecture ensures your AI agents pull from your company's actual knowledge — policies, manuals, CRM records, historical data — rather than generating plausible-sounding guesses. Part of our engagement is architecting the data pipelines that make this possible.</p></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)">How do you ensure the AI gives accurate answers?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>This is what separates a professional implementation from a chatbot experiment. We connect the AI directly to your company's actual information — policies, manuals, records, and past work — so answers come from your documents rather than plausible-sounding guesses. When the system doesn't know, it says so. Organizing and connecting your information properly is a core part of every engagement.</p></div></div>
         <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)">How do you measure ROI on an AI or automation investment?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>We link every use case to specific KPIs tied to your P&L — cost per transaction, hours reclaimed per week, error rates, response times, or revenue protected. Our discovery phase includes an ROI modeling exercise so you know what success looks like before we build. Most clients see measurable return within 90 days of deployment.</p></div></div>
-        <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)">Where should we start with agentic AI?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>The best starting point is a use case involving high variability, data-rich conditions, or cross-functional workflows — where the cost of manual handling is clear and measurable. Our free assessment identifies exactly this: the highest-impact, most feasible automation opportunity in your business, scoped for a focused pilot that proves value quickly.</p></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)">Where should we start?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Start with the task that's repetitive, consumes hours every week, and doesn't require deep judgment — that's almost always where AI proves its value fastest. That's exactly what we help identify: your highest-impact, most practical starting point, scoped as a focused pilot so you see results before making a larger commitment.</p></div></div>
       </div>
     </div>
   </div>
@@ -465,25 +491,25 @@ footer span { font-size: 0.8rem; }
       <div class="contact-left reveal">
         <div class="eyebrow">Get In Touch</div>
         <h2>Let's find your<br><em>highest-leverage</em><br>automation.</h2>
-        <p>Book a free 45-minute assessment. We'll map your workflows, identify the highest-ROI opportunities, and outline a realistic path forward — no commitment required.</p>
+        <p>Tell us about your operation. We'll map your workflows, identify the highest-ROI opportunities, and outline a realistic path forward — no commitment required.</p>
         <div class="contact-perks">
-          <div class="perk"><div class="perk-icon"><svg width="16" height="16" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="perk-text"><h5>No generic discovery calls</h5><p>Our assessments are structured consultations — you'll walk away with actionable insights even if we never work together.</p></div></div>
+          <div class="perk"><div class="perk-icon"><svg width="16" height="16" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="perk-text"><h5>No generic discovery calls</h5><p>Every conversation is a structured consultation — you'll walk away with actionable insights even if we never work together.</p></div></div>
           <div class="perk"><div class="perk-icon"><svg width="16" height="16" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="perk-text"><h5>ROI modeled before we build</h5><p>Every engagement starts with a clear financial case — you know what success looks like before we write a line of code.</p></div></div>
-          <div class="perk"><div class="perk-icon"><svg width="16" height="16" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="perk-text"><h5>Response within 24 hours</h5><p>Reach us at hello@processflows.co — or fill out the form and we'll be in touch fast.</p></div></div>
+          <div class="perk"><div class="perk-icon"><svg width="16" height="16" fill="none" stroke="#1a6b45" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="perk-text"><h5>Response within 24 hours</h5><p>Reach us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d2bab7bebebd92a2a0bdb1b7a1a1b4bebda5a1fcb1bd">[email&#160;protected]</a> — or fill out the form and we'll be in touch fast.</p></div></div>
         </div>
       </div>
       <div class="form-card reveal">
-        <h4>Book a Free Assessment</h4>
+        <h4>Get in Touch</h4>
         <form onsubmit="submitForm(event)">
           <div class="form-grid">
             <div class="form-group"><label>First Name</label><input type="text" placeholder="Jane" required></div>
             <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith" required></div>
             <div class="form-group"><label>Work Email</label><input type="email" placeholder="jane@company.com" required></div>
             <div class="form-group"><label>Company</label><input type="text" placeholder="Acme Corp" required></div>
-            <div class="form-group full"><label>Primary Interest</label><select><option value="">Select a service</option><option>Business Process Automation</option><option>Agentic AI Implementation</option><option>Both / Not sure yet</option></select></div>
+            <div class="form-group full"><label>Primary Interest</label><select><option value="">Select a service</option><option>Business Process Automation</option><option>AI Implementation</option><option>Podcast / Content Workflows</option><option>Not sure yet</option></select></div>
             <div class="form-group full"><label>Biggest operational challenge</label><textarea placeholder="e.g. Our team spends 10+ hours a week compiling reports across three systems..."></textarea></div>
           </div>
-          <button type="submit" class="submit-btn">Book My Free Assessment →</button>
+          <button type="submit" class="submit-btn">Send Message →</button>
         </form>
       </div>
     </div>
@@ -491,7 +517,17 @@ footer span { font-size: 0.8rem; }
 </section>
 
 <footer>
-  <div class="footer-logo">Process<em>Flows</em></div>
+  <div class="footer-logo">
+    <svg class="footer-mark" width="44" height="18" viewBox="0 0 88 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="10" cy="18" r="8.5" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+      <line x1="19" y1="18" x2="35" y2="18" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+      <circle cx="44" cy="18" r="8.5" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
+      <circle cx="44" cy="18" r="3.5" fill="#ffffff"/>
+      <line x1="53" y1="18" x2="66" y2="18" stroke="rgba(255,255,255,0.85)" stroke-width="1.5"/>
+      <path d="M63 12 L73 18 L63 24" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="footer-wordmark">Process<em>Flows</em></span>
+  </div>
   <ul class="footer-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#usecases">Use Cases</a></li>
@@ -502,7 +538,7 @@ footer span { font-size: 0.8rem; }
   <span>© 2026 ProcessFlows. All rights reserved.</span>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const revealEls = document.querySelectorAll('.reveal');
 const ro = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
